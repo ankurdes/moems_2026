@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen MOEMs Housie 🎲</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --bg: #fdf4ff;
+    --card: #ffffff;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --row1: #fef3c7;
+    --row2: #dbeafe;
+    --row3: #fce7f3;
+    --row1-border: #f59e0b;
+    --row2-border: #3b82f6;
+    --row3-border: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white;
+    padding: 18px 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  h1 {
+    margin: 0;
+    font-size: 2em;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .subtitle { font-size: 0.95em; opacity: 0.95; margin-top: 4px; }
+  button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: all 0.15s;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+  button.primary { background: var(--accent); color: white; }
+  button.danger  { background: var(--bad); color: white; }
+  button.success { background: var(--good); color: white; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 18px; }
+
+  /* Question display panel */
+  .question-panel {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 14px rgba(124,58,237,0.18);
+    border: 3px solid var(--primary);
+  }
+  .qp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .qp-num {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 50px; height: 50px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 1.4em;
+  }
+  .qp-meta { color: var(--muted); font-size: 0.9em; }
+  .qp-text {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 12px 0;
+    text-align: center;
+    padding: 14px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 12px;
+  }
+  .qp-text code {
+    background: white;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 1em;
+    color: #7c3aed;
+    font-weight: 800;
+  }
+  .qp-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .qp-answer-reveal {
+    margin-top: 12px;
+    padding: 12px;
+    background: #ecfdf5;
+    border: 2px solid var(--good);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 800;
+    color: var(--good);
+    display: none;
+  }
+  .qp-answer-reveal.show { display: block; }
+
+  /* Sidebar with progress */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+  }
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .progress-box {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  .progress-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 6px;
+  }
+  .called-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .called-chip {
+    background: var(--primary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.85em;
+  }
+
+  /* Cards grid */
+  .cards-section {
+    margin-top: 26px;
+  }
+  .cards-section h2 {
+    color: var(--primary);
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .housie-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 3px solid #cbd5e1;
+    transition: all 0.2s;
+  }
+  .housie-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .player-input {
+    flex: 1;
+    margin-right: 6px;
+    padding: 6px 10px;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95em;
+    color: var(--ink);
+  }
+  .player-input:focus { outline: none; border-color: var(--primary); }
+  .card-num {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.8em;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1.05em;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.12s;
+    border: 2px solid transparent;
+  }
+  .cell.row-1 { background: var(--row1); border-color: var(--row1-border); color: #92400e; }
+  .cell.row-2 { background: var(--row2); border-color: var(--row2-border); color: #1e3a8a; }
+  .cell.row-3 { background: var(--row3); border-color: var(--row3-border); color: #831843; }
+  .cell:hover { transform: scale(1.06); }
+  .cell.marked {
+    background: var(--good) !important;
+    color: white !important;
+    border-color: #15803d !important;
+    transform: scale(0.96);
+    position: relative;
+  }
+  .cell.marked::after {
+    content: '✓';
+    position: absolute;
+    font-size: 1.5em;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .cell.marked .cell-num { display: none; }
+
+  .badges {
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    min-height: 28px;
+  }
+  .badge {
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 0.78em;
+    font-weight: 800;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .badge.row1 { background: var(--row1-border); }
+  .badge.row2 { background: var(--row2-border); }
+  .badge.row3 { background: var(--row3-border); }
+  .badge.full { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); font-size: 0.9em; padding: 4px 12px; }
+
+  /* Winner announcements */
+  .winner-bar {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  .winner-bar h3 {
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 6px;
+  }
+  .winner-line {
+    padding: 6px 10px;
+    margin: 4px 0;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95em;
+  }
+  .winner-line.row1 { background: var(--row1); color: #92400e; }
+  .winner-line.row2 { background: var(--row2); color: #1e3a8a; }
+  .winner-line.row3 { background: var(--row3); color: #831843; }
+  .winner-line.full { background: #dcfce7; color: #14532d; font-size: 1.05em; font-weight: 800; }
+  .winner-line .empty { color: var(--muted); font-style: italic; font-weight: 500; }
+
+  /* Instructions */
+  .instructions {
+    background: white;
+    border: 3px solid var(--accent);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+  }
+  .instructions h3 { margin-top: 0; color: var(--accent); font-size: 1.2em; }
+  .instructions ol { margin: 8px 0; padding-left: 20px; }
+  .instructions li { margin: 6px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1>🎲 Hansen MOEMs Housie</h1>
+      <div class="subtitle">Math bingo · 30 unique-answer questions · 10 cards · row & full-card prizes</div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button id="newGameBtn" class="primary">🔀 New Game (shuffle cards)</button>
+      <button id="nextBtn" class="success">▶ Show next question</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="instructions" id="instructions">
+    <h3>📋 How to Play (Indian Housie / Math Bingo)</h3>
+    <ol>
+      <li><strong>Assign cards.</strong> Each of the 10 cards below is unique (15 random answers from a pool of 30). Type each player's name into the box at the top of a card to assign it.</li>
+      <li><strong>Click "▶ Show next question"</strong> to display a math question on the big purple panel above. Everyone solves on paper.</li>
+      <li><strong>Players check their card.</strong> If the answer to the question appears anywhere on their card, they call out and tap that cell to mark it. (You as teacher can also tap cells if you're managing for younger kids.)</li>
+      <li><strong>Click "Reveal answer"</strong> on the question panel after the room has had time, then move on to the next question.</li>
+      <li><strong>Prizes (the system tracks them automatically):</strong>
+        <ul style="margin:6px 0;">
+          <li>🥇 First to complete the <strong>top row</strong> (5 cells, yellow row)</li>
+          <li>🥈 First to complete the <strong>middle row</strong> (5 cells, blue row)</li>
+          <li>🥉 First to complete the <strong>bottom row</strong> (5 cells, pink row)</li>
+          <li>🏆 First to complete the <strong>full house</strong> (all 15 cells)</li>
+        </ul>
+      </li>
+      <li><strong>Coaching tip:</strong> Verify each player's claim by checking their card and the called numbers (visible on the right). Don't auto-trust — Housie etiquette says false claims forfeit the prize!</li>
+    </ol>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="question-panel" id="questionPanel">
+        <div class="qp-head">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="qp-num" id="qpNum">?</div>
+            <div>
+              <div style="font-weight:700; font-size:1.05em;">Question <span id="qpIdx">—</span> of 30</div>
+              <div class="qp-meta" id="qpMeta">Click "Show next question" to begin</div>
+            </div>
+          </div>
+        </div>
+        <div class="qp-text" id="qpText">Welcome! Assign players to cards below, then click "▶ Show next question" to start.</div>
+        <div class="qp-controls">
+          <button id="revealBtn" class="primary" style="display:none;">💡 Reveal answer</button>
+        </div>
+        <div class="qp-answer-reveal" id="qpAnswerReveal"></div>
+      </div>
+    </div>
+    <div>
+      <div class="progress-box">
+        <h3>📞 Called numbers (<span id="calledCount">0</span>/30)</h3>
+        <div class="called-list" id="calledList"><span style="color:var(--muted); font-size:0.85em;">No questions called yet.</span></div>
+      </div>
+      <div class="winner-bar">
+        <h3>🏆 Winners</h3>
+        <div class="winner-line row1">🥇 Top row: <span id="win-row1"><span class="empty">—</span></span></div>
+        <div class="winner-line row2">🥈 Middle row: <span id="win-row2"><span class="empty">—</span></span></div>
+        <div class="winner-line row3">🥉 Bottom row: <span id="win-row3"><span class="empty">—</span></span></div>
+        <div class="winner-line full">🏆 Full house: <span id="win-full"><span class="empty">—</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards-section">
+    <h2>🃏 Player Cards (10)</h2>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+
+</div>
+
+<script>
+// ===== Question pool: 30 MOEMS Div M-style questions with UNIQUE answers =====
+const QUESTIONS = [
+  { q: "Units digit of <code>3<sup>2024</sup></code>", a: 1 },
+  { q: "Smallest positive integer N such that <code>18N</code> is a perfect square", a: 2 },
+  { q: "Units digit of <code>7<sup>15</sup></code>", a: 3 },
+  { q: "Units digit of <code>2<sup>50</sup></code>", a: 4 },
+  { q: "Number of diagonals in a regular pentagon", a: 5 },
+  { q: "Number of edges of a tetrahedron", a: 6 },
+  { q: "Compute <code>12% of 75</code>", a: 9 },
+  { q: "Number of primes less than <code>30</code>", a: 10 },
+  { q: "How many positive divisors does <code>60</code> have?", a: 12 },
+  { q: "Median of <code>7, 11, 13, 17, 22, 28, 31</code>", a: 17 },
+  { q: "Mean of <code>12, 14, 18, 20, 26</code>", a: 18 },
+  { q: "Number of diagonals in a regular octagon", a: 20 },
+  { q: "Compute <code>25% of 84</code>", a: 21 },
+  { q: "Perimeter of a square whose area is <code>49</code>", a: 28 },
+  { q: "Range of <code>8, 15, 23, 29, 41</code>", a: 33 },
+  { q: "Area of a triangle with base <code>14</code> and height <code>5</code>", a: 35 },
+  { q: "<code>LCM(12, 18)</code>", a: 36 },
+  { q: "<code>GCD(84, 126)</code>", a: 42 },
+  { q: "Sum of all positive divisors of <code>24</code>", a: 60 },
+  { q: "Number of ways to choose <code>2</code> items from a set of <code>13</code>", a: 78 },
+  { q: "Compute <code>3<sup>4</sup></code>", a: 81 },
+  { q: "Largest 2-digit prime", a: 97 },
+  { q: "Smallest 3-digit prime", a: 101 },
+  { q: "Compute <code>2<sup>7</sup></code>", a: 128 },
+  { q: "Surface area of a cube with edge length <code>5</code>", a: 150 },
+  { q: "Sum of integers from <code>10</code> to <code>20</code> inclusive", a: 165 },
+  { q: "Hours in a week", a: 168 },
+  { q: "<code>1 + 2 + 3 + · · · + 20</code>", a: 210 },
+  { q: "Number of seconds in <code>5</code> minutes", a: 300 },
+  { q: "Smallest 4-digit multiple of <code>11</code>", a: 1001 },
+];
+
+const NUM_CARDS = 10;
+const CARD_ROWS = 3;
+const CARD_COLS = 5;
+const CELLS_PER_CARD = CARD_ROWS * CARD_COLS; // 15
+
+// ===== State =====
+let state = {
+  callOrder: [],          // shuffled indices into QUESTIONS
+  currentIdx: -1,         // index in callOrder of current question (-1 = none yet)
+  revealed: false,        // has the current question's answer been revealed?
+  cards: [],              // array of {playerName, cells[15]: {value, marked}}
+  winners: { row1: null, row2: null, row3: null, full: null },
+};
+
+// ===== Utilities =====
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ===== Card generation =====
+function generateCards() {
+  const allAnswers = QUESTIONS.map(q => q.a);
+  state.cards = [];
+  for (let i = 0; i < NUM_CARDS; i++) {
+    const picked = shuffle(allAnswers).slice(0, CELLS_PER_CARD);
+    const cells = picked.map(v => ({ value: v, marked: false }));
+    state.cards.push({ playerName: '', cells });
+  }
+}
+
+// ===== Render =====
+function renderQuestionPanel() {
+  const idx = state.currentIdx;
+  if (idx < 0) {
+    document.getElementById('qpNum').textContent = '?';
+    document.getElementById('qpIdx').textContent = '—';
+    document.getElementById('qpMeta').textContent = 'Click "Show next question" to begin';
+    document.getElementById('qpText').innerHTML = 'Welcome! Assign players to cards below, then click "▶ Show next question" to start.';
+    document.getElementById('revealBtn').style.display = 'none';
+    document.getElementById('qpAnswerReveal').classList.remove('show');
+    return;
+  }
+  const q = QUESTIONS[state.callOrder[idx]];
+  document.getElementById('qpNum').textContent = idx + 1;
+  document.getElementById('qpIdx').textContent = idx + 1;
+  document.getElementById('qpMeta').textContent = state.revealed ? 'Answer revealed below.' : 'Solve, then mark on your card if you have the answer!';
+  document.getElementById('qpText').innerHTML = q.q;
+  const reveal = document.getElementById('qpAnswerReveal');
+  if (state.revealed) {
+    reveal.innerHTML = '✓ Answer: <strong>' + q.a + '</strong>';
+    reveal.classList.add('show');
+    document.getElementById('revealBtn').style.display = 'none';
+  } else {
+    reveal.classList.remove('show');
+    document.getElementById('revealBtn').style.display = 'inline-block';
+  }
+  // Update Next button label
+  const next = document.getElementById('nextBtn');
+  if (idx + 1 >= state.callOrder.length) {
+    next.textContent = '✓ All 30 questions called';
+    next.disabled = true;
+    next.style.opacity = '0.5';
+  } else {
+    next.textContent = '▶ Next question (' + (idx + 2) + '/30)';
+    next.disabled = false;
+    next.style.opacity = '1';
+  }
+}
+
+function renderCalledList() {
+  const list = document.getElementById('calledList');
+  document.getElementById('calledCount').textContent = state.currentIdx + 1;
+  if (state.currentIdx < 0) {
+    list.innerHTML = '<span style="color:var(--muted); font-size:0.85em;">No questions called yet.</span>';
+    return;
+  }
+  const chips = [];
+  for (let i = 0; i <= state.currentIdx; i++) {
+    const q = QUESTIONS[state.callOrder[i]];
+    chips.push(`<span class="called-chip" title="Q${i+1}: ${q.q.replace(/<[^>]+>/g,'')}">${q.a}</span>`);
+  }
+  list.innerHTML = chips.join('');
+}
+
+function renderCards() {
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  state.cards.forEach((card, ci) => {
+    const div = document.createElement('div');
+    div.className = 'housie-card';
+    let cellsHtml = '';
+    for (let r = 0; r < CARD_ROWS; r++) {
+      for (let c = 0; c < CARD_COLS; c++) {
+        const cellIdx = r * CARD_COLS + c;
+        const cell = card.cells[cellIdx];
+        const cls = `cell row-${r+1}` + (cell.marked ? ' marked' : '');
+        cellsHtml += `<div class="${cls}" data-card="${ci}" data-cell="${cellIdx}"><span class="cell-num">${cell.value}</span></div>`;
+      }
+    }
+    // Build winner badges
+    const badges = [];
+    if (state.winners.row1 === ci) badges.push('<span class="badge row1">🥇 Top row!</span>');
+    if (state.winners.row2 === ci) badges.push('<span class="badge row2">🥈 Middle!</span>');
+    if (state.winners.row3 === ci) badges.push('<span class="badge row3">🥉 Bottom!</span>');
+    if (state.winners.full === ci) badges.push('<span class="badge full">🏆 FULL HOUSE!</span>');
+    div.innerHTML = `
+      <div class="card-head">
+        <input type="text" class="player-input" data-card="${ci}" placeholder="Player name…" value="${card.playerName.replace(/"/g,'&quot;')}">
+        <span class="card-num">#${ci+1}</span>
+      </div>
+      <div class="card-grid">${cellsHtml}</div>
+      <div class="badges">${badges.join('')}</div>
+    `;
+    grid.appendChild(div);
+  });
+  // Wire up cell-click toggling
+  document.querySelectorAll('.cell').forEach(el => {
+    el.addEventListener('click', () => {
+      const ci = +el.dataset.card, idx = +el.dataset.cell;
+      state.cards[ci].cells[idx].marked = !state.cards[ci].cells[idx].marked;
+      checkWinners(ci);
+      renderCards();
+      renderWinners();
+    });
+  });
+  // Wire up name inputs
+  document.querySelectorAll('.player-input').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const ci = +e.target.dataset.card;
+      state.cards[ci].playerName = e.target.value;
+      renderWinners();
+    });
+  });
+}
+
+function playerLabel(ci) {
+  const name = state.cards[ci].playerName.trim();
+  return name ? `${name} (Card #${ci+1})` : `Card #${ci+1}`;
+}
+
+function renderWinners() {
+  const fmt = (ci) => ci === null ? '<span class="empty">—</span>' : playerLabel(ci);
+  document.getElementById('win-row1').innerHTML = fmt(state.winners.row1);
+  document.getElementById('win-row2').innerHTML = fmt(state.winners.row2);
+  document.getElementById('win-row3').innerHTML = fmt(state.winners.row3);
+  document.getElementById('win-full').innerHTML = fmt(state.winners.full);
+}
+
+function checkWinners(ci) {
+  const card = state.cards[ci];
+  // Row checks
+  for (let r = 0; r < CARD_ROWS; r++) {
+    const rowKey = 'row' + (r+1);
+    if (state.winners[rowKey] !== null) continue;
+    const allMarked = [0,1,2,3,4].every(c => card.cells[r*CARD_COLS + c].marked);
+    if (allMarked) state.winners[rowKey] = ci;
+  }
+  // Full house check
+  if (state.winners.full === null && card.cells.every(c => c.marked)) {
+    state.winners.full = ci;
+  }
+}
+
+function renderAll() {
+  renderQuestionPanel();
+  renderCalledList();
+  renderCards();
+  renderWinners();
+}
+
+// ===== Controls =====
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (state.currentIdx + 1 >= state.callOrder.length) return;
+  state.currentIdx++;
+  state.revealed = false;
+  renderQuestionPanel();
+  renderCalledList();
+});
+
+document.getElementById('revealBtn').addEventListener('click', () => {
+  if (state.currentIdx < 0) return;
+  state.revealed = true;
+  renderQuestionPanel();
+});
+
+document.getElementById('newGameBtn').addEventListener('click', () => {
+  if (state.currentIdx >= 0 && !confirm('Start a new game? Current progress will be lost.')) return;
+  startNewGame();
+});
+
+function startNewGame() {
+  state.callOrder = shuffle(QUESTIONS.map((_, i) => i));
+  state.currentIdx = -1;
+  state.revealed = false;
+  state.winners = { row1: null, row2: null, row3: null, full: null };
+  generateCards();
+  renderAll();
+}
+
+// Initial setup
+startNewGame();
+</script>
+
+</body>
+</html>

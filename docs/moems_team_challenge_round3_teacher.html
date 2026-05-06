@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen Team Practice for MOEMs — Round 3 (Teacher)</title>
+<style>
+  :root {
+    --primary: #1e40af;
+    --accent: #f59e0b;
+    --teamA: #dc2626;
+    --teamB: #2563eb;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --warn: #ea580c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+    color: white;
+    padding: 18px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.4em;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    font-size: 0.85em;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .timer-box {
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-size: 1.6em;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+    text-align: center;
+  }
+  .timer-box.warn { background: var(--warn); border-color: white; animation: pulse 1s infinite; }
+  .timer-box.danger { background: var(--bad); border-color: white; animation: pulse 0.5s infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+  }
+  button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95em;
+  }
+  button:hover { background: var(--accent); color: white; }
+  button.danger { background: var(--bad); color: white; }
+  button.danger:hover { background: #991b1b; }
+
+  .scoreboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 22px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .stat {
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: white;
+    text-align: center;
+  }
+  .stat.solved { background: var(--good); }
+  .stat.attempted { background: var(--bad); }
+  .stat-label { font-size: 0.8em; opacity: 0.9; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+  .stat-value { font-size: 2.2em; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin-top: 4px; }
+  .auto-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-left: 6px;
+  }
+  .auto-mark.ok { background: var(--good); }
+  .auto-mark.no { background: var(--bad); }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .instructions {
+    background: #fef9e7;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .instructions h3 { margin-top: 0; color: var(--accent); }
+  .instructions ol { margin: 6px 0; padding-left: 20px; }
+  .instructions li { margin: 4px 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .card.solved { border-color: var(--good); background: #f0fdf4; }
+  .card.wrong { border-color: var(--bad); background: #fef2f2; }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .qnum {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+  .difficulty {
+    font-size: 0.75em;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .topic {
+    font-size: 0.7em;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .qtext {
+    font-size: 0.98em;
+    line-height: 1.55;
+    margin: 8px 0 12px 0;
+  }
+  .qtext code {
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.95em;
+  }
+
+  .answer-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .answer-row input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  .award-btns {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .award-btns button {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 0.85em;
+    border-radius: 6px;
+  }
+  .award-correct { background: var(--good); color: white; }
+  .award-correct:hover { background: #15803d; color: white; }
+  .award-wrong { background: var(--bad); color: white; }
+  .award-wrong:hover { background: #991b1b; color: white; }
+  .award-skip { background: #e2e8f0; color: var(--ink); }
+  .award-skip:hover { background: #cbd5e1; color: var(--ink); }
+
+  .reveal-btn {
+    background: #f1f5f9;
+    color: var(--ink);
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    font-size: 0.82em;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .reveal-btn:hover { background: var(--primary); color: white; }
+
+  .solution {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #ecfdf5;
+    border-left: 3px solid var(--good);
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .solution.show { display: block; }
+  .solution .ans {
+    font-weight: 700;
+    color: var(--good);
+    font-size: 1.05em;
+  }
+  .solved-tag {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.75em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: white;
+  }
+  .solved-tag.ok { background: var(--good); }
+  .solved-tag.no { background: var(--bad); }
+
+  .footer-summary {
+    background: white;
+    border-top: 2px solid var(--primary);
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .winner-banner {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  @media print {
+    header, .controls, .answer-row, .award-btns, .reveal-btn { display: none !important; }
+    .solution { display: block !important; }
+    .card { break-inside: avoid; }
+  }
+  @media (max-width: 600px) {
+    .timer-box { font-size: 1.2em; padding: 6px 10px; min-width: 90px; }
+    h1 { font-size: 1.1em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs — Round 3 (Teacher)</h1>
+      <div class="subtitle" style="font-size:1em; margin-top:6px;">Teacher-driven scoring · Two teams call out answers · 10 questions (easy → hard) · grade whenever you're ready</div>
+    </div>
+    <div class="controls">
+      <button id="gradeBtn" style="background:var(--good); color:white;">✓ Grade All Remaining</button>
+      <button id="startBtn">▶ Start</button>
+    </div>
+  </div>
+</header>
+
+<div class="scoreboard" style="grid-template-columns: 1fr 1fr;">
+  <div class="stat" style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%);">
+    <div class="stat-label">🔴 TEAM 1 SCORE</div>
+    <div class="stat-value"><span id="team1Score">0</span> / 10</div>
+  </div>
+  <div class="stat" style="background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%);">
+    <div class="stat-label">🔵 TEAM 2 SCORE</div>
+    <div class="stat-value"><span id="team2Score">0</span> / 10</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="instructions" id="instructionsBox">
+    <h3>📋 How to Run This Practice Round (Teacher-Driven)</h3>
+    <ol>
+      <li><strong>One screen, both teams in the same room.</strong> The two teams of 5 work simultaneously on paper at separate tables. You (the teacher) hold the laptop with this page.</li>
+      <li><strong>Click ▶ Start</strong> to reveal all 10 problems. Read each problem aloud (or hand out a printed copy). <em>No timer — work at whatever pace fits the room.</em></li>
+      <li><strong>For each question, type both teams' answers in the red and blue boxes, then click "✓ Grade Q#"</strong> directly below that question. The system instantly shows ✓/✗ next to each team's answer, reveals the correct answer, and — if either team got it wrong — auto-reveals the full step-by-step explanation right there for class review.</li>
+      <li><strong>Running scores</strong> at the top update after every question you grade.</li>
+      <li><strong>Optional:</strong> the "✓ Grade All Remaining" button at the top grades any remaining ungraded questions in one go (useful for cleanup at the end).</li>
+    </ol>
+    <p style="margin: 8px 0 0 0; font-size: 0.9em; color: var(--muted);"><strong>Coaching tip:</strong> Encourage runners to call out clean, simplified answers (e.g., "twelve" or "12", not "12 square units"). The grader is forgiving (handles fractions, decimals, dashes, etc.) but cleaner is better.</p>
+  </div>
+
+  <div class="grid" id="grid" style="display:none;"></div>
+
+  <div class="footer-summary" id="finalSummary" style="display:none;">
+    <div class="winner-banner" id="winnerText"></div>
+    <div style="color: var(--muted);">Click "Show solution" on each problem to review with the class.</div>
+  </div>
+
+</div>
+
+<script>
+// ===== Questions (MOEMS Div M Team-aligned, easy → hard) — ROUND 3 =====
+const QUESTIONS = [
+  {
+    n: 1, topic: "Arithmetic · Sum of Odd Numbers", diff: 2,
+    q: "What is the sum of the first <code>30</code> positive odd numbers? <br>(That is: <code>1 + 3 + 5 + 7 + · · · + 59</code>.)",
+    a: "900",
+    accepts: ["900"],
+    sol: `<div class="ans">Answer: 900</div>
+      <p><strong>Step 1 — Identify the last term.</strong> The k-th odd number is 2k − 1. So the 30th odd number is 2(30) − 1 = <strong>59</strong>. We're summing 1 + 3 + 5 + … + 59.</p>
+      <p><strong>Step 2 — Use the classic identity.</strong> The sum of the first n positive odd numbers is exactly <strong>n²</strong>:</p>
+      <p style="text-align:center;">1 + 3 + 5 + … + (2n − 1) = n²</p>
+      <p>(Visual proof: stack n L-shaped odd-numbered "gnomons" — they assemble into an n × n square.)</p>
+      <p><strong>Step 3 — Apply.</strong> n = 30, so the sum is 30² = <strong>900</strong>.</p>
+      <p><strong>Verification (Gauss pairing):</strong> Pair 1+59=60, 3+57=60, …, 29+31=60. There are 15 pairs of 60. Total = 15 · 60 = 900 ✓.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Memorize: 1 + 3 + 5 + … + (2n − 1) = n². And 2 + 4 + 6 + … + 2n = n(n+1). These two formulas appear constantly.</p>`
+  },
+  {
+    n: 2, topic: "Probability · Two Dice", diff: 2,
+    q: "Two fair standard six-sided dice are rolled. What is the probability that the <em>sum</em> of the two numbers shown is a <strong>prime</strong> number? Express your answer as a fraction in lowest terms.",
+    a: "5/12",
+    accepts: ["5/12"],
+    sol: `<div class="ans">Answer: 5/12</div>
+      <p><strong>Step 1 — Total outcomes.</strong> Each die has 6 faces, so 6 · 6 = <strong>36</strong> equally-likely outcomes.</p>
+      <p><strong>Step 2 — Identify which sums are prime.</strong> Possible sums range from 2 to 12. The primes in this range are <strong>2, 3, 5, 7, 11</strong>. (Not 9 — that's 3·3. Not 4, 6, 8, 10, 12 — all even and > 2.)</p>
+      <p><strong>Step 3 — Count outcomes producing each prime sum:</strong></p>
+      <table style="border-collapse:collapse; margin:8px 0;">
+        <tr style="background:#e2e8f0;"><th style="padding:4px 10px; border:1px solid #cbd5e1;">Sum</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Outcomes</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Count</th></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">2</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">(1,1)</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">1</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">3</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">(1,2),(2,1)</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">2</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">5</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">(1,4),(4,1),(2,3),(3,2)</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">4</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">7</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">(1,6),(6,1),(2,5),(5,2),(3,4),(4,3)</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">6</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">11</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">(5,6),(6,5)</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">2</td></tr>
+      </table>
+      <p>Total favorable: 1 + 2 + 4 + 6 + 2 = <strong>15</strong>.</p>
+      <p><strong>Step 4 — Compute and reduce.</strong> 15/36 = <strong>5/12</strong> (divide both by 3).</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Two-dice probability problems. Build the 6×6 sum table once and memorize the counts: sum=2:1, 3:2, 4:3, 5:4, 6:5, 7:6, 8:5, 9:4, 10:3, 11:2, 12:1. Sum = 7 is the most likely.</p>`
+  },
+  {
+    n: 3, topic: "Number Theory · Trailing Zeros of Factorials", diff: 2,
+    q: "How many zeros does <code>25!</code> end in? (Recall: 25! = 25 × 24 × 23 × · · · × 2 × 1.)",
+    a: "6",
+    accepts: ["6"],
+    sol: `<div class="ans">Answer: 6</div>
+      <p><strong>Step 1 — A trailing zero comes from a factor of 10 = 2 · 5.</strong> Since there are far more factors of 2 than of 5 in 25!, the number of trailing zeros equals the number of factors of <strong>5</strong> in 25!.</p>
+      <p><strong>Step 2 — Count multiples of 5 from 1 to 25.</strong> They are 5, 10, 15, 20, 25. That's <strong>5 multiples</strong>, contributing 5 factors of 5.</p>
+      <p><strong>Step 3 — Add an extra for higher powers of 5.</strong> 25 = 5² contributes one <em>extra</em> factor of 5 beyond the 5 we already counted. That's <strong>+1</strong>.</p>
+      <p>Total = 5 + 1 = <strong>6</strong>.</p>
+      <p><strong>Legendre's formula:</strong> # of 5s in n! = ⌊n/5⌋ + ⌊n/25⌋ + ⌊n/125⌋ + … For n = 25: ⌊25/5⌋ + ⌊25/25⌋ = 5 + 1 = 6.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Trailing zeros of n! = number of 5s in its factorization. Use Legendre's formula. Don't forget to count 25, 125, 625, … as <em>extra</em> contributions.</p>`
+  },
+  {
+    n: 4, topic: "Algebra · Mean & Maximization", diff: 2,
+    q: "The arithmetic mean of 5 <em>distinct</em> positive integers is 10. What is the largest possible value that any one of these integers can take?",
+    a: "40",
+    accepts: ["40"],
+    sol: `<div class="ans">Answer: 40</div>
+      <p><strong>Step 1 — Mean = sum / count.</strong> If 5 integers have mean 10, their sum is 5 · 10 = 50.</p>
+      <p><strong>Step 2 — To maximize one integer, minimize the other four.</strong> They must be <em>distinct</em> positive integers, so the smallest possible four values are <strong>1, 2, 3, 4</strong>, summing to 10.</p>
+      <p><strong>Step 3 — Solve.</strong> Largest = 50 − 10 = <strong>40</strong>.</p>
+      <p><strong>Verify.</strong> The five numbers {1, 2, 3, 4, 40} are distinct positive integers, mean = 50/5 = 10 ✓.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> "Maximize one given a fixed sum/mean" — minimize all the others to their tightest legal values (smallest distinct positive integers: 1,2,3,4,…).</p>`
+  },
+  {
+    n: 5, topic: "Combinatorics · Ordered Pairs", diff: 2,
+    q: "How many <em>ordered</em> pairs <code>(a, b)</code> of positive integers satisfy <code>a + b = 20</code>?",
+    a: "19",
+    accepts: ["19"],
+    sol: `<div class="ans">Answer: 19</div>
+      <p><strong>Step 1 — Pin down a's range.</strong> Since a and b are positive integers, a ≥ 1 and b = 20 − a ≥ 1, so a ≤ 19.</p>
+      <p><strong>Step 2 — a can be 1, 2, 3, …, 19.</strong> Each value of a uniquely determines b. That's <strong>19 ordered pairs</strong>.</p>
+      <p><strong>Pairs:</strong> (1,19), (2,18), (3,17), …, (19,1).</p>
+      <p><strong>Watch out:</strong> "ordered" means (3,17) and (17,3) count as <em>different</em> pairs — both are included.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Ordered vs unordered pairs. For ordered pairs (a,b) of positive integers with a+b = n, the answer is n − 1.</p>`
+  },
+  {
+    n: 6, topic: "Geometry · Clock Hand Angle", diff: 3,
+    q: "What is the smaller angle (in degrees) between the hour and minute hands of a clock at exactly <code>4:20</code>?",
+    a: "10",
+    accepts: ["10", "10°", "10 degrees"],
+    sol: `<div class="ans">Answer: 10°</div>
+      <p><strong>Step 1 — Minute-hand angle.</strong> The minute hand moves 360° per hour = 6° per minute. At 20 minutes, it points at <strong>20 · 6 = 120°</strong> (measured clockwise from 12).</p>
+      <p><strong>Step 2 — Hour-hand angle.</strong> The hour hand moves 360° per 12 hours = 30° per hour, which is 0.5° per minute. At 4:20:</p>
+      <p style="text-align:center;">hour-hand angle = 4 · 30° + 20 · 0.5° = 120° + 10° = <strong>130°</strong></p>
+      <p><strong>Step 3 — Difference.</strong> |130° − 120°| = <strong>10°</strong>. (Smaller angle, since 10 < 360 − 10 = 350.)</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Clock-hand-angle problems. Memorize: minute hand = 6°/min, hour hand = 0.5°/min. Always compute both angles from 12 o'clock, then take the absolute difference.</p>`
+  },
+  {
+    n: 7, topic: "Number Theory · Pythagorean Triples", diff: 3,
+    q: "How many right triangles with all <em>integer</em> side lengths have a hypotenuse of length <code>25</code>? (Triangles that are reflections of each other count once.)",
+    a: "2",
+    accepts: ["2"],
+    sol: `<div class="ans">Answer: 2</div>
+      <p><strong>Step 1 — We need positive integers a ≤ b with a² + b² = 25² = 625.</strong></p>
+      <p><strong>Step 2 — Try small a and check whether 625 − a² is a perfect square:</strong></p>
+      <ul>
+        <li>a = 7: 625 − 49 = 576 = 24². ✓ Triangle (7, 24, 25).</li>
+        <li>a = 15: 625 − 225 = 400 = 20². ✓ Triangle (15, 20, 25).</li>
+        <li>Other a values from 1 to 17: 625 − a² is not a perfect square.</li>
+      </ul>
+      <p><strong>Step 3 — Count.</strong> Two triangles: <strong>(7, 24, 25)</strong> and <strong>(15, 20, 25)</strong>. Answer: <strong>2</strong>.</p>
+      <p><strong>Why these two?</strong> 25 = 5². Pythagorean triples scale: (3,4,5)·5 = (15,20,25), and (7,24,25) is a primitive triple. Memorize 3-4-5, 5-12-13, 7-24-25, 8-15-17, 9-40-41, 20-21-29.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Memorize the small Pythagorean triples and their multiples. Hypotenuse 25 is a doubly-rich case: a primitive (7,24,25) and a multiple of (3,4,5).</p>`
+  },
+  {
+    n: 8, topic: "Geometry · Regular Hexagon", diff: 4,
+    q: "A regular hexagon has area <code>96</code>. What is the area of the equilateral triangle formed by connecting <em>every other</em> vertex of the hexagon (i.e., the triangle formed by 3 alternating vertices)?",
+    a: "48",
+    accepts: ["48"],
+    sol: `<div class="ans">Answer: 48</div>
+      <p><strong>Step 1 — Decompose the hexagon into 6 small equilateral triangles.</strong> A regular hexagon of side s consists of 6 congruent equilateral triangles of side s, all meeting at the center. Each small triangle has area 96/6 = <strong>16</strong>.</p>
+      <p><strong>Step 2 — The "alternating-vertices" triangle covers exactly 3 of these small triangles plus 3 more.</strong> Drawing the picture: connecting alternate vertices A, C, E creates a large equilateral triangle. This big triangle contains:</p>
+      <ul>
+        <li>The 3 small triangles whose tips touch the alternating vertices A, C, E (these are <em>inside</em> the big triangle), plus</li>
+        <li>The central region — but wait, let's count more carefully.</li>
+      </ul>
+      <p><strong>Cleaner approach (using ratios):</strong> If the hexagon has side s, then by the regular-hexagon geometry, the distance between alternating vertices (a "long diagonal" of the equilateral inner triangle's side) is s√3. The big inner triangle has side s√3, so its area is (√3/4)(s√3)² = (3√3/4)s².</p>
+      <p>The hexagon's area is (3√3/2)s². So the ratio = [(3√3/4)s²] / [(3√3/2)s²] = <strong>1/2</strong>.</p>
+      <p><strong>Step 3 — Compute.</strong> Triangle area = (1/2) · 96 = <strong>48</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The big equilateral triangle inscribed in a regular hexagon (connecting every other vertex) always has area equal to <em>half</em> the hexagon's area. Memorize this ratio.</p>`
+  },
+  {
+    n: 9, topic: "Combinatorics · Stars and Bars", diff: 4,
+    q: "How many positive 4-digit integers have digits that sum to exactly <code>9</code>? (For example, 1080: digits 1+0+8+0 = 9 ✓.)",
+    a: "165",
+    accepts: ["165"],
+    sol: `<div class="ans">Answer: 165</div>
+      <p><strong>Setup.</strong> Let the 4-digit number be N = abcd, with a ∈ {1..9} and b, c, d ∈ {0..9}. Need a + b + c + d = 9.</p>
+      <p><strong>Step 1 — Substitute to make all variables non-negative.</strong> Let a' = a − 1 (so a' ∈ {0..8}). Then a' + b + c + d = 8, with all four variables ≥ 0.</p>
+      <p><strong>Step 2 — Apply stars and bars.</strong> The number of non-negative integer solutions to x₁ + x₂ + x₃ + x₄ = 8 is C(8 + 3, 3) = C(11, 3) = <strong>165</strong>.</p>
+      <p><strong>Step 3 — Check the upper-bound constraints.</strong> Each digit must be ≤ 9. Since the total sum is only 8, no single digit can exceed 8 anyway, so no solutions get excluded. Final answer: <strong>165</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> "Number of solutions to x₁ + … + xₖ = n with non-negative xᵢ" = C(n + k − 1, k − 1). Always shift the constrained variable (a ≥ 1 ↔ a' = a − 1 ≥ 0) before applying the formula.</p>`
+  },
+  {
+    n: 10, topic: "Number Theory · Largest Prime Factor", diff: 4,
+    q: "What is the largest prime factor of <code>2<sup>16</sup> − 1</code>? (Note: 2¹⁶ = 65536, so 2¹⁶ − 1 = 65535.)",
+    a: "257",
+    accepts: ["257"],
+    sol: `<div class="ans">Answer: 257</div>
+      <p><strong>Step 1 — Use the difference-of-squares factoring repeatedly.</strong></p>
+      <p>2¹⁶ − 1 = (2⁸ − 1)(2⁸ + 1) = 255 · 257.</p>
+      <p>Factor further: 2⁸ − 1 = (2⁴ − 1)(2⁴ + 1) = 15 · 17.</p>
+      <p>Continuing: 2⁴ − 1 = 15 = 3 · 5.</p>
+      <p><strong>Step 2 — Combine.</strong> So 2¹⁶ − 1 = (3 · 5) · 17 · 257 = 65535.</p>
+      <p><strong>Step 3 — Identify the prime factors.</strong> 3, 5, 17 are clearly prime. Is 257 prime? Test divisibility by primes ≤ √257 ≈ 16: try 2, 3, 5, 7, 11, 13. None divide 257. So 257 is prime.</p>
+      <p>Largest prime factor: <strong>257</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> 2<sup>2ⁿ</sup> − 1 always factors as (2<sup>2ⁿ⁻¹</sup> − 1)(2<sup>2ⁿ⁻¹</sup> + 1). Use this iteratively. The numbers 2<sup>2ⁿ</sup> + 1 are <em>Fermat numbers</em> — 3, 5, 17, 257, 65537 are all prime.</p>`
+  }
+];
+
+
+// ===== Answer normalization & auto-grading =====
+function normalize(str) {
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–—]/g, '-')        // various dashes -> minus
+    .replace(/[×·∗]/g, '*')         // multiplication symbols
+    .replace(/[÷]/g, '/')
+    .replace(/√/g, 'sqrt')
+    .replace(/[()]/g, '')           // strip parens for sqrt(15) -> sqrt15
+    .replace(/\*/g, '')             // strip * so 2*sqrt15 == 2sqrt15
+    .replace(/^0+(\d)/, '$1');      // leading zeros: 07 -> 7
+}
+// Try to compute a numeric value (handles "3.2", "16/5", "3 1/5", or plain integers)
+function toNumber(s) {
+  if (!s) return null;
+  const t = String(s).replace(/\s+/g, ' ').trim();
+  // mixed number like "3 1/5"
+  const mixed = t.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+  if (mixed) {
+    const whole = +mixed[1], num = +mixed[2], den = +mixed[3];
+    if (den !== 0) return whole + (whole < 0 ? -1 : 1) * (num / den);
+  }
+  // simple fraction "a/b"
+  const frac = t.match(/^(-?\d+)\/(-?\d+)$/);
+  if (frac) {
+    const num = +frac[1], den = +frac[2];
+    if (den !== 0) return num / den;
+  }
+  // plain decimal/integer
+  if (/^-?\d+(\.\d+)?$/.test(t)) return +t;
+  return null;
+}
+function gradeOne(n) {
+  const q = QUESTIONS.find(x => x.n === n);
+  if (!q) return;
+  ['1','2'].forEach(team => {
+    const typed = (state.answers[team][q.n] || '').trim();
+    if (!typed) {
+      state.status[team][q.n] = 'no';
+      return;
+    }
+    const accepts = q.accepts || [q.a];
+    const normTyped = normalize(typed);
+    let match = accepts.some(acc => normalize(acc) === normTyped);
+    if (!match) {
+      const typedNum = toNumber(typed);
+      if (typedNum !== null) {
+        match = accepts.some(acc => {
+          const accNum = toNumber(acc);
+          return accNum !== null && Math.abs(accNum - typedNum) < 1e-3;
+        });
+      }
+    }
+    state.status[team][q.n] = match ? 'ok' : 'no';
+  });
+  state.graded[q.n] = true;
+  render();
+}
+function autoGrade() {
+  QUESTIONS.forEach(q => gradeOne(q.n));
+}
+
+// ===== State =====
+let state = {
+  status: { '1': {}, '2': {} },     // team -> n -> 'ok' or 'no'
+  answers: { '1': {}, '2': {} },    // team -> n -> typed string
+  graded: {},                        // n -> true once that question has been graded
+  running: false,
+  finished: false                    // true after teacher clicks "Grade All"
+};
+
+// ===== Render =====
+const grid = document.getElementById('grid');
+function difficultyStars(d) {
+  return '★'.repeat(d) + '☆'.repeat(4-d);
+}
+function render() {
+  grid.innerHTML = '';
+  QUESTIONS.forEach(q => {
+    const isGraded = !!state.graded[q.n];
+    const st1 = state.status['1'][q.n];
+    const st2 = state.status['2'][q.n];
+    const eitherWrong = isGraded && (st1 === 'no' || st2 === 'no');
+    const card = document.createElement('div');
+    card.className = 'card';
+    if (isGraded) {
+      if (st1 === 'ok' && st2 === 'ok') card.className += ' solved';
+      else if (eitherWrong) card.className += ' wrong';
+    }
+
+    const teamRow = (team, color, st) => `
+      <div class="answer-row" style="margin-top:6px;">
+        <div style="background:${color}; color:white; font-weight:800; padding:8px 12px; border-radius:6px; min-width:74px; text-align:center; font-size:0.85em; letter-spacing:0.05em;">TEAM ${team}</div>
+        <input type="text" placeholder="Team ${team}'s answer..." id="ans-${team}-${q.n}" ${isGraded ? 'readonly' : ''}>
+        ${isGraded ? `<span class="auto-mark ${st}">${st === 'ok' ? '✓' : '✗'}</span>` : ''}
+      </div>
+    `;
+
+    const gradeBtnRow = !isGraded ? `
+      <div style="margin-top:10px;">
+        <button class="reveal-btn" style="background:var(--good); color:white; border:none; font-weight:700;" onclick="gradeOne(${q.n})">✓ Grade Q${q.n}</button>
+      </div>
+    ` : '';
+
+    const gradingControls = isGraded ? `
+      <div style="margin-top:10px; padding:8px 10px; background:#f8fafc; border-left:3px solid var(--primary); border-radius:4px; font-size:0.95em;">
+        <strong>Correct answer:</strong> <span style="font-weight:700; color:var(--good);">${q.a}</span>
+      </div>
+      ${eitherWrong ? `
+        <div class="solution show" style="margin-top:10px;">
+          <div style="margin-bottom:8px; font-weight:700; color:var(--bad);">⚠️ At least one team missed this — review:</div>
+          ${q.sol}
+        </div>
+      ` : `
+        <button class="reveal-btn" onclick="toggleSol(${q.n})">Show full explanation (both teams got it ✓)</button>
+        <div class="solution" id="sol-${q.n}">
+          ${q.sol}
+        </div>
+      `}
+    ` : '';
+
+    card.innerHTML = `
+      ${isGraded ? `<span class="solved-tag ${eitherWrong ? 'no' : 'ok'}">${eitherWrong ? '✗ Missed' : '✓ Both correct'}</span>` : ''}
+      <div class="card-head">
+        <span class="qnum">${q.n}</span>
+        <span class="difficulty">${difficultyStars(q.diff)}</span>
+      </div>
+      <div class="topic">${q.topic}</div>
+      <div class="qtext">${q.q}</div>
+      ${teamRow('1', '#dc2626', st1)}
+      ${teamRow('2', '#2563eb', st2)}
+      ${gradeBtnRow}
+      ${gradingControls}
+    `;
+    grid.appendChild(card);
+  });
+  // Restore typed answers
+  ['1','2'].forEach(team => {
+    Object.keys(state.answers[team]).forEach(n => {
+      const inp = document.getElementById('ans-' + team + '-' + n);
+      if (inp) inp.value = state.answers[team][n];
+    });
+  });
+  // Wire up listeners
+  QUESTIONS.forEach(q => {
+    ['1','2'].forEach(team => {
+      const inp = document.getElementById('ans-' + team + '-' + q.n);
+      if (inp) inp.oninput = (e) => { state.answers[team][q.n] = e.target.value; };
+    });
+  });
+  updateScores();
+}
+function toggleSol(n) {
+  document.getElementById('sol-' + n).classList.toggle('show');
+}
+function updateScores() {
+  const ok1 = Object.values(state.status['1']).filter(v => v === 'ok').length;
+  const ok2 = Object.values(state.status['2']).filter(v => v === 'ok').length;
+  document.getElementById('team1Score').textContent = ok1;
+  document.getElementById('team2Score').textContent = ok2;
+  const allGraded = QUESTIONS.every(q => state.graded[q.n]);
+  if (allGraded) {
+    document.getElementById('finalSummary').style.display = 'block';
+    document.getElementById('winnerText').innerHTML =
+      `<div style="font-size:1.3em; margin-bottom:8px;">All questions graded</div>` +
+      `<div style="font-size:1em; color:var(--muted); font-weight:500;">Review the missed problems together as a class — explanations are open under each one.</div>`;
+  }
+}
+
+// ===== Timer (disabled — teacher grades manually) =====
+function tick() { /* no-op: timer removed in teacher mode */ }
+function finishRound() {
+  document.getElementById('finalSummary').style.display = 'block';
+  autoGrade();
+  render();
+  updateScores();
+  document.getElementById('finalSummary').scrollIntoView({ behavior: 'smooth' });
+}
+document.getElementById('startBtn').onclick = () => {
+  if (state.running || state.finished) return;
+  state.running = true;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').style.opacity = '0.5';
+  document.getElementById('instructionsBox').style.display = 'none';
+  document.getElementById('grid').style.display = 'grid';
+};
+// Grade-all button: grades any ungraded questions in one shot
+document.getElementById('gradeBtn').addEventListener('click', () => {
+  QUESTIONS.forEach(q => { if (!state.graded[q.n]) gradeOne(q.n); });
+  document.getElementById('finalSummary').scrollIntoView({ behavior: 'smooth' });
+});
+
+render();
+</script>
+</body>
+</html>

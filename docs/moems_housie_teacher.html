@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen MOEMs Housie 🎲 (Teacher Console)</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --bad: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 18px 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; max-width: 1400px; margin: 0 auto;
+  }
+  h1 { margin: 0; font-size: 2em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 0.95em; opacity: 0.95; margin-top: 4px; }
+  button {
+    background: white; color: var(--primary); border: none;
+    border-radius: 10px; padding: 10px 18px; font-weight: 700;
+    cursor: pointer; font-size: 0.95em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: all 0.15s;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+  button.primary { background: var(--accent); color: white; }
+  button.success { background: var(--good); color: white; }
+  button.danger  { background: var(--bad); color: white; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 18px; }
+
+  .layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+  .question-panel {
+    background: white; border-radius: 16px;
+    padding: 24px 30px; margin-bottom: 20px;
+    box-shadow: 0 4px 14px rgba(124,58,237,0.18);
+    border: 3px solid var(--primary);
+  }
+  .qp-head {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+  }
+  .qp-num {
+    background: var(--primary); color: white; border-radius: 50%;
+    width: 50px; height: 50px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 1.4em;
+  }
+  .qp-meta { color: var(--muted); font-size: 0.9em; }
+  .qp-text {
+    font-size: 1.6em; font-weight: 700; color: var(--ink);
+    margin: 12px 0; text-align: center; padding: 14px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 12px;
+  }
+  .qp-text code {
+    background: white; padding: 2px 8px; border-radius: 6px;
+    font-size: 1em; color: #7c3aed; font-weight: 800;
+  }
+  .qp-controls {
+    display: flex; gap: 10px; align-items: center;
+    justify-content: center; margin-top: 14px; flex-wrap: wrap;
+  }
+  .teacher-answer {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #fef3c7; border: 2px dashed #d97706;
+    color: #92400e; font-weight: 800;
+    padding: 6px 12px; border-radius: 8px; font-size: 0.95em;
+  }
+  .teacher-answer .label { font-size: 0.75em; text-transform: uppercase; opacity: 0.85; }
+  .teacher-answer .ans-val {
+    background: white; padding: 2px 10px; border-radius: 6px;
+    font-size: 1.3em; color: var(--good); font-family: monospace;
+    letter-spacing: 0.05em; min-width: 50px; text-align: center;
+  }
+  .teacher-answer .ans-val.hidden { color: transparent; background: #fde68a; user-select: none; }
+  .teacher-answer .ans-val.hidden::before { content: '••••'; color: #92400e; }
+
+  .progress-box, .validate-box {
+    background: white; border-radius: 14px; padding: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 16px;
+  }
+  .progress-box h3, .validate-box h3 {
+    margin: 0 0 10px 0; font-size: 1em;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary); padding-bottom: 6px;
+  }
+  .called-list {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    max-height: 220px; overflow-y: auto;
+  }
+  .called-chip {
+    background: var(--primary); color: white;
+    padding: 4px 10px; border-radius: 12px;
+    font-weight: 700; font-size: 0.85em;
+  }
+
+  .validate-box textarea {
+    width: 100%; min-height: 70px;
+    border: 2px solid #cbd5e1; border-radius: 8px;
+    padding: 8px 10px; font-family: inherit; font-size: 1em;
+    font-weight: 700; color: var(--ink); resize: vertical;
+  }
+  .validate-box textarea:focus { outline: none; border-color: var(--primary); }
+  .validate-row {
+    display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .validate-row select {
+    padding: 6px 8px; border: 2px solid #cbd5e1; border-radius: 8px;
+    font-weight: 700; color: var(--ink); flex: 1;
+  }
+  .validate-result {
+    margin-top: 10px; padding: 10px; border-radius: 8px;
+    font-weight: 700; display: none;
+  }
+  .validate-result.show { display: block; }
+  .validate-result.pass { background: #ecfdf5; border: 2px solid var(--good); color: #14532d; }
+  .validate-result.fail { background: #fef2f2; border: 2px solid var(--bad); color: #7f1d1d; }
+  .num-pill {
+    display: inline-block; padding: 3px 9px; margin: 3px 3px 0 0;
+    border-radius: 10px; font-weight: 800; font-size: 0.9em;
+  }
+  .num-pill.ok { background: #16a34a; color: white; }
+  .num-pill.bad { background: #dc2626; color: white; }
+  .num-pill.unknown { background: #64748b; color: white; }
+
+  .instructions {
+    background: white; border: 3px solid var(--accent);
+    border-radius: 14px; padding: 18px 22px; margin-bottom: 18px;
+  }
+  .instructions h3 { margin-top: 0; color: var(--accent); font-size: 1.2em; }
+  .instructions ol { margin: 8px 0; padding-left: 20px; }
+  .instructions li { margin: 6px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1>🎲 MOEMs Housie — Teacher Console</h1>
+      <div class="subtitle">Show questions one by one · Validate student BINGO claims against numbers called so far</div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button id="newGameBtn" class="primary">🔀 New Game (reshuffle order)</button>
+      <button id="nextBtn" class="success">▶ Show next question</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="instructions">
+    <h3>📋 Teacher Flow</h3>
+    <ol>
+      <li>Make sure each student has the <strong>student cards page</strong> open on their device.</li>
+      <li>Click <strong>"▶ Show next question"</strong>. Read aloud, give students time to solve and self-mark on their card.</li>
+      <li>If you need to verify the answer privately, click <strong>"👁 Show"</strong> on the dashed yellow box (only visible on your screen). Click <strong>🙈 Hide</strong> to conceal it again. <strong>Do not project the answer</strong> — students should solve it themselves.</li>
+      <li>Click <strong>"▶ Next question"</strong> to continue.</li>
+      <li><strong>When a student shouts BINGO</strong> (top row / middle row / bottom row / full house):
+        <ul style="margin:6px 0;">
+          <li>Pause the game.</li>
+          <li>Have them read out the numbers they marked for that line (5 numbers for a row, 15 for full house).</li>
+          <li>Type/paste those numbers into the <strong>"Validate BINGO claim"</strong> box on the right.</li>
+          <li>Click <strong>Validate</strong>. The system checks every number against the answers called so far.</li>
+        </ul>
+      </li>
+      <li>If all numbers are valid (already called) and the count matches the line type → 🎉 legit BINGO. Otherwise → false claim.</li>
+    </ol>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="question-panel" id="questionPanel">
+        <div class="qp-head">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="qp-num" id="qpNum">?</div>
+            <div>
+              <div style="font-weight:700; font-size:1.05em;">Question <span id="qpIdx">—</span> of 30</div>
+              <div class="qp-meta" id="qpMeta">Click "Show next question" to begin</div>
+            </div>
+          </div>
+        </div>
+        <div class="qp-text" id="qpText">Welcome! Click "▶ Show next question" to start the game.</div>
+        <div class="qp-controls">
+          <span class="teacher-answer" id="teacherAnswer" style="display:none;">
+            <span class="label">🔒 Teacher only · answer:</span>
+            <span class="ans-val hidden" id="teacherAnswerVal"></span>
+            <button id="peekBtn" style="padding:4px 10px; font-size:0.8em;">👁 Show</button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="progress-box">
+        <h3>📊 Progress</h3>
+        <div style="font-size:1.6em; font-weight:800; color:var(--primary); text-align:center; padding:8px 0;">
+          <span id="calledCount">0</span> / 30 called
+        </div>
+        <div style="font-size:0.8em; color:var(--muted); text-align:center;">
+          (Numbers hidden so students can't reverse-engineer answers from a screen peek.)
+        </div>
+      </div>
+
+      <div class="validate-box">
+        <h3>✅ Validate BINGO claim</h3>
+        <div style="font-size:0.85em; color:var(--muted); margin-bottom:6px;">
+          Paste the numbers the student marked (comma- or space-separated):
+        </div>
+        <textarea id="claimInput" placeholder="e.g. 12, 36, 78, 150, 1001"></textarea>
+        <div class="validate-row">
+          <select id="claimType">
+            <option value="row">Single Row (5 numbers)</option>
+            <option value="full">Full House (15 numbers)</option>
+            <option value="any">Any count</option>
+          </select>
+          <button id="validateBtn" class="success">Validate</button>
+          <button id="clearClaimBtn">Clear</button>
+        </div>
+        <div class="validate-result" id="validateResult"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== Same 30 questions as the combined housie file (UNIQUE answers) =====
+const QUESTIONS = [
+  { q: "How many positive integers less than <code>100</code> leave a remainder of <code>2</code> when divided by <code>9</code>?", a: 11 },
+  { q: "Number of positive divisors of <code>96</code>", a: 12 },
+  { q: "How many prime numbers are there from <code>1</code> to <code>41</code> inclusive?", a: 13 },
+  { q: "In how many ways can <code>4</code> identical candies be distributed among <code>3</code> distinct children (a child may get zero)?", a: 15 },
+  { q: "Smallest positive integer that leaves remainder <code>4</code> when divided by <code>6</code> and remainder <code>1</code> when divided by <code>5</code>", a: 16 },
+  { q: "If <code>x + y = 10</code> and <code>x² + y² = 66</code>, find <code>xy</code>", a: 17 },
+  { q: "Number of positive divisors of <code>180</code>", a: 18 },
+  { q: "The <code>8<sup>th</sup></code> prime number", a: 19 },
+  { q: "Number of diagonals in a regular octagon", a: 20 },
+  { q: "Number of handshakes if every one of <code>7</code> people shakes hands with every other person exactly once", a: 21 },
+  { q: "Smallest positive integer <code>n</code> such that <code>n²</code> ≥ <code>500</code>", a: 23 },
+  { q: "Number of positive divisors of <code>360</code>", a: 24 },
+  { q: "If <code>x + y = 7</code> and <code>xy = 12</code>, find <code>x² + y²</code>", a: 25 },
+  { q: "Smallest perfect cube greater than <code>20</code>", a: 27 },
+  { q: "Sum of all positive divisors of <code>12</code>", a: 28 },
+  { q: "The <code>10<sup>th</sup></code> prime number", a: 29 },
+  { q: "Number of subsets of a <code>5</code>-element set", a: 32 },
+  { q: "How many positive integers from <code>1</code> to <code>100</code> are <em>relatively prime</em> to <code>6</code>?", a: 33 },
+  { q: "In how many ways can <code>7</code> people be split into a team of <code>3</code> and a team of <code>4</code>?", a: 35 },
+  { q: "Sum of all positive divisors of <code>22</code>", a: 36 },
+  { q: "<code>GCD(84, 126)</code>", a: 42 },
+  { q: "Number of handshakes among <code>10</code> people if everyone shakes hands once with everyone else", a: 45 },
+  { q: "Smallest positive integer divisible by both <code>16</code> and <code>24</code>", a: 48 },
+  { q: "If <code>x² + y² = 25</code> and <code>xy = 12</code>, find <code>(x + y)²</code>", a: 49 },
+  { q: "The <code>10<sup>th</sup></code> Fibonacci number (with <code>F₁ = F₂ = 1</code>)", a: 55 },
+  { q: "Sum of all positive divisors of <code>24</code>", a: 60 },
+  { q: "Number of subsets of a <code>6</code>-element set", a: 64 },
+  { q: "Smallest positive integer divisible by both <code>8</code> and <code>9</code>", a: 72 },
+  { q: "Largest perfect square less than <code>90</code>", a: 81 },
+  { q: "Largest prime less than <code>100</code>", a: 97 },
+];
+
+let state = {
+  callOrder: [],
+  currentIdx: -1,
+  revealed: false,
+};
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function calledAnswers() {
+  // Set of answers called so far (up to and including currentIdx)
+  const s = new Set();
+  for (let i = 0; i <= state.currentIdx; i++) {
+    s.add(QUESTIONS[state.callOrder[i]].a);
+  }
+  return s;
+}
+
+function renderQuestionPanel() {
+  const idx = state.currentIdx;
+  const teacherWrap = document.getElementById('teacherAnswer');
+  const teacherVal = document.getElementById('teacherAnswerVal');
+  const peekBtn = document.getElementById('peekBtn');
+  if (idx < 0) {
+    document.getElementById('qpNum').textContent = '?';
+    document.getElementById('qpIdx').textContent = '—';
+    document.getElementById('qpMeta').textContent = 'Click "Show next question" to begin';
+    document.getElementById('qpText').innerHTML = 'Welcome! Click "▶ Show next question" to start the game.';
+    teacherWrap.style.display = 'none';
+  } else {
+    const q = QUESTIONS[state.callOrder[idx]];
+    document.getElementById('qpNum').textContent = idx + 1;
+    document.getElementById('qpIdx').textContent = idx + 1;
+    document.getElementById('qpMeta').textContent = 'Read aloud · let students solve · peek the answer privately if needed.';
+    document.getElementById('qpText').innerHTML = q.q;
+    teacherWrap.style.display = 'inline-flex';
+    teacherVal.textContent = q.a;
+    // Default: hidden until teacher chooses to peek (resets each new question)
+    teacherVal.classList.add('hidden');
+    peekBtn.textContent = '👁 Show';
+  }
+  const next = document.getElementById('nextBtn');
+  if (idx + 1 >= state.callOrder.length) {
+    next.textContent = '✓ All 30 questions called';
+    next.disabled = true;
+  } else {
+    next.textContent = idx < 0 ? '▶ Show next question' : '▶ Next question (' + (idx + 2) + '/30)';
+    next.disabled = false;
+  }
+}
+
+function renderCalledList() {
+  document.getElementById('calledCount').textContent = state.currentIdx + 1;
+}
+
+function parseClaimNumbers(text) {
+  // Accept commas, whitespace, semicolons as separators
+  return text.split(/[\s,;]+/).map(t => t.trim()).filter(Boolean).map(t => {
+    const n = Number(t);
+    return Number.isFinite(n) ? n : null;
+  });
+}
+
+function validateClaim() {
+  const text = document.getElementById('claimInput').value;
+  const claimType = document.getElementById('claimType').value;
+  const result = document.getElementById('validateResult');
+  const tokens = parseClaimNumbers(text);
+
+  if (tokens.length === 0) {
+    result.className = 'validate-result fail show';
+    result.innerHTML = '⚠️ Please enter some numbers to validate.';
+    return;
+  }
+
+  const called = calledAnswers();
+  const validPool = new Set(QUESTIONS.map(q => q.a));
+
+  let okCount = 0, badCount = 0, unknownCount = 0;
+  const pills = tokens.map(n => {
+    if (n === null) {
+      unknownCount++;
+      return `<span class="num-pill unknown">?</span>`;
+    }
+    if (called.has(n)) {
+      okCount++;
+      return `<span class="num-pill ok">${n} ✓</span>`;
+    }
+    if (validPool.has(n)) {
+      badCount++;
+      return `<span class="num-pill bad">${n} ✗ not called yet</span>`;
+    }
+    badCount++;
+    return `<span class="num-pill bad">${n} ✗ not on any card</span>`;
+  });
+
+  // Check duplicates within claim (a card can't have the same number twice — pool is unique)
+  const dupSet = new Set();
+  let hasDup = false;
+  for (const n of tokens) {
+    if (n === null) continue;
+    if (dupSet.has(n)) { hasDup = true; break; }
+    dupSet.add(n);
+  }
+
+  // Expected count check
+  let expectedCount = null;
+  if (claimType === 'row') expectedCount = 5;
+  else if (claimType === 'full') expectedCount = 15;
+
+  const allCalled = (badCount === 0 && unknownCount === 0);
+  const countOk = (expectedCount === null) || (tokens.length === expectedCount);
+  const pass = allCalled && countOk && !hasDup;
+
+  let header;
+  if (pass) {
+    const label = claimType === 'row' ? 'Row BINGO' : (claimType === 'full' ? 'FULL HOUSE' : 'Claim');
+    header = `🎉 ✅ Valid ${label}! All ${tokens.length} number${tokens.length===1?'':'s'} have been called.`;
+  } else {
+    const issues = [];
+    if (badCount > 0) issues.push(`${badCount} number${badCount===1?'':'s'} not called yet (or not on any card)`);
+    if (unknownCount > 0) issues.push(`${unknownCount} unparseable token${unknownCount===1?'':'s'}`);
+    if (hasDup) issues.push('duplicate number(s) in claim');
+    if (!countOk) issues.push(`expected ${expectedCount} numbers but got ${tokens.length}`);
+    header = `❌ Invalid claim — ${issues.join('; ')}.`;
+  }
+
+  result.className = 'validate-result ' + (pass ? 'pass' : 'fail') + ' show';
+  result.innerHTML = `
+    <div style="margin-bottom:8px; font-size:1.05em;">${header}</div>
+    <div>${pills.join('')}</div>
+    <div style="margin-top:8px; font-size:0.85em; color:#475569;">
+      Summary: ${okCount} ✓ valid · ${badCount} ✗ invalid · ${tokens.length} total · ${called.size} number${called.size===1?'':'s'} called so far.
+    </div>
+  `;
+}
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (state.currentIdx + 1 >= state.callOrder.length) return;
+  state.currentIdx++;
+  state.revealed = false;
+  renderQuestionPanel();
+  renderCalledList();
+});
+
+document.getElementById('peekBtn').addEventListener('click', () => {
+  const val = document.getElementById('teacherAnswerVal');
+  const btn = document.getElementById('peekBtn');
+  if (val.classList.contains('hidden')) {
+    val.classList.remove('hidden');
+    btn.textContent = '🙈 Hide';
+  } else {
+    val.classList.add('hidden');
+    btn.textContent = '👁 Show';
+  }
+});
+
+document.getElementById('newGameBtn').addEventListener('click', () => {
+  if (state.currentIdx >= 0 && !confirm('Start a new game? Called numbers will reset.')) return;
+  startNewGame();
+});
+
+document.getElementById('validateBtn').addEventListener('click', validateClaim);
+document.getElementById('clearClaimBtn').addEventListener('click', () => {
+  document.getElementById('claimInput').value = '';
+  document.getElementById('validateResult').classList.remove('show');
+});
+
+function startNewGame() {
+  state.callOrder = shuffle(QUESTIONS.map((_, i) => i));
+  state.currentIdx = -1;
+  state.revealed = false;
+  document.getElementById('claimInput').value = '';
+  document.getElementById('validateResult').classList.remove('show');
+  renderQuestionPanel();
+  renderCalledList();
+}
+
+startNewGame();
+</script>
+
+</body>
+</html>

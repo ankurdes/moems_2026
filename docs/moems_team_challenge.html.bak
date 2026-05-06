@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen Team Practice for MOEMs</title>
+<style>
+  :root {
+    --primary: #1e40af;
+    --accent: #f59e0b;
+    --teamA: #dc2626;
+    --teamB: #2563eb;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --warn: #ea580c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+    color: white;
+    padding: 18px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.4em;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    font-size: 0.85em;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .timer-box {
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-size: 1.6em;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+    text-align: center;
+  }
+  .timer-box.warn { background: var(--warn); border-color: white; animation: pulse 1s infinite; }
+  .timer-box.danger { background: var(--bad); border-color: white; animation: pulse 0.5s infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+  }
+  button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95em;
+  }
+  button:hover { background: var(--accent); color: white; }
+  button.danger { background: var(--bad); color: white; }
+  button.danger:hover { background: #991b1b; }
+
+  .scoreboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 22px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .stat {
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: white;
+    text-align: center;
+  }
+  .stat.solved { background: var(--good); }
+  .stat.attempted { background: var(--bad); }
+  .stat-label { font-size: 0.8em; opacity: 0.9; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+  .stat-value { font-size: 2.2em; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin-top: 4px; }
+  .auto-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-left: 6px;
+  }
+  .auto-mark.ok { background: var(--good); }
+  .auto-mark.no { background: var(--bad); }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .instructions {
+    background: #fef9e7;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .instructions h3 { margin-top: 0; color: var(--accent); }
+  .instructions ol { margin: 6px 0; padding-left: 20px; }
+  .instructions li { margin: 4px 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .card.solved { border-color: var(--good); background: #f0fdf4; }
+  .card.wrong { border-color: var(--bad); background: #fef2f2; }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .qnum {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+  .difficulty {
+    font-size: 0.75em;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .topic {
+    font-size: 0.7em;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .qtext {
+    font-size: 0.98em;
+    line-height: 1.55;
+    margin: 8px 0 12px 0;
+  }
+  .qtext code {
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.95em;
+  }
+
+  .answer-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .answer-row input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  .award-btns {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .award-btns button {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 0.85em;
+    border-radius: 6px;
+  }
+  .award-correct { background: var(--good); color: white; }
+  .award-correct:hover { background: #15803d; color: white; }
+  .award-wrong { background: var(--bad); color: white; }
+  .award-wrong:hover { background: #991b1b; color: white; }
+  .award-skip { background: #e2e8f0; color: var(--ink); }
+  .award-skip:hover { background: #cbd5e1; color: var(--ink); }
+
+  .reveal-btn {
+    background: #f1f5f9;
+    color: var(--ink);
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    font-size: 0.82em;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .reveal-btn:hover { background: var(--primary); color: white; }
+
+  .solution {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #ecfdf5;
+    border-left: 3px solid var(--good);
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .solution.show { display: block; }
+  .solution .ans {
+    font-weight: 700;
+    color: var(--good);
+    font-size: 1.05em;
+  }
+  .solved-tag {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.75em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: white;
+  }
+  .solved-tag.ok { background: var(--good); }
+  .solved-tag.no { background: var(--bad); }
+
+  .footer-summary {
+    background: white;
+    border-top: 2px solid var(--primary);
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .winner-banner {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  @media print {
+    header, .controls, .answer-row, .award-btns, .reveal-btn { display: none !important; }
+    .solution { display: block !important; }
+    .card { break-inside: avoid; }
+  }
+  @media (max-width: 600px) {
+    .timer-box { font-size: 1.2em; padding: 6px 10px; min-width: 90px; }
+    h1 { font-size: 1.1em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs</h1>
+      <div class="subtitle" style="font-size:1em; margin-top:6px;">5-student team · 10 questions (easy → hard) · 30 minutes · timer locks input; teacher unlocks grading with a secret phrase</div>
+    </div>
+    <div class="timer-box" id="timer">30:00</div>
+    <div class="controls">
+      <input type="text" id="unlockBox" placeholder="Secret phrase…" style="padding:8px 10px; border:none; border-radius:8px; font-size:0.95em; min-width:160px;" disabled>
+      <button id="startBtn">▶ Start</button>
+    </div>
+  </div>
+</header>
+
+<div class="scoreboard">
+  <div class="stat solved">
+    <div class="stat-label">✓ Correct</div>
+    <div class="stat-value" id="solvedCount">0</div>
+  </div>
+  <div class="stat attempted">
+    <div class="stat-label">✗ Wrong</div>
+    <div class="stat-value" id="wrongCount">0</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+    <div style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border-radius:14px; padding:18px 22px; box-shadow:0 4px 14px rgba(220,38,38,0.3); color:white;">
+      <div style="font-weight:900; font-size:1.1em; letter-spacing:0.1em; opacity:0.95;">🔴 TEAM 1</div>
+      <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;">
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Vikram</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Ayaan</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Darsh</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Ritvik</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Samhita</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Hitaishi</span>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border-radius:14px; padding:18px 22px; box-shadow:0 4px 14px rgba(37,99,235,0.3); color:white;">
+      <div style="font-weight:900; font-size:1.1em; letter-spacing:0.1em; opacity:0.95;">🔵 TEAM 2</div>
+      <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;">
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Abhinav</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Vaibhav</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Ayaansh</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Pranshu</span>
+        <span style="background:rgba(255,255,255,0.25); border:1.5px solid rgba(255,255,255,0.5); padding:6px 12px; border-radius:18px; font-weight:700; font-size:1em;">Shruthi</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="instructions" id="instructionsBox">
+    <h3>📋 How to Run This Practice Round</h3>
+    <ol>
+      <li><strong>Two teams of 5 work separately.</strong> Open this page on two laptops/tabs — one per team. Each team has its own private 30-minute round.</li>
+      <li><strong>Quick self-organization (1 min per team):</strong> skim all 10 problems, split into 2 sub-pods by topic strength (e.g., "geometry" and "number theory/algebra"), pick a "scribe" who types each agreed-upon answer into the correct box, and a "checker" who verifies before the scribe types it.</li>
+      <li><strong>Click ▶ Start.</strong> Teams have 30 minutes. Problems are ordered easy → hard (Q1 easiest, Q10 hardest). Encourage them to lock in the easy ones first, then tackle the harder ones together.</li>
+      <li><strong>When the timer hits 0:00:</strong> all answer boxes lock automatically. Teams cannot type or change anything after this point. <em>No grading yet — no answers shown.</em></li>
+      <li><strong>Teacher unlocks grading:</strong> walk to each laptop and type the secret phrase into the unlock box at the top of the page. The system instantly auto-grades all 10 answers, paints ✓ or ✗ next to each, and reveals detailed step-by-step explanations under every wrong (or blank) answer.</li>
+      <li><strong>Compare scores between teams</strong> and walk through the missed problems together as a class. The detailed explanations are written in plain teacher-walkthrough style — read them aloud verbatim.</li>
+    </ol>
+    <p style="margin: 8px 0 0 0; font-size: 0.9em; color: var(--muted);"><strong>Coaching tip:</strong> Walk between teams during the round. Don't give answers; ask "what does this remind you of?" or "have you tried small cases?" Watch which kids naturally lead, verify, or hang back — that information is more valuable than the score.</p>
+  </div>
+
+  <div class="grid" id="grid" style="display:none;"></div>
+
+  <div class="footer-summary" id="finalSummary" style="display:none;">
+    <div class="winner-banner" id="winnerText"></div>
+    <div style="color: var(--muted);">Click "Show solution" on each problem to review with the class.</div>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    n: 1, topic: "Number Theory — Digits", diff: 1,
+    q: "What is the units digit of the sum 1! + 2! + 3! + 4! + … + 100!  ?",
+    a: "3", accepts: ["3"],
+    sol: "<strong>Strategy:</strong> For n ≥ 5, n! contains the factor 2 × 5 = 10 (in fact, multiple factors of 10), so n! ends in zero. Those terms contribute 0 to the units digit. Only 1!, 2!, 3!, 4! matter. <br><br><strong>Step 1.</strong> Compute the small factorials:<br>&nbsp;&nbsp;1! = 1<br>&nbsp;&nbsp;2! = 2<br>&nbsp;&nbsp;3! = 6<br>&nbsp;&nbsp;4! = 24<br>&nbsp;&nbsp;5! = 120 ← ends in 0 from here on<br><strong>Step 2.</strong> For every n ≥ 5, n! is a multiple of 10 (it contains 5 × 2 = 10 as a factor). So 5! + 6! + … + 100! ends in 0.<br><strong>Step 3.</strong> Units digit of total = units digit of (1 + 2 + 6 + 24) = units digit of 33 = <span class='ans'>3</span>.<br><br><strong>Big idea:</strong> 'Units digit of sum' problems usually have most terms contributing 0. Find the cutoff where things become 'multiples of 10' and ignore everything past it."
+  },
+  {
+    n: 2, topic: "Number Theory", diff: 1,
+    q: "The number 2025 = 3⁴ × 5². Find the smallest positive integer N such that 2025·N is a perfect cube.",
+    a: "45", accepts: ["45"],
+    sol: "<strong>Strategy:</strong> A perfect cube has every prime exponent divisible by 3. <br><br><strong>Step 1.</strong> Factor 2025 = 3⁴ · 5².<br><strong>Step 2.</strong> Look at each prime exponent and figure out the smallest 'top-up' needed to reach the next multiple of 3:<br>&nbsp;&nbsp;• 3⁴ → next cube power is 3⁶, so we need 3² more.<br>&nbsp;&nbsp;• 5² → next cube power is 5³, so we need 5¹ more.<br><strong>Step 3.</strong> Multiply the top-ups: N = 3² · 5¹ = 9 · 5 = <span class='ans'>45</span>.<br><strong>Verify:</strong> 2025 · 45 = 91125, and 45³ = 45·45·45 = 2025·45 = 91125 ✓<br><br><strong>Common mistake:</strong> Thinking you need 3³ and 5³, giving N = 27·5 = 135. But 3⁴ already has FOUR 3's — you only need TWO more to reach the next cube exponent (six)."
+  },
+  {
+    n: 3, topic: "Geometry — Coordinates", diff: 2,
+    q: "A triangle has vertices A(0,0), B(8,0), C(2,6). Find the length of the median from vertex C to side AB.",
+    a: "2√10", accepts: ["2√10", "2sqrt(10)", "2*sqrt(10)", "2 sqrt 10", "2sqrt10", "2*sqrt10", "√40", "sqrt(40)", "sqrt40"],
+    sol: "<strong>Strategy:</strong> A median goes from a vertex to the MIDPOINT of the opposite side. So we need: (1) midpoint of AB, (2) distance from C to that midpoint. <br><br><strong>Step 1 (midpoint of AB).</strong> A(0,0) and B(8,0). Midpoint M = ((0+8)/2, (0+0)/2) = (4, 0).<br><strong>Step 2 (distance CM).</strong> Use the distance formula: √((x₂−x₁)² + (y₂−y₁)²).<br>&nbsp;&nbsp;CM = √((4−2)² + (0−6)²) = √(4 + 36) = √40.<br><strong>Step 3 (simplify).</strong> √40 = √(4·10) = 2√10.<br><br><strong>Answer:</strong> <span class='ans'>2√10</span> ≈ 6.32.<br><br><strong>Common mistake:</strong> Using the wrong vertex pair (e.g., taking midpoint of AC or BC instead of AB). The median 'from C' lands on the side OPPOSITE to C, which is AB."
+  },
+  {
+    n: 4, topic: "Inclusion-Exclusion", diff: 2,
+    q: "In a survey of 100 people: 50 like apples, 45 like bananas, 40 like cherries, 25 like apples & bananas, 20 like bananas & cherries, 15 like apples & cherries, and 10 like all three. How many like NONE of the three?",
+    a: "15", accepts: ["15"],
+    sol: "<strong>Strategy:</strong> Use the 3-set inclusion-exclusion formula to find how many like at least one, then subtract from 100. <br><br><strong>The formula:</strong> |A ∪ B ∪ C| = |A| + |B| + |C| − |A∩B| − |B∩C| − |A∩C| + |A∩B∩C|<br>(Add singles, subtract pairs, add triple back.)<br><br><strong>Step 1.</strong> Plug in: 50 + 45 + 40 − 25 − 20 − 15 + 10.<br><strong>Step 2.</strong> Compute step by step: 50+45+40 = 135. Then 135 − 25 = 110, − 20 = 90, − 15 = 75. Then 75 + 10 = 85.<br><strong>Step 3.</strong> So 85 people like at least one fruit.<br><strong>Step 4.</strong> None = 100 − 85 = <span class='ans'>15</span>.<br><br><strong>Memory trick:</strong> 'Add singles, subtract pairs, add triple.' If you accidentally subtract the triple instead of adding, the universe is over-corrected and your answer will be way off."
+  },
+  {
+    n: 5, topic: "Modular Arithmetic", diff: 2,
+    q: "What is the remainder when 7^2025 is divided by 100?",
+    a: "7", accepts: ["7", "07"],
+    sol: "<strong>Strategy:</strong> 'Last two digits of 7ⁿ' is the same as '7ⁿ mod 100'. Powers of 7 cycle modulo 100 with a short period. <br><br><strong>Step 1.</strong> Compute the cycle:<br>&nbsp;&nbsp;7¹ = 7<br>&nbsp;&nbsp;7² = 49<br>&nbsp;&nbsp;7³ = 343 → mod 100 = 43<br>&nbsp;&nbsp;7⁴ = 7·43 = 301 → mod 100 = 1<br>&nbsp;&nbsp;7⁵ = 7·1 = 7 ← back to 7! Cycle length = 4.<br><strong>Step 2.</strong> Since the cycle is length 4, we need 2025 mod 4. 2025 = 4·506 + 1, so 2025 mod 4 = 1.<br><strong>Step 3.</strong> 7^2025 mod 100 = 7¹ mod 100 = <span class='ans'>7</span>.<br><br><strong>Big idea:</strong> When asked 'last digit' or 'last two digits' of a huge power, ALWAYS look for a cycle. The cycle length is usually small (≤ 20) and tells you exactly which power to look up."
+  },
+  {
+    n: 6, topic: "Combinatorics", diff: 3,
+    q: "How many 4-digit positive integers have all distinct digits AND are divisible by 5?",
+    a: "952", accepts: ["952"],
+    sol: "<strong>Strategy:</strong> Divisible by 5 means the last digit is 0 or 5. Split into two cases — they have different counts because of the 'no leading zero' rule. <br><br><strong>Case 1: last digit = 0.</strong> First digit: any of 1–9 → 9 choices (no zero allowed up front, and 0 is taken). Second digit: any digit except the two used → 8 choices. Third digit: 7 choices. Total: 9 · 8 · 7 = 504.<br><strong>Case 2: last digit = 5.</strong> First digit: 1–9 except 5 → 8 choices (no leading zero, and 5 is taken). Second digit: any digit except the two used → 8 choices (now 0 IS allowed). Third digit: 7 choices. Total: 8 · 8 · 7 = 448.<br><strong>Step 3.</strong> Add: 504 + 448 = <span class='ans'>952</span>.<br><br><strong>Common mistake:</strong> Forgetting that in Case 2, the second-position has 8 choices (not 7) because we've only excluded the first digit and the '5' at the end — '0' is back in play."
+  },
+  {
+    n: 7, topic: "Algebra", diff: 3,
+    q: "If x + 1/x = 5, find x⁴ + 1/x⁴.",
+    a: "527", accepts: ["527"],
+    sol: "<strong>Strategy:</strong> Square the given equation, then square again. Each squaring promotes the exponent by 2 (1 → 2 → 4) and gives you a constant '+2' term you have to subtract. <br><br><strong>Step 1.</strong> Start: x + 1/x = 5.<br><strong>Step 2.</strong> Square both sides: (x + 1/x)² = 5² = 25. Expand the left side: x² + 2·x·(1/x) + 1/x² = x² + 2 + 1/x². So x² + 1/x² = 25 − 2 = 23.<br><strong>Step 3.</strong> Square again: (x² + 1/x²)² = 23² = 529. Expand: x⁴ + 2·x²·(1/x²) + 1/x⁴ = x⁴ + 2 + 1/x⁴. So x⁴ + 1/x⁴ = 529 − 2 = <span class='ans'>527</span>.<br><br><strong>Big idea (memorize this):</strong> Whenever you see 'x + 1/x = k, find xⁿ + 1/xⁿ,' use repeated squaring. Each square gives you 2 extra from the cross-term, which you subtract."
+  },
+  {
+    n: 8, topic: "Telescoping Product", diff: 3,
+    q: "Compute the product (1 − 1/2²)(1 − 1/3²)(1 − 1/4²) … (1 − 1/100²). Express as a fraction in lowest terms.",
+    a: "101/200", accepts: ["101/200", "101 / 200", "0.505"],
+    sol: "<strong>Strategy:</strong> Rewrite each factor using difference of squares, then watch the telescoping cancellation. <br><br><strong>Step 1.</strong> 1 − 1/k² = (k² − 1)/k² = (k−1)(k+1)/k² = [(k−1)/k] · [(k+1)/k].<br><strong>Step 2.</strong> Split the whole product into two separate products from k=2 to k=100:<br>&nbsp;&nbsp;<strong>P₁</strong> = (1/2)(2/3)(3/4)…(99/100) — telescopes! Almost everything cancels, leaving 1/100.<br>&nbsp;&nbsp;<strong>P₂</strong> = (3/2)(4/3)(5/4)…(101/100) — also telescopes to 101/2.<br><strong>Step 3.</strong> Multiply: (1/100) · (101/2) = <span class='ans'>101/200</span>.<br><br><strong>Big idea:</strong> Telescoping = systematic cancellation. Whenever you see a product of fractions where each numerator looks like a previous denominator, split, cancel, and just keep the leftover endpoints."
+  },
+  {
+    n: 9, topic: "Logic — Constraints", diff: 4,
+    q: "Five cards lie in a row, each Red or Blue. You're told: among cards 1–2 there is at least one Red; among cards 2–3 at least one Blue; among cards 3–4 at least one Red; among cards 4–5 at least one Blue. What is the MAXIMUM possible number of Red cards?",
+    a: "3", accepts: ["3"],
+    sol: "<strong>Strategy:</strong> Try to construct an arrangement with lots of Reds. If you can't, prove why it's impossible. <br><br><strong>Step 1 (try 3 Reds).</strong> Test R B R B R: positions 1=R, 2=B, 3=R, 4=B, 5=R.<br>&nbsp;&nbsp;• (1,2) = R B: has Red ✓<br>&nbsp;&nbsp;• (2,3) = B R: has Blue ✓<br>&nbsp;&nbsp;• (3,4) = R B: has Red ✓<br>&nbsp;&nbsp;• (4,5) = B R: has Blue ✓<br>&nbsp;&nbsp;Works! 3 Reds is achievable.<br><strong>Step 2 (try 4 Reds — only 1 Blue).</strong> The single Blue card must satisfy 'at least one Blue in (2,3)' AND 'at least one Blue in (4,5).' But (2,3) and (4,5) are DISJOINT pairs of positions — no single position is in both. So one Blue card cannot satisfy both constraints simultaneously. Therefore we need at least 2 Blues.<br><strong>Step 3 (try 5 Reds — 0 Blues).</strong> Same problem: zero Blues fails the (2,3) and (4,5) constraints. Impossible.<br><strong>Conclusion:</strong> Max Reds = 5 − 2 = <span class='ans'>3</span>.<br><br><strong>Big idea:</strong> When constraints involve disjoint sub-ranges that all require the SAME color, you need at least one of that color per sub-range. Count the sub-ranges to find the minimum."
+  },
+  {
+    n: 10, topic: "Geometry — Inscribed", diff: 4,
+    q: "A square with side 10 is inscribed in a circle. A smaller square is inscribed in one of the 4 circular segments cut off by the big square (smaller square's base lies on a side of the big square; its top two corners lie on the circle). Find the side length of the smaller square.",
+    a: "2", accepts: ["2"],
+    sol: "<strong>Strategy:</strong> Set up coordinates with the circle at the origin. Use the constraint that the small square's top corners lie on the circle to write a quadratic in the side length. <br><br><strong>Step 1 (find the circle).</strong> Big square has side 10, so its diagonal = 10√2, and the circumscribing circle has radius r = 5√2. Equation: x² + y² = (5√2)² = 50.<br><strong>Step 2 (place the small square).</strong> The big square's top side is the chord at y = 5 (from x = −5 to x = +5). Place the small square sitting ON this chord, centered horizontally. Let its side be s. Then its base goes from (−s/2, 5) to (s/2, 5), and its top corners are at (−s/2, 5+s) and (s/2, 5+s).<br><strong>Step 3 (top corners on circle).</strong> Plug (s/2, 5+s) into x² + y² = 50:<br>&nbsp;&nbsp;(s/2)² + (5 + s)² = 50<br>&nbsp;&nbsp;s²/4 + 25 + 10s + s² = 50<br>&nbsp;&nbsp;Multiply through by 4: s² + 100 + 40s + 4s² = 200<br>&nbsp;&nbsp;5s² + 40s − 100 = 0<br>&nbsp;&nbsp;Divide by 5: s² + 8s − 20 = 0.<br><strong>Step 4 (solve quadratic).</strong> s = (−8 ± √(64 + 80))/2 = (−8 ± √144)/2 = (−8 ± 12)/2. Take positive root: s = (−8 + 12)/2 = 4/2 = <span class='ans'>2</span>.<br><br><strong>Sanity check:</strong> Top corners at (±1, 7). Check: 1² + 7² = 1 + 49 = 50 ✓. The corners DO lie on the circle."
+  }
+];
+
+// ===== Answer normalization & auto-grading =====
+function normalize(str) {
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–—]/g, '-')        // various dashes -> minus
+    .replace(/[×·∗]/g, '*')         // multiplication symbols
+    .replace(/[÷]/g, '/')
+    .replace(/√/g, 'sqrt')
+    .replace(/[()]/g, '')           // strip parens for sqrt(15) -> sqrt15
+    .replace(/\*/g, '')             // strip * so 2*sqrt15 == 2sqrt15
+    .replace(/^0+(\d)/, '$1');      // leading zeros: 07 -> 7
+}
+// Try to compute a numeric value (handles "3.2", "16/5", "3 1/5", or plain integers)
+function toNumber(s) {
+  if (!s) return null;
+  const t = String(s).replace(/\s+/g, ' ').trim();
+  // mixed number like "3 1/5"
+  const mixed = t.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+  if (mixed) {
+    const whole = +mixed[1], num = +mixed[2], den = +mixed[3];
+    if (den !== 0) return whole + (whole < 0 ? -1 : 1) * (num / den);
+  }
+  // simple fraction "a/b"
+  const frac = t.match(/^(-?\d+)\/(-?\d+)$/);
+  if (frac) {
+    const num = +frac[1], den = +frac[2];
+    if (den !== 0) return num / den;
+  }
+  // plain decimal/integer
+  if (/^-?\d+(\.\d+)?$/.test(t)) return +t;
+  return null;
+}
+function autoGrade() {
+  QUESTIONS.forEach(q => {
+    const typed = (state.answers[q.n] || '').trim();
+    if (!typed) {
+      state.status[q.n] = 'no';   // blank counts as wrong
+      return;
+    }
+    const accepts = q.accepts || [q.a];
+    const normTyped = normalize(typed);
+    // First: normalized string match
+    let match = accepts.some(acc => normalize(acc) === normTyped);
+    // Second: numeric-equivalence match (for fractions vs decimals)
+    if (!match) {
+      const typedNum = toNumber(typed);
+      if (typedNum !== null) {
+        match = accepts.some(acc => {
+          const accNum = toNumber(acc);
+          return accNum !== null && Math.abs(accNum - typedNum) < 1e-3;
+        });
+      }
+    }
+    state.status[q.n] = match ? 'ok' : 'no';
+  });
+}
+
+// ===== State =====
+let state = {
+  status: {}, // n -> 'ok' or 'no'
+  answers: {}, // n -> string typed by teacher during the round
+  timeLeft: 30 * 60,
+  running: false,
+  intervalId: null,
+  timeUp: false,    // true when timer hits 0 — locks input but does NOT grade
+  finished: false   // true when teacher unlocks via secret phrase — auto-grades
+};
+
+const SECRET_PHRASE = "hansen2026";   // case-insensitive; spaces ignored
+
+// ===== Render =====
+const grid = document.getElementById('grid');
+function difficultyStars(d) {
+  return '★'.repeat(d) + '☆'.repeat(4-d);
+}
+function render() {
+  grid.innerHTML = '';
+  QUESTIONS.forEach(q => {
+    const st = state.status[q.n];
+    const card = document.createElement('div');
+    card.className = 'card' + (st === 'ok' ? ' solved' : st === 'no' ? ' wrong' : '');
+    const answerInput = `
+      <div class="answer-row">
+        <input type="text" placeholder="Team's answer..." id="ans-${q.n}" ${state.timeUp ? 'readonly' : ''}>
+        ${state.finished ? `<span class="auto-mark ${st}">${st === 'ok' ? '✓' : '✗'}</span>` : ''}
+      </div>
+    `;
+    const gradingControls = state.finished ? `
+      <div style="margin-top:10px; padding:8px 10px; background:${st === 'ok' ? '#ecfdf5' : '#fef2f2'}; border-left:3px solid ${st === 'ok' ? 'var(--good)' : 'var(--bad)'}; border-radius:4px; font-size:0.95em;">
+        <strong>Correct answer:</strong> <span class="ans" style="font-weight:700; color:var(--good);">${q.a}</span>
+      </div>
+      ${st === 'no' ? `
+        <div class="solution show" style="margin-top:10px;">
+          ${q.sol}
+        </div>
+      ` : `
+        <button class="reveal-btn" onclick="toggleSol(${q.n})">Show full explanation</button>
+        <div class="solution" id="sol-${q.n}">
+          ${q.sol}
+        </div>
+      `}
+    ` : '';
+    card.innerHTML = `
+      ${st === 'ok' ? `<span class="solved-tag ok">✓ Correct</span>` : st === 'no' ? `<span class="solved-tag no">✗ Wrong</span>` : ''}
+      <div class="card-head">
+        <span class="qnum">${q.n}</span>
+        <span class="difficulty">${difficultyStars(q.diff)}</span>
+      </div>
+      <div class="topic">${q.topic}</div>
+      <div class="qtext">${q.q}</div>
+      ${answerInput}
+      ${gradingControls}
+    `;
+    grid.appendChild(card);
+  });
+  // Restore typed answers (input fields are recreated on every render)
+  Object.keys(state.answers).forEach(n => {
+    const inp = document.getElementById('ans-' + n);
+    if (inp) inp.value = state.answers[n];
+  });
+  // Wire up answer-saving listeners
+  QUESTIONS.forEach(q => {
+    const inp = document.getElementById('ans-' + q.n);
+    if (inp) inp.oninput = (e) => { state.answers[q.n] = e.target.value; };
+  });
+  updateScores();
+}
+function mark(n, val) {
+  // legacy/no-op — auto-grading now handles all scoring
+  if (val === null) delete state.status[n];
+  else state.status[n] = val;
+  render();
+}
+function toggleSol(n) {
+  document.getElementById('sol-' + n).classList.toggle('show');
+}
+function updateScores() {
+  const vals = Object.values(state.status);
+  const ok = vals.filter(v => v === 'ok').length;
+  const no = vals.filter(v => v === 'no').length;
+  document.getElementById('solvedCount').textContent = ok;
+  document.getElementById('wrongCount').textContent = no;
+  if (state.finished) {
+    let rating;
+    if (ok >= 18) rating = "🌟 Exceptional — state-level ready!";
+    else if (ok >= 15) rating = "🏆 Excellent team coordination!";
+    else if (ok >= 12) rating = "✅ Strong — solid contest performance.";
+    else if (ok >= 8) rating = "👍 Good effort — review weak topics & try again.";
+    else rating = "📚 Keep practicing — review the concept guide together.";
+    document.getElementById('winnerText').innerHTML =
+      `<div style="font-size:1.6em; margin-bottom:8px;">✓ ${ok} correct &nbsp;·&nbsp; ✗ ${no} wrong</div>` +
+      `<div style="font-size:1em; color:var(--muted); font-weight:500;">${rating}</div>`;
+  }
+}
+
+// ===== Timer =====
+function fmt(s) {
+  const m = Math.floor(s/60), sec = s%60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+function tick() {
+  if (!state.running) return;
+  state.timeLeft--;
+  const t = document.getElementById('timer');
+  t.textContent = fmt(state.timeLeft);
+  t.classList.toggle('warn', state.timeLeft <= 5*60 && state.timeLeft > 60);
+  t.classList.toggle('danger', state.timeLeft <= 60);
+  if (state.timeLeft <= 0) {
+    state.running = false;
+    clearInterval(state.intervalId);
+    state.timeUp = true;
+    document.getElementById('timer').textContent = "TIME!";
+    // Lock all answer inputs but DO NOT grade yet — wait for secret phrase
+    render();
+    // Enable the secret-phrase unlock box
+    const unlock = document.getElementById('unlockBox');
+    unlock.disabled = false;
+    unlock.placeholder = "Teacher: enter secret phrase to grade";
+    unlock.focus();
+  }
+}
+function finishRound() {
+  document.getElementById('timer').textContent = "TIME!";
+  document.getElementById('finalSummary').style.display = 'block';
+  autoGrade();
+  render();
+  updateScores();
+  document.getElementById('finalSummary').scrollIntoView({ behavior: 'smooth' });
+}
+document.getElementById('startBtn').onclick = () => {
+  if (state.running || state.finished) return;
+  state.running = true;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').style.opacity = '0.5';
+  document.getElementById('instructionsBox').style.display = 'none';
+  document.getElementById('grid').style.display = 'grid';
+  state.intervalId = setInterval(tick, 1000);
+};
+// Secret-phrase unlock box: when teacher types the phrase, auto-grade and reveal
+document.getElementById('unlockBox').addEventListener('input', (e) => {
+  if (state.finished) return;
+  const typed = e.target.value.toLowerCase().replace(/\s+/g, '');
+  if (typed === SECRET_PHRASE.toLowerCase().replace(/\s+/g, '')) {
+    state.finished = true;
+    e.target.disabled = true;
+    e.target.value = '✓ unlocked';
+    e.target.style.background = '#16a34a';
+    e.target.style.color = 'white';
+    e.target.style.fontWeight = '700';
+    finishRound();
+  }
+});
+
+render();
+</script>
+</body>
+</html>

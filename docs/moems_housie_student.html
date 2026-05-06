@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen MOEMs Housie 🎲 (Student Cards)</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --row1: #fef3c7;
+    --row2: #dbeafe;
+    --row3: #fce7f3;
+    --row1-border: #f59e0b;
+    --row2-border: #3b82f6;
+    --row3-border: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 18px 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; max-width: 1400px; margin: 0 auto;
+  }
+  h1 { margin: 0; font-size: 1.8em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 0.95em; opacity: 0.95; margin-top: 4px; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 18px; }
+
+  .picker-box {
+    background: white; border: 3px solid var(--accent);
+    border-radius: 14px; padding: 20px; margin-bottom: 18px;
+    text-align: center;
+  }
+  .picker-box h2 {
+    margin: 0 0 12px 0;
+    color: var(--accent); font-size: 1.3em;
+  }
+  .picker-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; flex-wrap: wrap;
+  }
+  select.card-picker {
+    padding: 10px 16px; font-size: 1.1em; font-weight: 800;
+    border: 2px solid var(--primary); border-radius: 10px;
+    color: var(--primary); background: white; cursor: pointer;
+  }
+  select.card-picker:focus { outline: none; box-shadow: 0 0 0 3px rgba(124,58,237,0.3); }
+  input.player-input {
+    padding: 10px 14px; font-size: 1em; font-weight: 700;
+    border: 2px solid #cbd5e1; border-radius: 10px;
+    color: var(--ink); flex: 1; max-width: 240px;
+  }
+  input.player-input:focus { outline: none; border-color: var(--primary); }
+  button {
+    background: white; color: var(--primary); border: 2px solid var(--primary);
+    border-radius: 10px; padding: 9px 16px; font-weight: 700;
+    cursor: pointer; font-size: 0.95em;
+  }
+  button:hover { background: #f5f3ff; }
+
+  .card-stage {
+    background: white; border-radius: 16px; padding: 20px;
+    box-shadow: 0 6px 18px rgba(124,58,237,0.18);
+    border: 3px solid var(--primary);
+  }
+  .card-stage.empty {
+    text-align: center; color: var(--muted); font-style: italic;
+    padding: 40px 20px; border-style: dashed;
+  }
+  .card-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px dashed #e2e8f0;
+  }
+  .card-title { font-size: 1.2em; font-weight: 800; color: var(--primary); }
+  .card-num-big {
+    background: var(--primary); color: white; border-radius: 50%;
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 1.2em;
+  }
+  .card-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 8px; margin-top: 8px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; font-weight: 800; font-size: 1.3em;
+    cursor: pointer; user-select: none;
+    transition: all 0.12s; border: 2px solid transparent;
+    position: relative;
+  }
+  .cell.row-1 { background: var(--row1); border-color: var(--row1-border); color: #92400e; }
+  .cell.row-2 { background: var(--row2); border-color: var(--row2-border); color: #1e3a8a; }
+  .cell.row-3 { background: var(--row3); border-color: var(--row3-border); color: #831843; }
+  .cell:hover { transform: scale(1.05); }
+  .cell.marked {
+    background: var(--good) !important; color: white !important;
+    border-color: #15803d !important; transform: scale(0.97);
+  }
+  .cell.marked .cell-num {
+    color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .cell.marked::after {
+    content: '✓'; position: absolute;
+    top: 3px; right: 5px;
+    font-size: 0.85em; color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+
+  .reset-row { margin-top: 14px; text-align: center; }
+
+  .instructions {
+    background: white; border: 2px solid var(--accent);
+    border-radius: 14px; padding: 14px 20px; margin-top: 18px;
+    font-size: 0.92em;
+  }
+  .instructions h3 { margin: 0 0 6px 0; color: var(--accent); font-size: 1em; }
+  .instructions ol { margin: 6px 0; padding-left: 20px; }
+  .instructions li { margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1>🎲 MOEMs Housie — Student Card</h1>
+      <div class="subtitle">Pick your card number · Mark cells when teacher reveals an answer that's on your card!</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="picker-box">
+    <h2>🎟️ Pick your name</h2>
+    <div class="picker-row">
+      <select id="cardPicker" class="card-picker">
+        <option value="">— Choose your name —</option>
+      </select>
+    </div>
+    <div style="margin-top:8px; font-size:0.85em; color:var(--muted);">
+      Each student has their own unique card. Pick your name to see yours!
+    </div>
+  </div>
+
+  <div id="cardStage" class="card-stage empty">
+    Pick your name above to see your card.
+  </div>
+
+  <div class="instructions">
+    <h3>📋 How to Play</h3>
+    <ol>
+      <li>Pick your name from the dropdown.</li>
+      <li>Listen to the teacher's question and solve it.</li>
+      <li>If your answer appears on your card, tap it to mark it ✓.</li>
+      <li>Shout BINGO when you complete a row 🥇 yellow / 🥈 blue / 🥉 pink, or the full house 🏆.</li>
+      <li>Read the marked numbers aloud so the teacher can verify.</li>
+    </ol>
+  </div>
+
+</div>
+
+<script>
+// MUST match teacher version exactly
+const ANSWER_POOL = [
+  11, 12, 13, 15, 16, 17, 18, 19, 20, 21,
+  23, 24, 25, 27, 28, 29, 32, 33, 35, 36,
+  42, 45, 48, 49, 55, 60, 64, 72, 81, 97
+];
+
+// Roster — order here is the canonical card-assignment order.
+// Each student gets a fixed unique card; same name = same card on every device.
+const STUDENTS = [
+  "Ayaan", "Vikram", "Ritvik", "Darsh", "Ayaansh", "Abhinav",
+  "Vaibhav", "Pranshu", "Hitaishi", "Samhita", "Sanjana", "Shruthi"
+];
+
+const CARD_ROWS = 3;
+const CARD_COLS = 5;
+const CELLS_PER_CARD = CARD_ROWS * CARD_COLS;
+
+// ===== Deterministic PRNG (Mulberry32) — same seed → same card on every device =====
+function mulberry32(seed) {
+  return function() {
+    let t = seed += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function seededShuffle(arr, seed) {
+  const rand = mulberry32(seed);
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Hash a name into a stable seed — simple FNV-1a 32-bit
+function hashName(name) {
+  let h = 0x811c9dc5;
+  const s = name.toLowerCase();
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+function buildCard(studentName) {
+  const SEED_BASE = 0xC0FFEE;
+  const seed = (SEED_BASE ^ hashName(studentName)) >>> 0;
+  const picked = seededShuffle(ANSWER_POOL, seed).slice(0, CELLS_PER_CARD);
+  return picked.map(v => ({ value: v, marked: false }));
+}
+
+let selectedCard = null; // { name, cells }
+
+// Storage helpers (persist marks per-device per-name)
+function storageKey(name) { return 'housie_marks_' + name.toLowerCase(); }
+function loadMarks(name) {
+  try {
+    const raw = localStorage.getItem(storageKey(name));
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+function saveMarks(name, cells) {
+  try {
+    localStorage.setItem(storageKey(name), JSON.stringify(cells.map(c => c.marked)));
+  } catch (e) { /* ignore */ }
+}
+
+function populatePicker() {
+  const sel = document.getElementById('cardPicker');
+  STUDENTS.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    sel.appendChild(opt);
+  });
+}
+
+function selectCard(name) {
+  if (!name) {
+    selectedCard = null;
+    renderStage();
+    return;
+  }
+  const cells = buildCard(name);
+  const saved = loadMarks(name);
+  if (saved && saved.length === cells.length) {
+    cells.forEach((c, i) => c.marked = !!saved[i]);
+  }
+  selectedCard = { name, cells };
+  renderStage();
+}
+
+function renderStage() {
+  const stage = document.getElementById('cardStage');
+  if (!selectedCard) {
+    stage.className = 'card-stage empty';
+    stage.innerHTML = 'Pick your name above to see your card.';
+    return;
+  }
+  stage.className = 'card-stage';
+  let cellsHtml = '';
+  for (let r = 0; r < CARD_ROWS; r++) {
+    for (let c = 0; c < CARD_COLS; c++) {
+      const cellIdx = r * CARD_COLS + c;
+      const cell = selectedCard.cells[cellIdx];
+      const cls = `cell row-${r+1}` + (cell.marked ? ' marked' : '');
+      cellsHtml += `<div class="${cls}" data-cell="${cellIdx}"><span class="cell-num">${cell.value}</span></div>`;
+    }
+  }
+  stage.innerHTML = `
+    <div class="card-head">
+      <div class="card-title">🃏 ${selectedCard.name}'s Card</div>
+      <div class="card-num-big">${selectedCard.name.charAt(0).toUpperCase()}</div>
+    </div>
+    <div class="card-grid">${cellsHtml}</div>
+    <div class="reset-row">
+      <button id="resetBtn">🔄 Clear all marks on this card</button>
+    </div>
+  `;
+  stage.querySelectorAll('.cell').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = +el.dataset.cell;
+      selectedCard.cells[idx].marked = !selectedCard.cells[idx].marked;
+      saveMarks(selectedCard.name, selectedCard.cells);
+      renderStage();
+    });
+  });
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (!confirm('Clear all marks on ' + selectedCard.name + "'s card?")) return;
+    selectedCard.cells.forEach(c => c.marked = false);
+    saveMarks(selectedCard.name, selectedCard.cells);
+    renderStage();
+  });
+}
+
+document.getElementById('cardPicker').addEventListener('change', (e) => {
+  const name = e.target.value || null;
+  if (name) localStorage.setItem('housie_last_name', name);
+  selectCard(name);
+});
+
+// Init: restore last picked name if any
+populatePicker();
+const lastName = localStorage.getItem('housie_last_name');
+if (lastName && STUDENTS.includes(lastName)) {
+  document.getElementById('cardPicker').value = lastName;
+  selectCard(lastName);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOEMS Quick Review — 7th/8th Grade Class Walkthrough</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --ink: #1a2332;
+    --muted: #5a6b85;
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --accent: #f59e0b;
+    --hot: #dc2626;
+    --good: #059669;
+    --soft: #eef2ff;
+    --border: #e2e8f0;
+    --code-bg: #f1f5f9;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    background: linear-gradient(135deg, #eef2ff 0%, #f5f7fb 100%);
+    color: var(--ink);
+    margin: 0;
+    padding: 40px 20px;
+    line-height: 1.55;
+  }
+
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  header.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+    padding: 48px 40px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+    box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.3);
+  }
+  header.hero h1 {
+    margin: 0 0 12px 0;
+    font-size: 2.4em;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  header.hero p {
+    margin: 0;
+    opacity: 0.95;
+    font-size: 1.1em;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-top: 12px;
+  }
+
+  .how-to {
+    background: #fef3c7;
+    border-left: 5px solid var(--accent);
+    padding: 16px 24px;
+    border-radius: 8px;
+    margin-bottom: 28px;
+    font-size: 0.95em;
+  }
+  .how-to strong { color: #92400e; }
+
+  .section {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid var(--border);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .section h2 {
+    margin: 0 0 14px 0;
+    font-size: 1.4em;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section .num {
+    background: var(--primary);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .star {
+    color: var(--accent);
+    margin-left: auto;
+    font-size: 1em;
+  }
+  .star.hot { color: var(--hot); }
+
+  ul { padding-left: 22px; margin: 12px 0; }
+  ul li { margin-bottom: 6px; }
+
+  code, .formula {
+    font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+    background: var(--code-bg);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    color: var(--primary-dark);
+    font-weight: 600;
+  }
+
+  .example {
+    background: var(--soft);
+    border-left: 4px solid var(--primary);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-top: 14px;
+  }
+  .example strong { color: var(--primary-dark); }
+  .answer {
+    color: var(--good);
+    font-weight: 700;
+    background: #d1fae5;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .diagram-wrap {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .diagram-wrap .text { flex: 1; min-width: 260px; }
+  .diagram-wrap svg {
+    background: #fafbfc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.95em;
+  }
+  table th, table td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  table th {
+    background: var(--soft);
+    color: var(--primary-dark);
+    font-weight: 700;
+  }
+  table tr:nth-child(even) td { background: #fafbfc; }
+
+  .quiz {
+    background: linear-gradient(135deg, #fef3c7 0%, #fef9e7 100%);
+    border: 2px dashed var(--accent);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 28px 0;
+  }
+  .quiz h2 {
+    color: #92400e;
+    margin-top: 0;
+  }
+  .quiz ol li {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 6px;
+  }
+  .reveal {
+    color: var(--good);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  details.qa {
+    margin-top: 6px;
+  }
+  details.qa summary {
+    cursor: pointer;
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: 0.9em;
+    list-style: none;
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(37, 99, 235, 0.1);
+    border-radius: 6px;
+    transition: background 0.15s ease;
+  }
+  details.qa summary:hover {
+    background: rgba(37, 99, 235, 0.2);
+  }
+  details.qa summary::-webkit-details-marker { display: none; }
+  details.qa summary::before {
+    content: "▶ ";
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+  details.qa[open] summary::before {
+    content: "▼ ";
+  }
+  details.qa[open] summary {
+    background: #d1fae5;
+    color: var(--good);
+  }
+  details.qa .ans {
+    display: block;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: #d1fae5;
+    border-left: 3px solid var(--good);
+    border-radius: 6px;
+    color: #065f46;
+    font-size: 0.95em;
+  }
+  details.qa .ans strong { color: #064e3b; }
+
+  .priority-box {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-left: 5px solid var(--good);
+    padding: 18px 24px;
+    border-radius: 10px;
+    margin: 28px 0;
+  }
+  .priority-box strong { color: #065f46; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    padding: 24px;
+    margin-top: 32px;
+    font-size: 0.9em;
+  }
+
+  /* SVG diagram styling */
+  .diag-line { stroke: #1e293b; stroke-width: 2; fill: none; }
+  .diag-fill { fill: #93c5fd; stroke: #2563eb; stroke-width: 2; }
+  .diag-fill-2 { fill: #fde68a; stroke: #f59e0b; stroke-width: 2; }
+  .diag-fill-3 { fill: #fca5a5; stroke: #dc2626; stroke-width: 2; }
+  .diag-text { font-family: sans-serif; font-size: 12px; fill: #1e293b; }
+  .diag-label { font-family: sans-serif; font-size: 11px; fill: #475569; font-style: italic; }
+
+  @media (max-width: 600px) {
+    body { padding: 16px 8px; }
+    header.hero { padding: 28px 20px; }
+    header.hero h1 { font-size: 1.6em; }
+    .section { padding: 20px; }
+  }
+
+  @media print {
+    body { background: white; }
+    .section { break-inside: avoid; box-shadow: none; }
+    header.hero { background: var(--primary); }
+    .game-card { display: none; }
+  }
+
+  /* ============== GAME STYLES ============== */
+  .game-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    color: white;
+    box-shadow: 0 20px 50px -10px rgba(49, 46, 129, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .game-card::before {
+    content: "";
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 50%);
+    animation: glow 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes glow {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+  }
+
+  .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .game-header h2 {
+    color: white;
+    font-size: 1.8em;
+    text-shadow: 0 2px 10px rgba(124, 58, 237, 0.5);
+  }
+
+  .game-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1em;
+    font-weight: 800;
+    border-radius: 30px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    box-shadow: 0 8px 20px -4px rgba(220, 38, 38, 0.5);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+  }
+  .game-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 12px 28px -4px rgba(220, 38, 38, 0.7);
+  }
+  .game-btn:active { transform: scale(0.97); }
+
+  .game-stats {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .stat {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 0.7em;
+    opacity: 0.7;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .stat-value {
+    font-size: 1.6em;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+  #timer.warning { color: #fbbf24; animation: pulse 0.5s infinite; }
+  #timer.danger { color: #ef4444; animation: pulse 0.3s infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .game-area {
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .question-box {
+    background: rgba(255,255,255,0.95);
+    color: var(--ink);
+    padding: 20px 24px;
+    border-radius: 12px;
+    font-size: 1.15em;
+    font-weight: 600;
+    min-height: 60px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    margin-bottom: 16px;
+  }
+  .choices {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .choice {
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.25);
+    color: white;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 1.05em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    backdrop-filter: blur(10px);
+  }
+  .choice:hover {
+    background: rgba(124, 58, 237, 0.4);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+  }
+  .choice.correct {
+    background: #10b981 !important;
+    border-color: #10b981 !important;
+    animation: correctFlash 0.5s ease;
+  }
+  .choice.wrong {
+    background: #ef4444 !important;
+    border-color: #ef4444 !important;
+    animation: shake 0.4s ease;
+  }
+  @keyframes correctFlash {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  .feedback {
+    margin-top: 14px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.3em;
+    height: 28px;
+  }
+  .feedback.correct { color: #10b981; animation: bounceIn 0.4s ease; }
+  .feedback.wrong { color: #ef4444; animation: bounceIn 0.4s ease; }
+  @keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .game-over {
+    text-align: center;
+    padding: 30px 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .trophy {
+    font-size: 5em;
+    animation: spin 1s ease;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0) scale(0); }
+    100% { transform: rotate(720deg) scale(1); }
+  }
+  .rank-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 1.1em;
+    margin: 10px 0;
+    box-shadow: 0 8px 20px -4px rgba(220, 38, 38, 0.5);
+  }
+  .final-score {
+    font-size: 2.4em;
+    font-weight: 800;
+    margin: 16px 0;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .final-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 0.95em;
+    opacity: 0.9;
+  }
+
+  .hidden { display: none !important; }
+
+  .floating-emoji {
+    position: absolute;
+    font-size: 2em;
+    pointer-events: none;
+    animation: floatUp 1.2s ease-out forwards;
+    z-index: 100;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+  }
+
+  @media (max-width: 600px) {
+    .game-stats { grid-template-columns: repeat(2, 1fr); }
+    .choices { grid-template-columns: 1fr; }
+  }
+
+  /* SETUP SCREEN */
+  .game-setup {
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .setup-row {
+    margin-bottom: 18px;
+  }
+  .setup-label {
+    display: block;
+    font-size: 0.85em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    opacity: 0.85;
+    margin-bottom: 8px;
+  }
+  .setup-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1.05em;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 10px;
+    font-family: inherit;
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+  }
+  .setup-input::placeholder { color: rgba(255,255,255,0.4); }
+  .setup-input:focus {
+    outline: none;
+    border-color: #f59e0b;
+    background: rgba(255,255,255,0.15);
+  }
+  .concept-picker, .length-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .concept-btn, .length-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    font-size: 0.9em;
+  }
+  .concept-btn:hover, .length-btn:hover {
+    background: rgba(124, 58, 237, 0.4);
+    border-color: rgba(255,255,255,0.4);
+  }
+  .concept-btn.active, .length-btn.active {
+    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    border-color: #f59e0b;
+    box-shadow: 0 4px 12px -2px rgba(220, 38, 38, 0.5);
+  }
+  .game-btn.big {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.2em;
+    margin-top: 8px;
+  }
+  .game-btn.secondary {
+    background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+    box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5);
+  }
+  .game-btn.danger {
+    background: linear-gradient(135deg, #6b7280 0%, #374151 100%);
+    box-shadow: 0 8px 20px -4px rgba(107, 114, 128, 0.5);
+  }
+
+  /* QUESTION CATEGORY TAG */
+  .qcat {
+    display: inline-block;
+    background: rgba(124, 58, 237, 0.4);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  /* LEADERBOARD */
+  .leaderboard {
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+  .lb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .lb-row {
+    display: grid;
+    grid-template-columns: 50px 1fr auto auto;
+    gap: 12px;
+    align-items: center;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 12px 16px;
+    border-radius: 10px;
+    text-align: left;
+  }
+  .lb-row.top1 {
+    background: linear-gradient(135deg, rgba(245,158,11,0.4) 0%, rgba(220,38,38,0.4) 100%);
+    border-color: #f59e0b;
+  }
+  .lb-row.top2 { background: rgba(156, 163, 175, 0.25); }
+  .lb-row.top3 { background: rgba(180, 83, 9, 0.25); }
+  .lb-rank { font-weight: 800; font-size: 1.2em; }
+  .lb-name { font-weight: 700; }
+  .lb-meta { font-size: 0.8em; opacity: 0.8; }
+  .lb-score { font-weight: 800; font-size: 1.2em; color: #fbbf24; }
+  .lb-empty {
+    padding: 30px;
+    opacity: 0.6;
+    font-style: italic;
+  }
+
+  /* REVIEW BOX */
+  .review-box {
+    margin-top: 20px;
+    padding: 18px 22px;
+    background: rgba(251, 191, 36, 0.12);
+    border: 2px solid rgba(251, 191, 36, 0.4);
+    border-radius: 12px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .review-item {
+    background: rgba(255,255,255,0.06);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.92em;
+  }
+  .review-item .rcat {
+    display: inline-block;
+    background: rgba(251, 191, 36, 0.3);
+    color: #fde68a;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .review-item .rq {
+    color: white;
+    margin-bottom: 4px;
+  }
+  .review-item .ra {
+    color: #86efac;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+  .review-item .ra .label { color: rgba(255,255,255,0.6); font-weight: 500; margin-right: 4px; }
+
+  /* IN-GAME WRONG-ANSWER REVIEW POPUP */
+  .wrong-review {
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(251,191,36,0.18) 0%, rgba(220,38,38,0.18) 100%);
+    border: 2px solid rgba(251,191,36,0.5);
+    border-radius: 12px;
+    animation: bounceIn 0.4s ease;
+  }
+  .wr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .wr-tag {
+    background: rgba(251,191,36,0.4);
+    color: #fde68a;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .wr-countdown {
+    color: #fbbf24;
+    font-weight: 800;
+    font-size: 0.95em;
+  }
+  .wr-tip {
+    color: white;
+    font-size: 0.95em;
+    line-height: 1.55;
+    background: rgba(0,0,0,0.2);
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  .wr-tip strong { color: #fbbf24; }
+  .wr-skip {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="hero">
+    <h1>🏆 MOEMS Quick Review Guide</h1>
+    <p>Core concepts, theorems & test-day tactics for 7th &amp; 8th graders — designed for a 20–30 minute class walkthrough.</p>
+    <span class="badge">Division M</span>
+    <span class="badge">22 Concepts</span>
+    <span class="badge">⭐ = High Yield</span>
+  </header>
+
+  <!-- ===================== GAME ===================== -->
+  <div class="game-card">
+    <div class="game-header">
+      <div>
+        <h2 style="margin:0;">🎮 Math Olympiad Battle!</h2>
+        <p style="margin:4px 0 0 0; opacity:0.9; font-size:0.9em;">Random questions across all concepts. Beat the clock! 🏆</p>
+      </div>
+    </div>
+
+    <!-- SETUP SCREEN -->
+    <div id="gameSetup" class="game-setup">
+      <div class="setup-row">
+        <label class="setup-label">👤 Your Name</label>
+        <input type="text" id="playerName" maxlength="20" placeholder="Enter your name" class="setup-input"/>
+      </div>
+
+      <div class="setup-row">
+        <label class="setup-label">🎲 Game Mode</label>
+        <div style="background:rgba(255,255,255,0.1); border:2px solid rgba(124,58,237,0.6); padding:14px 18px; border-radius:10px; text-align:center; font-weight:700; font-size:1em;">
+          🎯 Random questions across ALL concepts<br>
+          <span style="font-size:0.85em; opacity:0.85; font-weight:500;">Number Theory · Fractions · Algebra · Geometry · Probability · Percents · Modular · Sets</span>
+        </div>
+      </div>
+
+      <div class="setup-row">
+        <label class="setup-label">⏱️ Game Length</label>
+        <div style="background:rgba(255,255,255,0.1); border:2px solid rgba(245,158,11,0.6); padding:14px 18px; border-radius:10px; text-align:center; font-weight:700; font-size:1.05em;">
+          🕒 10 minutes — non-stop questions until time runs out!
+        </div>
+        <p style="margin:8px 4px 0 4px; font-size:0.82em; opacity:0.8;">
+          ⚠️ <strong>Penalty for wrong answers:</strong> −10 points and −5 seconds. Don't guess randomly!<br>
+          📚 Wrong answer? You'll see the concept to review later.
+        </p>
+      </div>
+
+      <button id="startBtn" class="game-btn big" onclick="startGame()">▶ START GAME</button>
+    </div>
+
+    <!-- IN-GAME -->
+    <div id="gameStats" class="game-stats hidden">
+      <div class="stat"><div class="stat-label">PLAYER</div><div class="stat-value" id="statPlayer" style="font-size:1em;">—</div></div>
+      <div class="stat"><div class="stat-label">SCORE</div><div class="stat-value" id="score">0</div></div>
+      <div class="stat"><div class="stat-label">✅ RIGHT</div><div class="stat-value" id="correctCount">0</div></div>
+      <div class="stat"><div class="stat-label">❌ WRONG</div><div class="stat-value" id="wrongCount">0</div></div>
+      <div class="stat"><div class="stat-label">🔥 STREAK</div><div class="stat-value" id="streak">0</div></div>
+      <div class="stat"><div class="stat-label">⏱ TIME LEFT</div><div class="stat-value" id="timer">10:00</div></div>
+    </div>
+
+    <div id="gameArea" class="game-area hidden">
+      <div class="qcat" id="qcat">Concept</div>
+      <div class="question-box" id="questionBox">Press START to begin!</div>
+      <div class="choices" id="choices"></div>
+      <div id="feedback" class="feedback"></div>
+
+      <!-- inline review popup shown after wrong answer -->
+      <div id="wrongReview" class="wrong-review hidden">
+        <div class="wr-header">
+          <span class="wr-tag" id="wrTag">📚 Concept</span>
+          <span class="wr-countdown">Next in <span id="wrCountdown">10</span>s</span>
+        </div>
+        <div class="wr-tip" id="wrTip"></div>
+        <button class="game-btn secondary wr-skip" onclick="skipReview()">⏭ Got it — skip ahead</button>
+      </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="gameOver" class="game-over hidden">
+      <div class="trophy" id="trophy">🏆</div>
+      <h2 style="margin:0 0 8px 0;">Game Over, <span id="goName">Player</span>!</h2>
+      <div class="rank-badge" id="rankBadge">Math Wizard</div>
+      <div class="final-score">Final Score: <span id="finalScore">0</span></div>
+      <div class="final-stats">
+        <span>✅ Correct: <strong id="finalCorrect">0</strong></span>
+        <span>❌ Wrong: <strong id="finalWrong">0</strong></span>
+        <span>🎯 Accuracy: <strong id="finalAccuracy">0%</strong></span>
+        <span>🔥 Best Streak: <strong id="finalStreak">0</strong></span>
+      </div>
+
+      <div id="reviewBox" class="review-box hidden">
+        <h3 style="margin:0 0 10px 0; color:#fbbf24;">📚 Concepts to Review</h3>
+        <div id="reviewList"></div>
+      </div>
+      <div style="margin-top:18px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+        <button class="game-btn" onclick="resetToSetup()">🔄 PLAY AGAIN</button>
+      </div>
+    </div>
+  </div>
+  <!-- ================== END GAME ==================== -->
+
+  <!-- Section 1 -->
+  <div class="section">
+    <h2><span class="num">1</span> Divisibility Rules <span class="star">⭐</span></h2>
+    <table>
+      <tr><th>Divisor</th><th>Rule</th></tr>
+      <tr><td><strong>2</strong></td><td>Last digit is even</td></tr>
+      <tr><td><strong>3</strong></td><td>Sum of digits divisible by 3</td></tr>
+      <tr><td><strong>4</strong></td><td>Last two digits divisible by 4</td></tr>
+      <tr><td><strong>5</strong></td><td>Ends in 0 or 5</td></tr>
+      <tr><td><strong>6</strong></td><td>Divisible by 2 AND 3</td></tr>
+      <tr><td><strong>8</strong></td><td>Last three digits divisible by 8</td></tr>
+      <tr><td><strong>9</strong></td><td>Sum of digits divisible by 9</td></tr>
+      <tr><td><strong>11</strong></td><td>Alternating digit sum divisible by 11</td></tr>
+      <tr><td><strong>7 / 13</strong></td><td>No easy trick — just try long division</td></tr>
+    </table>
+    <div class="example">
+      <strong>MOEMS-style example:</strong> Which of 217, 224, 234, 245 is divisible by 9?<br>
+      Apply the digit-sum rule: 2+1+7=10, 2+2+4=8, 2+3+4=9 ✓, 2+4+5=11 → <span class="answer">234</span>
+    </div>
+    <div class="example">
+      <strong>Quick check:</strong> Is 3,916 divisible by 11? → 3 − 9 + 1 − 6 = −11 (divisible by 11) → <span class="answer">Yes</span>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section">
+    <h2><span class="num">2</span> Prime Factorization <span class="star">⭐</span></h2>
+    <ul>
+      <li>Every number breaks down into primes in only ONE way (Fundamental Theorem of Arithmetic).</li>
+      <li>Useful for: GCD, LCM, perfect squares, counting factors.</li>
+    </ul>
+    <p><strong>Big rule:</strong> A number is a <em>perfect square</em> ⇔ every prime in its factorization has an <strong>even</strong> exponent. A number is a <em>perfect cube</em> ⇔ every exponent is a <strong>multiple of 3</strong>.</p>
+    <div class="diagram-wrap">
+      <div class="text">
+        <div class="example">
+          <strong>MOEMS Tournament 2023:</strong> 2023 = 7 × 17². Find the LEAST N so that 2023·N is a perfect cube.<br>
+          We have 7¹ and 17². To make every exponent a multiple of 3, multiply by 7² · 17 = 49·17 = <span class="answer">833</span>
+        </div>
+        <div class="example">
+          <strong>MOEMS Tournament 2024:</strong> 2024 = 2³ × 11 × 23. How many TWO-DIGIT factors does 2024 have?<br>
+          List factors and circle 10–99: 11, 22, 44, 88, 23, 46, 92 → <span class="answer">7 factors</span>
+        </div>
+        <div class="example">
+          <strong>Counting all factors:</strong> If N = p<sup>a</sup>·q<sup>b</sup>·r<sup>c</sup>, the number of divisors is (a+1)(b+1)(c+1). 60 = 2²·3·5 → (3)(2)(2) = <span class="answer">12 divisors</span>
+        </div>
+      </div>
+      <svg width="240" height="180" viewBox="0 0 240 180">
+        <!-- Factor tree for 72 -->
+        <text x="120" y="20" text-anchor="middle" class="diag-text" font-weight="bold" font-size="16">72</text>
+        <line x1="115" y1="28" x2="80" y2="55" class="diag-line"/>
+        <line x1="125" y1="28" x2="160" y2="55" class="diag-line"/>
+        <text x="80" y="70" text-anchor="middle" class="diag-text" font-weight="bold">8</text>
+        <text x="160" y="70" text-anchor="middle" class="diag-text" font-weight="bold">9</text>
+        <line x1="75" y1="78" x2="55" y2="105" class="diag-line"/>
+        <line x1="85" y1="78" x2="105" y2="105" class="diag-line"/>
+        <line x1="155" y1="78" x2="135" y2="105" class="diag-line"/>
+        <line x1="165" y1="78" x2="185" y2="105" class="diag-line"/>
+        <text x="55" y="120" text-anchor="middle" class="diag-text" fill="#dc2626" font-weight="bold">2</text>
+        <text x="105" y="120" text-anchor="middle" class="diag-text" font-weight="bold">4</text>
+        <text x="135" y="120" text-anchor="middle" class="diag-text" fill="#059669" font-weight="bold">3</text>
+        <text x="185" y="120" text-anchor="middle" class="diag-text" fill="#059669" font-weight="bold">3</text>
+        <line x1="100" y1="128" x2="85" y2="150" class="diag-line"/>
+        <line x1="110" y1="128" x2="125" y2="150" class="diag-line"/>
+        <text x="85" y="165" text-anchor="middle" class="diag-text" fill="#dc2626" font-weight="bold">2</text>
+        <text x="125" y="165" text-anchor="middle" class="diag-text" fill="#dc2626" font-weight="bold">2</text>
+        <text x="120" y="180" text-anchor="middle" class="diag-label">72 = 2³ × 3²</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section">
+    <h2><span class="num">3</span> Counting Multiples & Numbers Between</h2>
+    <ul>
+      <li>Numbers from <em>a</em> to <em>b</em> inclusive: <code>b − a + 1</code></li>
+      <li>Multiples of <em>k</em> from 1 to <em>n</em>: <code>⌊n/k⌋</code></li>
+      <li>Multiples of <em>k</em> between <em>a</em> and <em>b</em>: <code>⌊b/k⌋ − ⌊(a−1)/k⌋</code></li>
+    </ul>
+    <div class="example">
+      <strong>MOEMS Tiebreaker 2023:</strong> How many whole numbers from 1 to 100 are multiples of 5 OR multiples of 7 (or both)?<br>
+      Inclusion-exclusion: ⌊100/5⌋ + ⌊100/7⌋ − ⌊100/35⌋ = 20 + 14 − 2 = <span class="answer">32</span>
+    </div>
+    <div class="example">
+      <strong>Example:</strong> Multiples of 4 between 19 and 79? → ⌊79/4⌋ = 19, ⌊18/4⌋ = 4 → <span class="answer">15</span>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section">
+    <h2><span class="num">4</span> Arithmetic Series <span class="star">⭐</span></h2>
+    <p><strong>Formulas:</strong></p>
+    <ul>
+      <li>Sum = <code>(number of terms) × (first + last) / 2</code></li>
+      <li>Number of terms = <code>(last − first) / difference + 1</code></li>
+    </ul>
+    <div class="example">
+      <strong>MOEMS Tournament 2022:</strong> Compute 4044 − 4043 + 4042 − 4041 + … + 4 − 3 + 2 − 1.<br>
+      Pair adjacent terms: (4044−4043) + (4042−4041) + … + (2−1). Each pair = 1 and there are 4044/2 = <span class="answer">2022 pairs → 2022</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Tournament 2023:</strong> Simplify 1 − 2 + 3 − 4 + 5 − 6 + … − 2022 + 2023.<br>
+      Group: (1−2)+(3−4)+…+(2021−2022)+2023. That's 1011 pairs of −1 plus 2023 → −1011 + 2023 = <span class="answer">1012</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Team 2021:</strong> Greatest number of consecutive integers summing to −24?<br>
+      Use the symmetric trick: −24 + −23 + … + 0 + 1 + … + 23 sums to −24. That's <span class="answer">48 terms</span> (negatives cancel positives, leaving the leftmost −24).
+    </div>
+    <div class="example">
+      <strong>Standard formula:</strong> 1 + 5 + 9 + … + 49<br>
+      Number of terms = (49 − 1)/4 + 1 = 13. Sum = 13 × (1 + 49)/2 = <span class="answer">325</span>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="section">
+    <h2><span class="num">5</span> Sum & Product Tricks</h2>
+    <ul>
+      <li>1 + 2 + 3 + … + n = <code>n(n+1)/2</code> (Gauss's Rule)</li>
+      <li>1 + 3 + 5 + … (first n odd numbers) = <code>n²</code></li>
+      <li><strong>Telescoping product:</strong> (1/2)(2/3)(3/4)…(n/(n+1)) = <code>1/(n+1)</code></li>
+      <li>(1 + 1/k) rewrites as (k+1)/k — perfect for telescoping</li>
+      <li>1/(1 − 1/k) rewrites as k/(k−1) — also telescopes</li>
+    </ul>
+    <div class="example">
+      <strong>MOEMS Individual 2021:</strong> Fully simplify (1 + 1/1)(1 + 1/2)(1 + 1/3)…(1 + 1/2021).<br>
+      Each factor = (k+1)/k. Product = (2/1)(3/2)(4/3)…(2022/2021). Everything cancels except 2022 → <span class="answer">2022</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Tiebreaker 2024:</strong> Compute 1/(1 − ½) · 1/(1 − ⅓) · 1/(1 − ¼) · … · 1/(1 − 1/10).<br>
+      Each factor = k/(k−1). Product = (2/1)(3/2)(4/3)…(10/9) = <span class="answer">10</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Team 2024:</strong> 24th term of (1+2+3−4), (5+6+7−8), (9+10+11−12), …<br>
+      Each group simplifies to 2, 10, 18, 26, … (arithmetic, common difference 8). Term n = 2 + 8(n−1). For n=24: <span class="answer">186</span>
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="section">
+    <h2><span class="num">6</span> Defined Operations <span class="star">⭐</span></h2>
+    <ul>
+      <li>The problem invents a symbol like <code>a ✱ b = a + 3b</code> or <code>a ▲ b = 2a + b</code>.</li>
+      <li>Just plug numbers into the rule exactly. Don't overthink it!</li>
+      <li>If they ask "find N so a✱b = N✱c," set both expansions equal and solve for N.</li>
+    </ul>
+    <div class="example">
+      <strong>MOEMS-style:</strong> If a ✱ b = a + 3b, find N so that 2 ✱ 6 = N ✱ 4.<br>
+      2 + 18 = N + 12 → <span class="answer">N = 8</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Tournament 2024 (style):</strong> Apply the identity (x − y)² = x² − 2xy + y² to compute<br>
+      R = ((2024 − 2025)² − 2024² − 2025²) / (2024 × 2025).<br>
+      Numerator = (2024² − 2·2024·2025 + 2025²) − 2024² − 2025² = −2·2024·2025. Divide → <span class="answer">R = −2</span>
+    </div>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="section">
+    <h2><span class="num">7</span> Word Problem Setup <span class="star hot">⭐⭐</span></h2>
+    <p><strong>The 4-step recipe:</strong></p>
+    <ol>
+      <li><strong>Let x = the unknown</strong> (write it down!)</li>
+      <li>Translate each sentence into one equation</li>
+      <li>Solve</li>
+      <li>Check it makes sense (positive, whole, fits the story)</li>
+    </ol>
+    <div class="example">
+      <strong>MOEMS Team 2021:</strong> Henry adds three of the four sides of a rectangle and gets 18. Doris does the same (different selection) and gets 21. Find the AREA of the rectangle.<br>
+      Let L, W be the sides. Henry: 2W + L = 18. Doris: 2L + W = 21. Subtract: L − W = 3. Add: 3L + 3W = 39, so L + W = 13. Solve: L = 8, W = 5. Area = <span class="answer">40</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Team 2023:</strong> 20X + 23Y = 2023 with X, Y positive integers. Find the LEAST X + Y.<br>
+      Rewrite as 20(X+Y) + 3Y = 2023. To minimize X+Y, maximize Y. Try X=8, Y=81: 160+1863=2023 ✓ → X+Y = <span class="answer">89</span>
+    </div>
+    <div class="example">
+      <strong>Classic setup:</strong> Each student gets 4 sheets, 16 left over. With 2 fewer students, each gets 5 with 3 left.<br>
+      Let s = students, p = sheets. p = 4s + 16 and p = 5(s−2) + 3 = 5s − 7. Equate: 4s + 16 = 5s − 7, so s = 23, p = <span class="answer">108</span>
+    </div>
+  </div>
+
+  <!-- Section 8 -->
+  <div class="section">
+    <h2><span class="num">8</span> Distributive Property Tricks</h2>
+    <ul>
+      <li><code>ax + bx = (a+b)x</code> — pull out the common factor!</li>
+      <li>Saves huge calculation time on the test.</li>
+    </ul>
+    <div class="example">
+      <strong>Classic factoring:</strong> (4.7 × 2.5 + 5.3 × 2.5) ÷ 2.5<br>
+      Top: 2.5 × (4.7 + 5.3) = 2.5 × 10. Divide by 2.5 → <span class="answer">10</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Individual 2023:</strong> When (3 × 10⁴) × (5 × 10⁶) is written in scientific notation a × 10ᵇ (1 ≤ a &lt; 10), find a + b.<br>
+      Multiply: 15 × 10¹⁰ = 1.5 × 10¹¹. So a = 1.5, b = 11. Sum = <span class="answer">12.5</span>
+    </div>
+  </div>
+
+  <!-- Section 9 -->
+  <div class="section">
+    <h2><span class="num">9</span> Counting & Combinations <span class="star">⭐</span></h2>
+    <ul>
+      <li><strong>Multiplication rule:</strong> A choices then B choices → A × B total</li>
+      <li><strong>Permutations of n distinct objects:</strong> n!</li>
+      <li><strong>Circular arrangements (mirror images different):</strong> fix one, permute the rest → (n−1)!</li>
+      <li><strong>Order doesn't matter:</strong> C(n, k) = n! / (k!(n−k)!)</li>
+      <li><strong>"Pick from each category":</strong> multiply across the categories</li>
+    </ul>
+    <div class="example">
+      <strong>MOEMS Team 2023:</strong> Five points A, B, C, D, E are placed equally spaced around a circle (in some order). Counting mirror images as different, how many distinct labelings are possible?<br>
+      Fix one point's label to break circular symmetry, then arrange the remaining 4: 4! = <span class="answer">24</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Tiebreaker 2023:</strong> A teacher assigns Aldus, Briana, and Cleo to seats in a row of 5 seats. How many different seating arrangements are possible?<br>
+      Aldus has 5 choices, Briana 4 left, Cleo 3 left → 5·4·3 = <span class="answer">60</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Individual 2024:</strong> How many non-congruent rectangular bricks (length × width × height) have positive integer dimensions summing to 10?<br>
+      List unordered triples (a ≤ b ≤ c) with a+b+c = 10: (1,1,8), (1,2,7), (1,3,6), (1,4,5), (2,2,6), (2,3,5), (2,4,4), (3,3,4) → <span class="answer">8</span>
+    </div>
+  </div>
+
+  <!-- Section 10 -->
+  <div class="section">
+    <h2><span class="num">10</span> Probability <span class="star">⭐</span></h2>
+    <ul>
+      <li><strong>Probability</strong> = (favorable outcomes) / (total outcomes)</li>
+      <li><strong>Independent events:</strong> multiply probabilities</li>
+      <li>Build a <strong>sum table</strong> (especially for two dice or two-spin spinner) and count favorable cells</li>
+      <li>Use the <strong>complement</strong> when "at least one" is involved: P(at least one) = 1 − P(none)</li>
+    </ul>
+    <div class="example">
+      <strong>MOEMS Individual 2023:</strong> One number is selected randomly from EACH of {1, 3, 5, 7, 9} and {1, 4, 9, 16, 25}. The probability the sum is a PERFECT SQUARE is K%. Find K.<br>
+      Build a 5×5 sum table (25 cells). Perfect-square sums (4, 9, 16, 25): 4 cells (e.g., 1+3=4, 5+4=9, 7+9=16, 9+16=25). 4/25 = <span class="answer">K = 16</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Individual 2024:</strong> A circular spinner has 5 equal sectors numbered 2, 3, 5, 7, 10. Spin twice. The probability the sum is EVEN is K%. Find K.<br>
+      Sum is even when both spins same parity. Even nums: 2 (so 2 of 5). Odd: 3 (so 3 of 5). P = (2² + 3²)/5² = 13/25 = <span class="answer">K = 52</span>
+    </div>
+  </div>
+
+  <!-- Section 11 -->
+  <div class="section">
+    <h2><span class="num">11</span> Geometry — Angles <span class="star">⭐</span></h2>
+    <div class="diagram-wrap">
+      <div class="text">
+        <ul>
+          <li>Straight line = <strong>180°</strong>, around a point = <strong>360°</strong></li>
+          <li>Triangle = <strong>180°</strong>, quadrilateral = <strong>360°</strong></li>
+          <li><strong>Polygon (n sides):</strong> sum of interior angles = <code>(n − 2) · 180°</code></li>
+          <li>Vertical angles equal; supplementary angles add to 180°</li>
+        </ul>
+        <div class="example">
+          <strong>MOEMS Tiebreaker 2024:</strong> Find the sum of the interior angles of hexagon TRICKY.<br>
+          (n − 2)·180° with n = 6: 4·180° = <span class="answer">720°</span>
+        </div>
+        <div class="example">
+          <strong>Overlap trick:</strong> ∠COE + ∠DOB − ∠COB = ∠DOE (when two big angles share an overlap, sum and subtract the overlap).
+        </div>
+      </div>
+      <svg width="220" height="180" viewBox="0 0 220 180">
+        <!-- Straight line AOB with rays OC, OD, OE -->
+        <line x1="20" y1="120" x2="200" y2="120" class="diag-line"/>
+        <text x="15" y="135" class="diag-text">A</text>
+        <text x="200" y="135" class="diag-text">B</text>
+        <circle cx="110" cy="120" r="3" fill="#1e293b"/>
+        <text x="105" y="138" class="diag-text">O</text>
+        <!-- Ray OC -->
+        <line x1="110" y1="120" x2="50" y2="40" class="diag-line"/>
+        <text x="40" y="35" class="diag-text">C</text>
+        <!-- Ray OD -->
+        <line x1="110" y1="120" x2="120" y2="20" class="diag-line"/>
+        <text x="115" y="15" class="diag-text">D</text>
+        <!-- Ray OE -->
+        <line x1="110" y1="120" x2="170" y2="40" class="diag-line"/>
+        <text x="170" y="35" class="diag-text">E</text>
+        <!-- Arc for COE -->
+        <path d="M 70 65 A 50 50 0 0 1 150 65" stroke="#2563eb" stroke-width="1.5" fill="none"/>
+        <text x="105" y="60" class="diag-label" fill="#2563eb">90°</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Section 12 -->
+  <div class="section">
+    <h2><span class="num">12</span> Geometry — Area & Perimeter</h2>
+    <table>
+      <tr><th>Shape</th><th>Area</th><th>Perimeter / Other</th></tr>
+      <tr><td>Rectangle</td><td><code>l × w</code></td><td>2(l + w)</td></tr>
+      <tr><td>Triangle</td><td><code>½ × b × h</code></td><td>a + b + c</td></tr>
+      <tr><td>Circle</td><td><code>πr²</code></td><td>2πr</td></tr>
+      <tr><td>Trapezoid</td><td><code>½ × (a + b) × h</code></td><td>—</td></tr>
+    </table>
+    <div class="example">
+      <strong>Shaded region trick:</strong> Big shape − removed pieces.
+    </div>
+    <div class="example">
+      <strong>MOEMS Individual 2024 (opposite-pairs theorem):</strong> Rectangle ABCD has interior point P. Segments PA, PB, PC, PD divide it into four triangles with areas 54, 65, 38, and N (going around). Find N.<br>
+      Key fact: in any rectangle, the SUMS of areas of opposite triangles are equal: 54 + 38 = 65 + N → N = <span class="answer">27</span>
+    </div>
+    <div class="example">
+      <strong>MOEMS Individual 2022:</strong> Rectangle FOXY is partitioned into 4 smaller rectangles with perimeters 28, 47, 35, 54 (corners F-O / Y-X). Find the PERIMETER of FOXY.<br>
+      Label inner side lengths a, b (vertical) and c, d (horizontal). Sum the four perimeter equations: 4a+4b+4c+4d = 164, so 2(a+b+c+d) = <span class="answer">82</span>
+    </div>
+    <div style="display:flex; gap:20px; justify-content:center; margin-top:14px; flex-wrap:wrap;">
+      <svg width="180" height="120" viewBox="0 0 180 120">
+        <rect x="10" y="40" width="160" height="60" class="diag-fill"/>
+        <path d="M 10 40 A 80 80 0 0 1 170 40 Z" class="diag-fill-2"/>
+        <path d="M 10 100 A 60 60 0 0 1 70 40 L 10 40 Z" fill="white" stroke="#dc2626" stroke-width="2"/>
+        <path d="M 170 100 A 60 60 0 0 0 110 40 L 170 40 Z" fill="white" stroke="#dc2626" stroke-width="2"/>
+        <text x="90" y="115" text-anchor="middle" class="diag-label">Shaded = rect + semicircle − corners</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Section 13 -->
+  <div class="section">
+    <h2><span class="num">13</span> Circles — Chords & Tangent Circles</h2>
+    <div class="diagram-wrap">
+      <div class="text">
+        <ul>
+          <li><strong>Chord through interior point P:</strong> the longest is the diameter; the shortest is the chord PERPENDICULAR to OP.</li>
+          <li>For perpendicular chord at P (with OP = d): half-length = <code>√(r² − d²)</code>, so chord length = <code>2√(r² − d²)</code>.</li>
+          <li><strong>Externally tangent circles</strong> → distance between centers = <code>r₁ + r₂</code></li>
+          <li>Get radius from area: <code>r = √(A/π)</code></li>
+        </ul>
+        <div class="example">
+          <strong>MOEMS Team 2023:</strong> Circle O has radius 10. Interior point P is 6 from the center. How many chords through P have INTEGER length?<br>
+          Longest chord = diameter = 20. Shortest = 2√(100−36) = 16. Integer lengths 16, 17, 18, 19, 20 → <span class="answer">5</span>
+        </div>
+        <div class="example">
+          <strong>Tangent circles example:</strong> Three externally tangent circles with areas 9π, 25π, 100π → radii 3, 5, 10.<br>
+          Triangle of centers has sides 8, 13, 15 → perimeter = <span class="answer">36</span>
+        </div>
+      </div>
+      <svg width="220" height="200" viewBox="0 0 220 200">
+        <circle cx="110" cy="100" r="70" fill="none" stroke="#2563eb" stroke-width="2"/>
+        <circle cx="110" cy="100" r="3" fill="#1e293b"/>
+        <text x="115" y="105" class="diag-text">O</text>
+        <circle cx="110" cy="60" r="3" fill="#dc2626"/>
+        <text x="115" y="58" class="diag-text" fill="#dc2626">P</text>
+        <line x1="110" y1="100" x2="110" y2="60" stroke="#1e293b" stroke-dasharray="3,3"/>
+        <text x="118" y="80" class="diag-label">d=6</text>
+        <line x1="44" y1="60" x2="176" y2="60" stroke="#dc2626" stroke-width="2"/>
+        <text x="44" y="55" class="diag-label" fill="#dc2626">shortest = 16</text>
+        <line x1="40" y1="100" x2="180" y2="100" stroke="#2563eb" stroke-width="2"/>
+        <text x="125" y="115" class="diag-label" fill="#2563eb">diameter = 20</text>
+        <text x="110" y="195" text-anchor="middle" class="diag-label">Integer chords: 16, 17, 18, 19, 20</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Section 14 -->
+  <div class="section">
+    <h2><span class="num">14</span> Pythagorean Theorem <span class="star">⭐</span></h2>
+    <div class="diagram-wrap">
+      <div class="text">
+        <ul>
+          <li><code>a² + b² = c²</code> in right triangles</li>
+          <li><strong>Memorize triples:</strong> 3-4-5, 5-12-13, 8-15-17, 7-24-25</li>
+          <li><strong>Tilted square trick:</strong> if one side goes "right a, up b", area = <code>a² + b²</code></li>
+          <li><strong>Reverse-test trick:</strong> if a² + b² = c² then it IS a right triangle (legs a, b).</li>
+        </ul>
+        <div class="example">
+          <strong>Example (MOEMS Team 2024):</strong> A triangle has sides √8, √18, √26 cm. Find its area.<br>
+          Check: (√8)² + (√18)² = 8 + 18 = 26 = (√26)² ✓ → right triangle, legs √8 &amp; √18.<br>
+          Area = ½·√8·√18 = ½·√144 = <span class="answer">6 sq cm</span>
+        </div>
+      </div>
+      <svg width="200" height="180" viewBox="0 0 200 180">
+        <polygon points="40,140 160,140 160,60" class="diag-fill"/>
+        <line x1="40" y1="140" x2="55" y2="125" stroke="#1e293b"/>
+        <line x1="55" y1="125" x2="40" y2="140" stroke="#1e293b"/>
+        <rect x="148" y="128" width="12" height="12" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="100" y="160" text-anchor="middle" class="diag-text" font-weight="bold">b = 12</text>
+        <text x="175" y="105" class="diag-text" font-weight="bold">a = 5</text>
+        <text x="80" y="100" class="diag-text" font-weight="bold" fill="#dc2626">c = 13</text>
+        <text x="100" y="178" text-anchor="middle" class="diag-label">5² + 12² = 169 = 13²</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Section 15 -->
+  <div class="section">
+    <h2><span class="num">15</span> Volume of Prisms <span class="star">⭐</span></h2>
+    <div class="diagram-wrap">
+      <div class="text">
+        <ul>
+          <li><strong>V = (area of base) × height</strong></li>
+          <li>For a pool with sloped bottom (trapezoidal cross-section):
+            <ul>
+              <li>Cross-section = ½(deep + shallow) × length</li>
+              <li>Volume = cross-section × width</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="example">
+          <strong>Example (MOEMS Team-style):</strong> Pool 20m × 6m, deep 4m, shallow 1m.<br>
+          Cross-section = ½(4+1)(20) = 50 m²<br>
+          Volume = 50 × 6 = <span class="answer">300 m³</span>
+        </div>
+        <div class="example">
+          <strong>Example (MOEMS Tournament 2022):</strong> A cube is sliced by a plane through three edges meeting at one vertex, removing a small corner tetrahedron of volume 1/6 unit³ (legs of length 1). The remaining solid's volume?<br>
+          Cube vol = 1; remove 1/6 → <span class="answer">5/6 unit³</span>
+        </div>
+      </div>
+      <svg width="220" height="180" viewBox="0 0 220 180">
+        <!-- 3D pool perspective -->
+        <polygon points="20,40 180,40 200,20 40,20" class="diag-fill" opacity="0.5"/>
+        <polygon points="20,40 180,40 180,140 20,80" class="diag-fill"/>
+        <polygon points="180,40 200,20 200,120 180,140" class="diag-fill" opacity="0.7"/>
+        <text x="100" y="60" text-anchor="middle" class="diag-text" font-weight="bold">20 m</text>
+        <text x="195" y="85" class="diag-text" font-weight="bold">6</text>
+        <text x="10" y="65" class="diag-text" font-weight="bold">1</text>
+        <text x="185" y="100" class="diag-text" font-weight="bold">4</text>
+        <text x="110" y="170" text-anchor="middle" class="diag-label">Deep end (right) = 4m, Shallow (left) = 1m</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Section 16 -->
+  <div class="section">
+    <h2><span class="num">16</span> Continued Fractions</h2>
+    <ul>
+      <li><code>a + 1/(b + 1/c)</code> — work from the <strong>inside out</strong> to simplify</li>
+      <li>To go backwards (fraction → continued form): repeated long division</li>
+    </ul>
+    <div class="example">
+      <strong>Example:</strong> 45/7 = 6 + 3/7 = 6 + 1/(7/3) = 6 + 1/(2 + 1/3)<br>
+      → <span class="answer">a = 6, b = 2, c = 3</span>
+    </div>
+    <div class="example">
+      <strong>Example (MOEMS-style):</strong> Simplify 2 + 1/(3 + 1/4) inside-out.<br>
+      Inner: 3 + 1/4 = 13/4 → 1/(13/4) = 4/13 → 2 + 4/13 = <span class="answer">30/13</span>
+    </div>
+  </div>
+
+  <!-- Section 17 -->
+  <div class="section" style="background: linear-gradient(135deg, #fef9e7 0%, #fff 100%); border:2px solid var(--accent);">
+    <h2><span class="num" style="background:var(--accent);">17</span> The 5 Big Test-Day Tactics <span class="star hot">⭐⭐</span></h2>
+    <ol style="font-size:1.05em;">
+      <li><strong>Try small cases.</strong> Don't solve in general — try n=1, 2, 3 and spot the pattern.</li>
+      <li><strong>Work backwards</strong> from the answer when you're stuck.</li>
+      <li><strong>Draw a picture</strong> for any geometry or motion problem.</li>
+      <li><strong>Look for cancellation</strong> — fractions, common factors, telescoping.</li>
+      <li><strong>Sanity check</strong> — does the answer have the right units? Is it reasonable?</li>
+    </ol>
+  </div>
+
+  <!-- ===== AMC 8 / MATHCOUNTS BONUS SECTIONS ===== -->
+  <div style="margin: 40px 0 20px 0; text-align:center;">
+    <div style="display:inline-block; background:#7c3aed; color:white; padding:8px 20px; border-radius:20px; font-weight:700; letter-spacing:0.05em; font-size:0.9em;">
+      🚀 BONUS: AMC 8 / MATHCOUNTS High-Yield Concepts
+    </div>
+    <p style="color:var(--muted); font-size:0.9em; margin-top:8px;">For students ready to push past MOEMS — these show up on AMC 8 and county-level team rounds.</p>
+  </div>
+
+  <!-- Section 18 -->
+  <div class="section">
+    <h2><span class="num">18</span> Modular Arithmetic ("Clock Math") <span class="star">⭐</span></h2>
+    <ul>
+      <li><strong>a mod n</strong> = remainder when a is divided by n.</li>
+      <li>Addition and multiplication work normally — just take the remainder.</li>
+      <li>Useful for: last digit, divisibility, repeating patterns.</li>
+    </ul>
+    <div class="example">
+      <strong>Example:</strong> What is the last digit of 7<sup>100</sup>?<br>
+      Powers of 7 cycle in last digits: 7, 9, 3, 1, 7, 9, 3, 1, … (period 4).<br>
+      100 ÷ 4 = 25 remainder 0 → matches position 4 → <span class="answer">last digit = 1</span>
+    </div>
+    <div class="example">
+      <strong>Example:</strong> What day of the week is 100 days after a Tuesday?<br>
+      100 mod 7 = 2 → 2 days after Tuesday → <span class="answer">Thursday</span>
+    </div>
+    <div class="example">
+      <strong>Example (MOEMS Individual 2024 — Klatururu):</strong> On Mars, Mondays/Wednesdays/Fridays Martians lie; other days they tell the truth. A Martian says "Yesterday I lied." On which day(s) could the statement be true?<br>
+      Need today = truth-day AND yesterday = lie-day. Truth-days: Tu, Th, Sa, Su. Yesterday lie-day means today ∈ {Tu, Th, Sa}. Intersection → <span class="answer">Tuesday, Thursday, Saturday</span>
+    </div>
+  </div>
+
+  <!-- Section 19 -->
+  <div class="section">
+    <h2><span class="num">19</span> Rate · Time · Distance & Work Problems <span class="star">⭐</span></h2>
+    <ul>
+      <li><strong>Distance = rate × time</strong></li>
+      <li><strong>Average speed</strong> for a round trip = <code>2·d / (d/r₁ + d/r₂)</code> = harmonic mean (NOT just (r₁+r₂)/2!)</li>
+      <li><strong>Work problems:</strong> if A finishes in a hours and B in b hours, together they finish in <code>ab/(a+b)</code> hours.</li>
+    </ul>
+    <div class="example">
+      <strong>Example (round trip):</strong> Drive 60 mph there, 40 mph back. Average speed?<br>
+      Use harmonic mean: 2(60)(40) / (60+40) = 4800/100 = <span class="answer">48 mph</span> (not 50!)
+    </div>
+    <div class="example">
+      <strong>Example (work):</strong> Alice paints a fence in 6 hours, Bob in 3 hours. Together?<br>
+      6·3 / (6+3) = 18/9 = <span class="answer">2 hours</span>
+    </div>
+    <div class="example">
+      <strong>Example (MOEMS Tournament 2022 wind):</strong> A plane flies 600 mi with a tailwind in H hours and returns 600 mi against the same wind in M hours. With still-air speed 250 mph and wind 50 mph: H = 600/300 = 2, M = 600/200 = 3 → H + M = <span class="answer">5 hours</span>
+    </div>
+  </div>
+
+  <!-- Section 20 -->
+  <div class="section">
+    <h2><span class="num">20</span> Inclusion–Exclusion (Overlapping Sets)</h2>
+    <p>For two sets:</p>
+    <p style="text-align:center;"><code>|A ∪ B| = |A| + |B| − |A ∩ B|</code></p>
+    <p>For three sets: add singles, subtract pairs, add triple back.</p>
+    <div class="diagram-wrap">
+      <div class="text">
+        <div class="example">
+          <strong>Example:</strong> In a class of 30: 18 like soccer, 15 like basketball, 8 like both. How many like at least one sport?<br>
+          18 + 15 − 8 = <span class="answer">25 students</span><br>
+          (Liking neither: 30 − 25 = 5)
+        </div>
+        <div class="example">
+          <strong>Example (MOEMS Tournament 2022 percent-Venn):</strong> In a class, 5/9 take Geometry and 7/12 take Biology, and every student takes at least one. Find the LEAST possible class size.<br>
+          Class size N must make 5N/9, 7N/12, and overlap (5/9 + 7/12 − 1)N = 11N/36 all integers → N must be a multiple of lcm(9,12,36)=36 → <span class="answer">N = 36</span>
+        </div>
+      </div>
+      <svg width="220" height="150" viewBox="0 0 220 150">
+        <circle cx="80" cy="75" r="55" fill="#93c5fd" opacity="0.6" stroke="#2563eb" stroke-width="2"/>
+        <circle cx="140" cy="75" r="55" fill="#fde68a" opacity="0.6" stroke="#f59e0b" stroke-width="2"/>
+        <text x="55" y="78" text-anchor="middle" class="diag-text" font-weight="bold">10</text>
+        <text x="110" y="78" text-anchor="middle" class="diag-text" font-weight="bold">8</text>
+        <text x="165" y="78" text-anchor="middle" class="diag-text" font-weight="bold">7</text>
+        <text x="55" y="20" text-anchor="middle" class="diag-text" font-weight="bold" fill="#2563eb">Soccer</text>
+        <text x="165" y="20" text-anchor="middle" class="diag-text" font-weight="bold" fill="#f59e0b">Basketball</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Section 21 -->
+  <div class="section">
+    <h2><span class="num">21</span> Percent Change & Successive Percents <span class="star">⭐</span></h2>
+    <ul>
+      <li><strong>x% increase</strong> = multiply by (1 + x/100). <strong>x% decrease</strong> = multiply by (1 − x/100).</li>
+      <li><strong>Successive percents multiply, NOT add!</strong> +20% then −20% ≠ unchanged.</li>
+      <li>Percent change = <code>(new − old) / old × 100%</code></li>
+    </ul>
+    <div class="example">
+      <strong>Example:</strong> A $50 shirt is marked up 20%, then discounted 20%. Final price?<br>
+      50 × 1.20 × 0.80 = 50 × 0.96 = <span class="answer">$48</span> (lost 4%, not 0%!)
+    </div>
+    <div class="example">
+      <strong>Example:</strong> A number is increased by 25%, then decreased by 20%. Net change?<br>
+      1.25 × 0.80 = 1.00 → <span class="answer">no net change</span>
+    </div>
+    <div class="example">
+      <strong>Example (MOEMS Tournament-style %-of-class):</strong> Exactly 5.2% of students in a class are absent. What is the SMALLEST possible class size?<br>
+      5.2% = 52/1000 = 13/250 in lowest terms → smallest N divisible by 250 → <span class="answer">N = 250</span>
+    </div>
+  </div>
+
+  <!-- Section 22 -->
+  <div class="section">
+    <h2><span class="num">22</span> Special Triangles & Geometry Power Tools</h2>
+    <div class="diagram-wrap">
+      <div class="text">
+        <ul>
+          <li><strong>30-60-90 triangle:</strong> sides in ratio <code>1 : √3 : 2</code></li>
+          <li><strong>45-45-90 triangle:</strong> sides in ratio <code>1 : 1 : √2</code></li>
+          <li><strong>Equilateral triangle area</strong> with side s: <code>(s²√3)/4</code></li>
+          <li><strong>Diagonal of square</strong> with side s: <code>s√2</code></li>
+          <li><strong>Diagonal of cube</strong> with side s: <code>s√3</code></li>
+          <li><strong>Hero's formula</strong> (for triangle area from 3 sides): s = (a+b+c)/2, area = √(s(s−a)(s−b)(s−c))</li>
+        </ul>
+      </div>
+      <svg width="220" height="180" viewBox="0 0 220 180">
+        <!-- 30-60-90 -->
+        <polygon points="30,150 110,150 110,30" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="60" y="165" class="diag-text">1</text>
+        <text x="118" y="95" class="diag-text">√3</text>
+        <text x="55" y="85" class="diag-text" fill="#dc2626" font-weight="bold">2</text>
+        <text x="98" y="148" class="diag-text" fill="#059669">60°</text>
+        <text x="40" y="143" class="diag-text" fill="#059669">30°</text>
+        <text x="115" y="175" text-anchor="middle" class="diag-label">30-60-90</text>
+        <!-- 45-45-90 -->
+        <polygon points="140,150 200,150 140,90" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="170" y="165" class="diag-text">1</text>
+        <text x="130" y="125" class="diag-text">1</text>
+        <text x="175" y="115" class="diag-text" fill="#dc2626" font-weight="bold">√2</text>
+        <text x="170" y="175" text-anchor="middle" class="diag-label">45-45-90</text>
+      </svg>
+    </div>
+    <div class="example">
+      <strong>Example:</strong> A square has diagonal length 10. Find its area.<br>
+      Side = 10/√2 = 5√2. Area = (5√2)² = <span class="answer">50</span>
+    </div>
+    <div class="example">
+      <strong>Example (MOEMS Tournament-style equilateral):</strong> An equilateral triangle has side 6. Its area?<br>
+      (6²·√3)/4 = 36√3/4 = <span class="answer">9√3</span>
+    </div>
+  </div>
+
+  <!-- Priority box -->
+  <div class="priority-box">
+    <strong>⏱️ Short on time?</strong> Run sections <strong>1, 4, 6, 7, 11, 14, 17</strong> first — those are the highest-yield. For advanced students, add sections <strong>18, 19, 21, 22</strong>. The ⭐⭐ items are tested on almost every contest.
+  </div>
+
+  <!-- Closing Quiz -->
+  <div class="quiz">
+    <h2>🎯 Closing Practice Quiz</h2>
+    <p style="margin-top:0;">Try each one — then click <strong>Show answer</strong> to check.</p>
+    <ol>
+      <li>
+        Sum of integers from −10 through N inclusive equals 50. Find N.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>N = 14.</strong> Integers from −10 through 10 sum to 0. Then 11 + 12 + 13 + 14 = 50 ✓. So <strong>N = 14</strong>.</span>
+        </details>
+      </li>
+      <li>
+        Number of digits to the left of the decimal in 500,000,000 ÷ 170,000?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>4 digits.</strong> 500,000,000 ÷ 170,000 = 50,000 ÷ 17 ≈ 2941.18. So there are <strong>4 digits</strong> to the left of the decimal point.</span>
+        </details>
+      </li>
+      <li>
+        The 4-digit number 3■11 is divisible by 13. Find the missing digit ■.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>■ = 2.</strong> Try each digit: 3211 ÷ 13 = 247 exactly ✓. So <strong>■ = 2</strong>.</span>
+        </details>
+      </li>
+      <li>
+        Express (1/3)(2/4)(3/5)(4/6) as a single fraction in simplest form.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>1/15.</strong> Numerator: 1·2·3·4 = 24. Denominator: 3·4·5·6 = 360. 24/360 = <strong>1/15</strong>. (Telescoping shortcut: cancel diagonally → (1·2)/(5·6) = 2/30 = 1/15.)</span>
+        </details>
+      </li>
+      <li>
+        Three circles tangent externally with areas π, 4π, 9π. Find the perimeter of the triangle joining the centers.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>12.</strong> Radii from area: √1 = 1, √4 = 2, √9 = 3. Distances between centers (externally tangent): 1+2 = 3, 2+3 = 5, 1+3 = 4. Perimeter = 3 + 4 + 5 = <strong>12</strong>.</span>
+        </details>
+      </li>
+      <li>
+        Find the value of: (3.5 × 1.04 + 6.5 × 1.04) ÷ (0.2 × 5.20)
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>10.</strong> Top: 1.04 × (3.5 + 6.5) = 1.04 × 10 = 10.4. Bottom: 0.2 × 5.20 = 1.04. So 10.4 ÷ 1.04 = <strong>10</strong>.</span>
+        </details>
+      </li>
+      <li>
+        For any two numbers a and b, define a ✱ b = 2a + b. If 5 ✱ x = x ✱ 8, find x.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>x = 2.</strong> 5 ✱ x = 2(5) + x = 10 + x. x ✱ 8 = 2x + 8. Setting equal: 10 + x = 2x + 8 → <strong>x = 2</strong>.</span>
+        </details>
+      </li>
+      <li>
+        A bag has 3 red, 5 blue, and 4 green marbles. You pick 2 without looking. What is the probability both are the same color?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>19/66.</strong> Total ways to pick 2 from 12 = C(12,2) = 66. Same-color: C(3,2)+C(5,2)+C(4,2) = 3+10+6 = 19. Probability = <strong>19/66</strong>.</span>
+        </details>
+      </li>
+      <li>
+        Find the smallest whole number N so that 240 + N is a perfect square.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>N = 16.</strong> √240 ≈ 15.49. Next perfect square is 16² = 256. So N = 256 − 240 = <strong>16</strong>.</span>
+        </details>
+      </li>
+      <li>
+        Sarah won 4 of her first 6 games. She then won 80% of her remaining games and ended with victories in exactly 3/4 of all games. How many games did she win total?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>14 wins.</strong> Let r = remaining games. Total = 6 + r. Wins = 4 + 0.8r. Set equal to ¾(6+r): 4 + 0.8r = 4.5 + 0.75r → 0.05r = 0.5 → r = 10. Wins = 4 + 8 = <strong>12</strong>. (Total games 16, wins 12, ratio 12/16 = 3/4 ✓)</span>
+        </details>
+      </li>
+      <li>
+        Two consecutive positive integers are each less than 80. One is divisible by 11 and the other by 13. Find the larger one.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>78.</strong> Multiples of 11 under 80: 11, 22, 33, 44, 55, 66, 77. Multiples of 13: 13, 26, 39, 52, 65, 78. Look for pairs differing by 1: 77 and 78 ✓. Larger = <strong>78</strong>.</span>
+        </details>
+      </li>
+      <li>
+        How many ways can you arrange the letters in the word "MATH"?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>24.</strong> 4 distinct letters → 4! = 4 × 3 × 2 × 1 = <strong>24</strong>.</span>
+        </details>
+      </li>
+      <li>
+        A rectangle has length 3 times its width. Its perimeter is 64 cm. Find its area.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>192 cm².</strong> Let w = width, length = 3w. Perimeter: 2(w + 3w) = 8w = 64 → w = 8. Length = 24. Area = 8 × 24 = <strong>192 cm²</strong>.</span>
+        </details>
+      </li>
+      <li>
+        A right triangle has legs 9 and 40. Find the length of the hypotenuse.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>41.</strong> 9² + 40² = 81 + 1600 = 1681 = 41². Hypotenuse = <strong>41</strong>. (This is the 9-40-41 Pythagorean triple — worth memorizing!)</span>
+        </details>
+      </li>
+      <li>
+        Find the sum: 3 + 7 + 11 + 15 + … + 99
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>1275.</strong> Arithmetic series, first = 3, last = 99, common diff = 4. Number of terms = (99−3)/4 + 1 = 25. Sum = 25 × (3+99)/2 = 25 × 51 = <strong>1275</strong>.</span>
+        </details>
+      </li>
+    </ol>
+
+    <h2 style="margin-top:32px; color:#7c3aed;">🔥 Bonus Challenge (AMC 8 / MATHCOUNTS Style)</h2>
+    <p style="margin-top:0;">A bit harder — these stretch into the AMC 8 / county team-round difficulty.</p>
+    <ol start="16">
+      <li>
+        What is the units digit of 7<sup>2026</sup>?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>9.</strong> Powers of 7 have last-digit cycle 7, 9, 3, 1 (period 4). 2026 ÷ 4 = 506 remainder 2 → matches position 2 → last digit <strong>9</strong>.</span>
+        </details>
+      </li>
+      <li>
+        A car drives 30 mph going uphill and 60 mph going downhill on the same road. What is the average speed for the round trip?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>40 mph.</strong> Use harmonic mean (NOT 45). 2(30)(60)/(30+60) = 3600/90 = <strong>40 mph</strong>.</span>
+        </details>
+      </li>
+      <li>
+        In a school of 200 students, 120 study Spanish, 80 study French, and 30 study both. How many study neither?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>30.</strong> By inclusion-exclusion: at least one = 120 + 80 − 30 = 170. Neither = 200 − 170 = <strong>30</strong>.</span>
+        </details>
+      </li>
+      <li>
+        A stock rises 25% on Monday and falls 20% on Tuesday. What is the net percent change?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>0% (no change).</strong> Multiply: 1.25 × 0.80 = 1.00 → exactly the same as the start.</span>
+        </details>
+      </li>
+      <li>
+        Alice can mow a lawn in 4 hours, Bob in 6 hours. Working together, how many minutes do they need?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>144 minutes (2 hours 24 min).</strong> Combined time = (4·6)/(4+6) = 24/10 = 2.4 hours = <strong>144 minutes</strong>.</span>
+        </details>
+      </li>
+      <li>
+        A regular hexagon has side length 6. Find its area.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>54√3.</strong> A regular hexagon = 6 equilateral triangles. Each triangle area = (6²√3)/4 = 9√3. Total = 6 × 9√3 = <strong>54√3</strong>.</span>
+        </details>
+      </li>
+      <li>
+        How many positive integer divisors does 360 have?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>24.</strong> 360 = 2³ × 3² × 5¹. Number of divisors = (3+1)(2+1)(1+1) = 4 × 3 × 2 = <strong>24</strong>.</span>
+        </details>
+      </li>
+      <li>
+        A square has diagonal 12. Find its area.
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>72.</strong> Diagonal of square = side × √2. Side = 12/√2 = 6√2. Area = (6√2)² = 36 × 2 = <strong>72</strong>. Shortcut: area = diagonal²/2 = 144/2 = 72.</span>
+        </details>
+      </li>
+      <li>
+        Find the number of ways to arrange the letters in the word "MISSISSIPPI."
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>34,650.</strong> 11 letters with repeats: 1 M, 4 I's, 4 S's, 2 P's. Arrangements = 11! / (1! · 4! · 4! · 2!) = 39,916,800 / 1152 = <strong>34,650</strong>.</span>
+        </details>
+      </li>
+      <li>
+        Three fair coins are tossed. What is the probability of getting exactly two heads?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>3/8.</strong> Total outcomes = 2³ = 8. Favorable: HHT, HTH, THH = 3. Probability = <strong>3/8</strong>.</span>
+        </details>
+      </li>
+      <li>
+        The mean of 5 numbers is 20. If a sixth number is added and the new mean is 22, what is the sixth number?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>32.</strong> Old sum = 5 × 20 = 100. New sum = 6 × 22 = 132. Sixth number = 132 − 100 = <strong>32</strong>.</span>
+        </details>
+      </li>
+      <li>
+        What is the greatest common divisor (GCD) of 84 and 126?
+        <details class="qa"><summary>Show answer</summary>
+          <span class="ans"><strong>42.</strong> Prime factorize: 84 = 2² · 3 · 7; 126 = 2 · 3² · 7. GCD = take min exponents: 2¹ · 3¹ · 7¹ = <strong>42</strong>.</span>
+        </details>
+      </li>
+    </ol>
+  </div>
+
+  <footer>
+    📚 MOEMS Quick Review · Designed for 7th &amp; 8th grade Math Olympiad prep<br>
+    Tip: Print this page for handouts (uses print-friendly styles).
+  </footer>
+
+</div>
+
+<script>
+// =============== MATH OLYMPIAD BATTLE GAME ===============
+console.log("[MOEMS Game] Script loaded");
+
+// Each question tagged with `cat` (concept). Players can filter by category or pick "All".
+const QUESTIONS = [
+  // ===== MOEMS-style set (modeled on Division M Tournament 2021–2025) =====
+  // Number Theory & Divisibility — counting two-digit factors, perfect-cube/square completions,
+  // sum-of-all-factors, smallest-prime-pair sums, divisor-counting, smallest n so kN is a cube/square
+  { cat: "Number Theory", q: "The prime factorization of 2024 is 2³·11·23. How many of its factors are TWO-digit numbers?", a: "7", c: ["5", "6", "7", "8"], explain: "Two-digit factors: 11, 22 (=2·11), 44 (=4·11), 88 (=8·11), 23, 46 (=2·23), 92 (=4·23). That's 7." },
+  { cat: "Number Theory", q: "The prime factorization of 2023 is 7·17². Find the SUM of all the whole-number factors of 2023.", a: "2456", c: ["2024", "2380", "2456", "2700"], explain: "Factors of 7·17² are: 1, 7, 17, 17², 7·17, 7·17² = 1, 7, 17, 289, 119, 2023. Sum = 2456." },
+  { cat: "Number Theory", q: "Given that 2023 = 7·17², find the LEAST positive whole number N so that 2023·N is a perfect cube.", a: "833", c: ["119", "289", "833", "2023"], explain: "Need every prime's exponent to be a multiple of 3. We have 7¹ and 17²; multiply by 7²·17¹ = 49·17 = 833." },
+  { cat: "Number Theory", q: "How many pairs of PRIMES have a sum of 100? (Both numbers must be prime.)", a: "6", c: ["4", "5", "6", "8"], explain: "Pairs: 3+97, 11+89, 17+83, 29+71, 41+59, 47+53. That's 6 pairs." },
+  { cat: "Number Theory", q: "Let p and q be two primes with p < q and p + q = 2383. Find q.", a: "2381", c: ["2381", "2389", "1979", "1979 + 404"], explain: "Sum is odd, so one prime must be 2 (the only even prime). Then q = 2383 − 2 = 2381 (prime)." },
+  { cat: "Number Theory", q: "X and Y are positive integers with 20X + 23Y = 2023. What is the LEAST possible value of X + Y?", a: "89", c: ["83", "89", "91", "100"], explain: "Rewrite as 20(X+Y) + 3Y = 2023. Maximize Y to minimize X+Y. Try X=8, Y=81: 160+1863=2023 ✓. X+Y=89." },
+  { cat: "Number Theory", q: "What is the LEAST positive whole number n so that 72·n is a perfect cube?", a: "3", c: ["3", "6", "9", "12"], explain: "72 = 2³·3². The 2's already form a cube. The 3² needs one more factor of 3 to become 3³. So n = 3, giving 72·3 = 216 = 6³." },
+  { cat: "Number Theory", q: "Find the LEAST positive integer N so that 28·N is a perfect cube.", a: "98", c: ["49", "98", "196", "784"], explain: "28 = 2²·7. Need 2³·7³, so multiply by 2¹·7² = 2·49 = 98." },
+  { cat: "Number Theory", q: "How many distinct tri-primes p·q·r (with p, q, r distinct primes) are at most 100?", a: "5", c: ["4", "5", "6", "7"], explain: "List: 2·3·5=30, 2·3·7=42, 2·3·11=66, 2·3·13=78, 2·5·7=70. That's 5 (2·5·11=110 too big)." },
+  { cat: "Number Theory", q: "How many whole numbers from 1 to 100 are multiples of 5 OR multiples of 7 (or both)?", a: "32", c: ["28", "30", "32", "34"], explain: "Inclusion-exclusion: ⌊100/5⌋ + ⌊100/7⌋ − ⌊100/35⌋ = 20 + 14 − 2 = 32." },
+  { cat: "Number Theory", q: "How many divisors does 60 have?", a: "12", c: ["8", "10", "12", "15"], explain: "60 = 2²·3·5. Number of divisors = (2+1)(1+1)(1+1) = 12." },
+  { cat: "Number Theory", q: "How many divisors does 48 have?", a: "10", c: ["8", "10", "12", "16"], explain: "48 = 2⁴·3¹. Number of divisors = (4+1)(1+1) = 10." },
+  { cat: "Number Theory", q: "GCD of 45 and 60?", a: "15", c: ["5", "10", "15", "20"], explain: "45 = 3²·5, 60 = 2²·3·5. GCD takes the MIN exponent of each prime: 3·5 = 15." },
+  { cat: "Number Theory", q: "LCM of 12 and 15?", a: "60", c: ["30", "45", "60", "180"], explain: "12 = 2²·3, 15 = 3·5. LCM takes the MAX exponent of each prime: 2²·3·5 = 60." },
+  { cat: "Number Theory", q: "What is the sum of all the whole-number divisors of 36?", a: "91", c: ["55", "78", "91", "100"], explain: "Divisors of 36: 1, 2, 3, 4, 6, 9, 12, 18, 36. Sum = 91." },
+  { cat: "Number Theory", q: "Which of the following is divisible by 9?", a: "234", c: ["217", "224", "234", "245"], explain: "A number is divisible by 9 iff its digit sum is. Only 2+3+4 = 9 works." },
+  { cat: "Number Theory", q: "Find the SMALLEST positive integer n so that 50·n is a perfect square.", a: "2", c: ["2", "5", "10", "25"], explain: "50 = 2·5². The exponent of 2 is odd, so multiply by 2: 50·2 = 100 = 10²." },
+  { cat: "Number Theory", q: "When 2024 is factored as 2³·11·23, how many distinct factors does 2024 have in total?", a: "16", c: ["12", "14", "16", "20"], explain: "(3+1)(1+1)(1+1) = 16 factors." },
+
+  // Fractions & Series — pairing/grouping signed series, telescoping products,
+  // sequences with growing differences, Gauss's Rule, harmonic mean, nested radicals
+  { cat: "Fractions & Series", q: "Compute the value of 4044 − 4043 + 4042 − 4041 + 4040 − 4039 + … + 4 − 3 + 2 − 1.", a: "2022", c: ["2021", "2022", "2023", "4044"], explain: "Pair terms: (4044−4043) + (4042−4041) + … + (2−1). Each pair = 1, and there are 4044/2 = 2022 pairs." },
+  { cat: "Fractions & Series", q: "Simplify the expression: 1 − 2 + 3 − 4 + 5 − 6 + … − 2022 + 2023.", a: "1012", c: ["1011", "1012", "1013", "2023"], explain: "Group pairs: (1−2)+(3−4)+…+(2021−2022)+2023. There are 1011 pairs of −1, then +2023. Total: −1011 + 2023 = 1012." },
+  { cat: "Fractions & Series", q: "Compute the simplified product: (1 + 1/1)(1 + 1/2)(1 + 1/3)(1 + 1/4)…(1 + 1/2021).", a: "2022", c: ["2021", "2022", "2023", "1011"], explain: "(1 + 1/k) = (k+1)/k. The product telescopes: (2/1)(3/2)(4/3)…(2022/2021). Everything cancels except the final numerator 2022." },
+  { cat: "Fractions & Series", q: "Compute the simplified product: 1/(1 − ½) · 1/(1 − ⅓) · 1/(1 − ¼) · … · 1/(1 − 1/10).", a: "10", c: ["9", "10", "11", "1"], explain: "1/(1 − 1/k) = k/(k−1). So product = (2/1)(3/2)(4/3)…(10/9). Telescopes — only 10 survives in numerator and 1 in denominator. Answer = 10." },
+  { cat: "Fractions & Series", q: "Compute the simplified decimal value of √(1/4 − 0.04 + 3/5).", a: "0.9", c: ["0.7", "0.8", "0.9", "1.0"], explain: "Convert each: 0.25 − 0.04 + 0.60 = 0.81. Then √0.81 = 0.9." },
+  { cat: "Fractions & Series", q: "Compute the simplified decimal value of √(2.56 + (6/5)²).", a: "2", c: ["1.6", "2", "2.4", "4"], explain: "(6/5)² = 1.44. So inside: 2.56 + 1.44 = 4. Then √4 = 2." },
+  { cat: "Fractions & Series", q: "The first 4 terms of a sequence are (1+2+3−4), (5+6+7−8), (9+10+11−12), (13+14+15−16), … . Find the 24th term.", a: "186", c: ["180", "184", "186", "188"], explain: "Each group simplifies to 2, 10, 18, 26, … (an arithmetic sequence with common difference 8). nth term = 2 + 8(n−1). For n=24: 2 + 8·23 = 186." },
+  { cat: "Fractions & Series", q: "The sequence 8, 24, 48, 80, 120, 168, … has differences that increase by 8 each time. Find the 22nd term.", a: "2024", c: ["1936", "2024", "2112", "2200"], explain: "Successive differences are 16, 24, 32, …, all multiples of 8. The nth term equals 8(1+2+3+…+n) = 8·n(n+1)/2. For n=22: 8·22·23/2 = 8·253 = 2024." },
+  { cat: "Fractions & Series", q: "What is the sum of all whole numbers from 1 to 2022? (Hint: this equals 1011 × n.)", a: "2023", c: ["1011", "2022", "2023", "4046"], explain: "Sum = 2022·2023/2 = 1011·2023. So n = 2023." },
+  { cat: "Fractions & Series", q: "Find the value of N if -8 + -7 + -6 + … + N = 84, where the sum is over consecutive integers.", a: "15", c: ["13", "14", "15", "16"], explain: "Negatives cancel positives: -8 through +8 cancels to 0. So we need 9 + 10 + … + N = 84. Test N = 15: 9+10+11+12+13+14+15 = 84 ✓." },
+  { cat: "Fractions & Series", q: "How many whole numbers N satisfy 50/2022 < 1/N < 100/2023?", a: "20", c: ["19", "20", "21", "30"], explain: "Take reciprocals (flip the inequality): 2022/50 > N > 2023/100, i.e. 20.23 < N < 40.44. Whole numbers 21 through 40, count = 20." },
+  { cat: "Fractions & Series", q: "Express the value of ∛(7/8 − 8/27) as a fraction in lowest terms.", a: "5/6", c: ["1/6", "5/6", "5/24", "7/24"], explain: "Common denominator 216: 7/8 = 189/216, 8/27 = 64/216. Difference = 125/216 = (5/6)³. So ∛… = 5/6." },
+  { cat: "Fractions & Series", q: "Compute the average (arithmetic mean) of 0.1/5, 0.1/0.5, 1/5, and 1/0.5.", a: "0.605", c: ["0.5", "0.605", "0.62", "1.21"], explain: "Convert: 0.02, 0.2, 0.2, 2. Sum = 2.42. Mean = 2.42 / 4 = 0.605." },
+  { cat: "Fractions & Series", q: "What is the greatest number of consecutive integers that sum to −24?", a: "48", c: ["24", "47", "48", "49"], explain: "Use the symmetric trick: −23 + −22 + … + 0 + 1 + 2 + … + 23 + 24 sums to +24. Shifting by one to start at −24: −24, −23, …, 0, 1, …, +23 sums to −24. That's 48 terms." },
+  { cat: "Fractions & Series", q: "Sum of the first 12 odd numbers (1 + 3 + 5 + … + 23)?", a: "144", c: ["100", "121", "144", "169"], explain: "Sum of the first n odd numbers = n². Here 12² = 144." },
+  { cat: "Fractions & Series", q: "Compute (1/2)(2/3)(3/4)(4/5)(5/6)(6/7)(7/8). (Telescoping product.)", a: "1/8", c: ["1/7", "1/8", "7/8", "1/28"], explain: "Each numerator cancels the next denominator. Only the very first numerator (1) and very last denominator (8) survive: 1/8." },
+
+  // Algebra & Defined Ops — identity rearranging, defined operations,
+  // integer-fraction puzzles, scientific-notation products, system of equations
+  { cat: "Algebra", q: "Using the algebraic identity (x − y)² = x² − 2xy + y², compute the exact value of R if R = ((2024 − 2025)² − 2024² − 2025²) / (2024 × 2025).", a: "−2", c: ["−2", "−1", "0", "1"], explain: "Expand the numerator: (2024−2025)² = 2024² − 2·2024·2025 + 2025². Subtracting 2024² + 2025² leaves −2·2024·2025. Divide by 2024·2025 → −2." },
+  { cat: "Algebra", q: "How many integers x satisfy x² < 17?", a: "9", c: ["7", "8", "9", "11"], explain: "Don't forget negatives: x ∈ {−4, −3, −2, −1, 0, 1, 2, 3, 4}. That's 9 integers." },
+  { cat: "Algebra", q: "Find the value of x so that BOTH (x+10)/(x−6) and (x−6)/(x+10) are integers.", a: "x = −2", c: ["x = −2", "x = 6", "x = 0", "x = 8"], explain: "If A and 1/A are both integers, A must be ±1. Solving (x+10)/(x−6) = 1 has no solution, but = −1 gives x+10 = −(x−6), so 2x = −4, x = −2." },
+  { cat: "Algebra", q: "When (3 × 10⁴) × (5 × 10⁶) is written in scientific notation a × 10ᵇ (with 1 ≤ a < 10), what is a + b?", a: "12.5", c: ["11", "11.5", "12.5", "13"], explain: "Multiply: 15 × 10¹⁰. To put in scientific notation, write 1.5 × 10¹¹. So a = 1.5 and b = 11. Sum = 12.5." },
+  { cat: "Algebra", q: "If a▲b = 2a + b, find the value of 4▲5.", a: "13", c: ["9", "11", "13", "14"], explain: "Plug into the rule: 2(4) + 5 = 8 + 5 = 13." },
+  { cat: "Algebra", q: "If a♣b = a + b + ab, find 2♣3.", a: "11", c: ["8", "9", "10", "11"], explain: "Plug in: 2 + 3 + (2·3) = 2 + 3 + 6 = 11." },
+  { cat: "Algebra", q: "If 3✦5 = N✦2 where a✦b = 2a + b, find N.", a: "9/2", c: ["3", "4", "9/2", "5"], explain: "3✦5 = 2·3 + 5 = 11. So N✦2 = 2N + 2 = 11, giving 2N = 9, N = 9/2." },
+  { cat: "Algebra", q: "If x + y = 10 and xy = 21, find x² + y².", a: "58", c: ["42", "50", "58", "79"], explain: "Identity: (x+y)² = x² + 2xy + y², so x² + y² = (x+y)² − 2xy = 100 − 42 = 58." },
+  { cat: "Algebra", q: "Solve: 2x + 5 = 4x − 3.", a: "x = 4", c: ["x = 2", "x = 3", "x = 4", "x = 5"], explain: "Move x's to one side: 5 + 3 = 4x − 2x, so 8 = 2x, x = 4." },
+  { cat: "Algebra", q: "Solve: 3(x − 2) = 18.", a: "x = 8", c: ["x = 4", "x = 6", "x = 8", "x = 10"], explain: "Divide both sides by 3: x − 2 = 6. Then x = 8." },
+  { cat: "Algebra", q: "If x + y = 15 and x − y = 3, find xy.", a: "54", c: ["48", "54", "60", "72"], explain: "Add the equations: 2x = 18, so x = 9. Subtract: 2y = 12, so y = 6. Then xy = 9·6 = 54." },
+  { cat: "Algebra", q: "(4.7 × 2.5 + 5.3 × 2.5) ÷ 2.5 = ?", a: "10", c: ["1", "10", "25", "100"], explain: "Factor 2.5 from the numerator: (4.7 + 5.3)·2.5 ÷ 2.5 = 4.7 + 5.3 = 10. The 2.5's cancel." },
+  { cat: "Algebra", q: "For how many integer values of n is the fraction 2n/(n−1) also an integer?", a: "4", c: ["2", "3", "4", "5"], explain: "Write 2n/(n−1) = 2 + 2/(n−1). Need (n−1) to divide 2, so n−1 ∈ {±1, ±2}, giving n ∈ {−1, 0, 2, 3}. That's 4 values." },
+  { cat: "Algebra", q: "Find the whole number value of N if (8² × 8² × 8²) / (4³ × 4³) = 2ᴺ.", a: "6", c: ["3", "6", "9", "12"], explain: "Numerator = 8⁶ = (2³)⁶ = 2¹⁸. Denominator = 4⁶ = (2²)⁶ = 2¹². So 2¹⁸/2¹² = 2⁶. N = 6." },
+  { cat: "Algebra", q: "Compute the simplified value of √((20 − 23)² + 2⁴).", a: "5", c: ["3", "5", "7", "9"], explain: "Inside: (−3)² + 16 = 9 + 16 = 25. √25 = 5." },
+  { cat: "Algebra", q: "Square root of 225?", a: "15", c: ["13", "14", "15", "16"], explain: "15² = 225, so √225 = 15. Memorize squares to 20!" },
+  { cat: "Algebra", q: "Square of 30?", a: "900", c: ["600", "800", "900", "1000"], explain: "30² = 30·30 = 900." },
+
+  // Geometry — similar triangles, polygon angle sums, diagonals, square diagonals,
+  // rectangle partition with given perimeters/areas, integer-length chords, Euler F+V−E
+  { cat: "Geometry", q: "Triangle ABC is similar to triangle DEF. The sides of ABC are 5, 7, and 8 units. In DEF the side corresponding to BC = 8 is EF = 4. What is the perimeter of triangle DEF?", a: "10", c: ["8", "10", "12", "16"], explain: "Scale factor = 4/8 = 1/2. So DE = 5/2 = 2.5, FD = 7/2 = 3.5, EF = 4. Perimeter = 2.5 + 3.5 + 4 = 10." },
+  { cat: "Geometry", q: "A triangle has sides of length √8, √18, and √26 cm. What is the area, in square cm?", a: "6", c: ["5", "6", "7", "9"], explain: "Check Pythagoras: (√8)² + (√18)² = 8 + 18 = 26 = (√26)². It is a right triangle. Area = ½·√8·√18 = ½·√144 = ½·12 = 6." },
+  { cat: "Geometry", q: "Rectangle ABCD has interior point P. Segments PA, PB, PC, and PD partition the rectangle into four triangles with areas 54, 65, 38, and N square cm (going around: 54 on top, 65 right, 38 bottom, N left). Find N.", a: "27", c: ["27", "31", "49", "65"], explain: "Key fact: in any rectangle, the sums of areas of OPPOSITE triangle pairs are equal. So 54 + 38 = 65 + N, giving N = 92 − 65 = 27." },
+  { cat: "Geometry", q: "Hexagon COUNTS has n diagonals (line segments connecting non-adjacent vertices). Find n.", a: "9", c: ["6", "8", "9", "12"], explain: "For an n-sided polygon: number of diagonals = n(n−3)/2. For n = 6: 6·3/2 = 9." },
+  { cat: "Geometry", q: "A cube has F faces, V vertices, and E edges. Compute F + V − E.", a: "2", c: ["0", "2", "6", "12"], explain: "A cube has F = 6 faces, V = 8 vertices, E = 12 edges. So F + V − E = 6 + 8 − 12 = 2. (Euler's formula!)" },
+  { cat: "Geometry", q: "Find the sum of the interior angles of hexagon TRICKY.", a: "720°", c: ["540°", "720°", "900°", "1080°"], explain: "Sum of interior angles of an n-gon = (n − 2)·180°. For n = 6: 4·180° = 720°." },
+  { cat: "Geometry", q: "Circle O has radius 10 units. Fixed interior point P is 6 units from center O. How many chords of circle O passing through P have INTEGER length?", a: "5", c: ["3", "5", "7", "9"], explain: "Longest chord through P = diameter = 20. Shortest chord through P (perpendicular to OP) has half-length √(10² − 6²) = 8, so length 16. Integer chord lengths: 16, 17, 18, 19, 20 → 5 chords." },
+  { cat: "Geometry", q: "The vertices of parallelogram EASY are E(−2, 3), A(c, 3), S(4, d), and Y(−4, −9). Find c + d.", a: "−3", c: ["−3", "0", "3", "6"], explain: "EA is horizontal (both y = 3), so YS must also be horizontal: d = −9. EA length = c − (−2) = c + 2. YS length = 4 − (−4) = 8, so c + 2 = 8, c = 6. Sum: 6 + (−9) = −3." },
+  { cat: "Geometry", q: "A square ABCD has diagonal AXC. Segment DXE is drawn so point E is one-third of the way from A to B. The area of triangle DXC is what FRACTION of the area of square ABCD?", a: "3/8", c: ["1/4", "1/3", "3/8", "1/2"], explain: "Triangles AEX and CDX are similar with ratio 1/3 : 1 (since AE = s/3 and CD = s). Working out the heights gives DX:EX = 3:1, so X divides AC at 3/4 from A. Triangle DXC has base DC = s and height 3s/4, so area = ½·s·(3s/4) = 3s²/8. Fraction = 3/8." },
+  { cat: "Geometry", q: "A right triangle has legs of 8 and 15. What is the hypotenuse?", a: "17", c: ["13", "17", "20", "23"], explain: "8² + 15² = 64 + 225 = 289 = 17². Memorize the 8-15-17 triple!" },
+  { cat: "Geometry", q: "A right triangle has legs of 7 and 24. What is the hypotenuse?", a: "25", c: ["23", "25", "26", "30"], explain: "7² + 24² = 49 + 576 = 625 = 25². Memorize the 7-24-25 triple!" },
+  { cat: "Geometry", q: "What is the diagonal of a square with side length 8?", a: "8√2", c: ["8", "8√2", "16", "8√3"], explain: "A square's diagonal = side·√2 (from the 45-45-90 triangle). So 8√2." },
+  { cat: "Geometry", q: "What is the area of a circle with radius 8?", a: "64π", c: ["16π", "32π", "64π", "128π"], explain: "Area = πr² = π·64 = 64π." },
+  { cat: "Geometry", q: "What is the circumference of a circle with radius 7?", a: "14π", c: ["7π", "14π", "28π", "49π"], explain: "Circumference = 2πr = 2π·7 = 14π." },
+  { cat: "Geometry", q: "What is the area of an equilateral triangle with side length 4?", a: "4√3", c: ["2√3", "4√3", "6√3", "8√3"], explain: "Formula: (√3/4)·s² = (√3/4)·16 = 4√3." },
+  { cat: "Geometry", q: "A square has diagonal of length 10. What is its area?", a: "50", c: ["25", "50", "100", "200"], explain: "Shortcut: a square's area = d²/2 = 100/2 = 50. (Or: side = 10/√2, area = (10/√2)² = 50.)" },
+  { cat: "Geometry", q: "What is the volume of a cylinder with radius 2 and height 7?", a: "28π", c: ["14π", "28π", "49π", "56π"], explain: "Volume = πr²h = π·4·7 = 28π." },
+
+  // Counting & Probability — circular-orderings, multiplication principle with empty seats,
+  // spinner sums (perfect square / even), non-congruent rectangular bricks, digit-sum counting
+  { cat: "Counting & Probability", q: "Five points labeled A, B, C, D, and E are placed equally spaced around a circle (in some order). Counting mirror images as different, how many distinct labelings (orderings around the circle) are possible?", a: "24", c: ["12", "24", "60", "120"], explain: "Pin one label (say A) to break circular symmetry. Then arrange the remaining 4 labels: 4! = 24 ways." },
+  { cat: "Counting & Probability", q: "A teacher assigns Aldus, Briana, and Cleo each a different seat in a row of 5 seats. How many different seating arrangements are possible?", a: "60", c: ["30", "45", "60", "120"], explain: "Aldus has 5 choices, then Briana has 4 left, then Cleo has 3 left. By the multiplication principle: 5·4·3 = 60." },
+  { cat: "Counting & Probability", q: "One number is randomly selected from EACH of the sets {1, 3, 5, 7, 9} and {1, 4, 9, 16, 25}. The probability that their sum is a perfect square is exactly K%. Find K.", a: "16", c: ["12", "16", "20", "25"], explain: "There are 5 × 5 = 25 ordered pairs. Build the sum table; perfect-square sums are 4, 9, 16, 25 — exactly 4 of the 25 cells. So 4/25 = 16%." },
+  { cat: "Counting & Probability", q: "A circular spinner has 5 equal sectors numbered 2, 3, 5, 7, and 10. The spinner is spun twice. The probability the sum of the two results is EVEN is K%. Find K.", a: "52", c: ["48", "50", "52", "56"], explain: "Sum is even when both spins are even or both are odd. Even numbers: {2, 10} (2 of them). Odd: {3, 5, 7} (3 of them). P = (2² + 3²)/5² = 13/25 = 52%." },
+  { cat: "Counting & Probability", q: "How many non-congruent rectangular 'bricks' (length × width × height) can be formed if the length, width, and height are all positive integers and their values SUM to 10?", a: "8", c: ["6", "7", "8", "10"], explain: "List unordered triples (a ≤ b ≤ c) with a + b + c = 10: (1,1,8), (1,2,7), (1,3,6), (1,4,5), (2,2,6), (2,3,5), (2,4,4), (3,3,4). That's 8." },
+  { cat: "Counting & Probability", q: "Compute the number of whole numbers less than 1000 with digit sum equal to 12.", a: "73", c: ["65", "70", "73", "78"], explain: "Use stars-and-bars with cap of 9 per digit. There are C(12+2, 2) = 91 nonneg solutions to a+b+c=12; subtract those with a digit ≥ 10. Three digits each could be ≥10: 3·C(2+2,2) = 18. So 91 − 18 = 73." },
+  { cat: "Counting & Probability", q: "How many ways can the letters of the word CODE be arranged?", a: "24", c: ["12", "16", "24", "120"], explain: "Four distinct letters, so 4! = 4·3·2·1 = 24 arrangements." },
+  { cat: "Counting & Probability", q: "How many ways can the letters of the word LEVEL be arranged?", a: "30", c: ["20", "30", "60", "120"], explain: "5 letters with 2 L's and 2 E's repeating: 5!/(2!·2!) = 120/4 = 30." },
+  { cat: "Counting & Probability", q: "If two fair dice are rolled, what is the probability the sum equals 6?", a: "5/36", c: ["1/12", "5/36", "1/6", "1/9"], explain: "Pairs summing to 6: (1,5), (2,4), (3,3), (4,2), (5,1) — that's 5 ordered pairs out of 36 total." },
+  { cat: "Counting & Probability", q: "If two fair dice are rolled, what is the probability the sum is GREATER than 9?", a: "1/6", c: ["1/12", "1/9", "1/6", "1/4"], explain: "Sums of 10, 11, or 12: (4,6)(5,5)(6,4) + (5,6)(6,5) + (6,6) = 6 outcomes. 6/36 = 1/6." },
+  { cat: "Counting & Probability", q: "If you flip a fair coin 3 times, what is the probability of getting AT LEAST one tail?", a: "7/8", c: ["1/2", "3/4", "7/8", "1"], explain: "Easier as complement: P(at least one tail) = 1 − P(all heads) = 1 − 1/8 = 7/8." },
+  { cat: "Counting & Probability", q: "How many ways can you choose 3 items from 8 (i.e., C(8,3))?", a: "56", c: ["24", "40", "56", "84"], explain: "C(8,3) = (8·7·6)/(3·2·1) = 336/6 = 56." },
+  { cat: "Counting & Probability", q: "A bag has 5 red, 3 blue, and 2 green marbles. What is the probability of drawing a NON-red marble?", a: "1/2", c: ["1/3", "2/5", "1/2", "3/5"], explain: "P(not red) = (3 + 2)/10 = 5/10 = 1/2." },
+  { cat: "Counting & Probability", q: "Using the digits 1, 2, 3, 4, 5, and 6 (no repeats), how many three-digit numbers can you make?", a: "120", c: ["60", "90", "120", "216"], explain: "6 choices for hundreds, 5 left for tens, 4 left for units: 6·5·4 = 120." },
+  { cat: "Counting & Probability", q: "How many ways can you choose 2 items from 10 (i.e., C(10,2))?", a: "45", c: ["20", "36", "45", "90"], explain: "C(10,2) = 10·9/2 = 90/2 = 45." },
+  { cat: "Counting & Probability", q: "You have 4 shirts and 5 hats. How many ways can you pick one shirt AND one hat?", a: "20", c: ["9", "16", "20", "25"], explain: "Multiplication principle: 4 × 5 = 20." },
+
+  // Percent & Word Problems — Venn percent overlap (LCM-of-percents),
+  // tailwind/headwind round-trip, harmonic mean speed, ratio puzzles,
+  // compound percent up/down, mean-with-extra-term, exact percent gives smallest count
+  { cat: "Percents & Word Problems", q: "There are at least 107 students at Euclid School. 50% take Geometry, 45% take Biology, and 20% take both. What is the LEAST number of students who take Geometry but NOT Biology?", a: "36", c: ["30", "36", "42", "54"], explain: "Each percent must give a whole number of students, so the total must be a multiple of LCM(50, 45, 20, 100/(100−75)) which is a multiple of 20. The least multiple of 20 that is at least 107 is 120. Then 30% take Geometry-only (50 − 20), giving 0.30·120 = 36." },
+  { cat: "Percents & Word Problems", q: "In still air a plane flies 240 mph. From city A to B (720 miles apart) it has a 60-mph TAILWIND; coming back it has a 60-mph HEADWIND. If the total round-trip time is H hours and M minutes, find H + M.", a: "30", c: ["24", "30", "32", "36"], explain: "Out: 720 / 300 = 2.4 hours. Back: 720 / 180 = 4 hours. Total = 6.4 hours = 6 hr 24 min. So H + M = 6 + 24 = 30." },
+  { cat: "Percents & Word Problems", q: "A car travels at 40 mph going there and 60 mph coming back over the SAME distance. What is the average speed for the entire trip?", a: "48 mph", c: ["45 mph", "48 mph", "50 mph", "55 mph"], explain: "For equal-distance round trips, average speed is the harmonic mean: 2ab/(a+b) = 2·40·60 / 100 = 4800/100 = 48 mph." },
+  { cat: "Percents & Word Problems", q: "At Pascal School, EXACTLY 5.2% of the 8th graders joined the tennis team. What is the LEAST possible number of 8th graders at Pascal School?", a: "250", c: ["100", "125", "200", "250"], explain: "5.2% = 5.2/100 = 52/1000 = 13/250 in lowest terms. The number of students must be a multiple of 250, and the smallest is 250 (with 13 tennis players)." },
+  { cat: "Percents & Word Problems", q: "Stock price goes UP 20%, then DOWN 25%. What is the net change?", a: "−10%", c: ["−10%", "−5%", "0%", "+5%"], explain: "Multiply factors: 1.20 × 0.75 = 0.90, a 10% decrease. Successive percents MULTIPLY, not add!" },
+  { cat: "Percents & Word Problems", q: "Stock price goes UP 50%, then DOWN 20%. What is the net change?", a: "+20%", c: ["+10%", "+20%", "+30%", "+50%"], explain: "Multiply: 1.50 × 0.80 = 1.20, a 20% increase." },
+  { cat: "Percents & Word Problems", q: "An $80 item is marked UP 25%, then put on sale at 20% off. What is the final price?", a: "$80", c: ["$76", "$80", "$84", "$100"], explain: "Multiply factors: 80 × 1.25 × 0.80 = 80. The 25% up and 20% off cancel exactly." },
+  { cat: "Percents & Word Problems", q: "A car travels 143 miles in exactly 3 hours and 40 minutes. What is the average speed in mph (in simplest form)?", a: "39 mph", c: ["35 mph", "37 mph", "39 mph", "42 mph"], explain: "Time = 3 + 2/3 = 11/3 hours. Speed = distance / time = 143 / (11/3) = 143·3/11 = 13·3 = 39 mph." },
+  { cat: "Percents & Word Problems", q: "Henry adds the lengths of three of the four sides of a rectangle and gets 18. Doris does the same with three sides (a different selection) and gets 21. What is the AREA of the rectangle?", a: "40", c: ["36", "40", "45", "60"], explain: "If the sides are L and W, the two equations are 2W + L = 18 and 2L + W = 21. Adding: 3L + 3W = 39, so L + W = 13. Subtract first equation from second: L − W = 3. So L = 8, W = 5. Area = 40." },
+  { cat: "Percents & Word Problems", q: "The mean of 6 numbers is 15. After adding a 7th number, the mean becomes 16. What is the 7th number?", a: "22", c: ["16", "18", "22", "26"], explain: "New sum = 7·16 = 112. Old sum = 6·15 = 90. So the 7th number = 112 − 90 = 22." },
+  { cat: "Percents & Word Problems", q: "Two numbers are in the ratio 2:7 and add up to 81. What is the LARGER number?", a: "63", c: ["56", "60", "63", "70"], explain: "Total parts = 2 + 7 = 9. Each part = 81/9 = 9. Larger = 7·9 = 63." },
+  { cat: "Percents & Word Problems", q: "Two numbers are in the ratio 4:9 and add up to 65. What is the SMALLER number?", a: "20", c: ["15", "20", "26", "30"], explain: "Total parts = 4 + 9 = 13. Each part = 65/13 = 5. Smaller = 4·5 = 20." },
+  { cat: "Percents & Word Problems", q: "A number INCREASED by 20% becomes 84. What was the original number?", a: "70", c: ["64", "67", "70", "72"], explain: "x · 1.20 = 84, so x = 84/1.20 = 70." },
+  { cat: "Percents & Word Problems", q: "A number DECREASED by 25% becomes 60. What was the original number?", a: "80", c: ["72", "75", "80", "90"], explain: "x · 0.75 = 60, so x = 60/0.75 = 80." },
+  { cat: "Percents & Word Problems", q: "Anna paints a fence in 3 hours. Ben paints the same fence in 6 hours. Working together, how long will the fence take?", a: "2 hr", c: ["1.5 hr", "2 hr", "3 hr", "4.5 hr"], explain: "Rates add: 1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2 of the fence per hour. So 1 / (1/2) = 2 hours." },
+  { cat: "Percents & Word Problems", q: "30% of 90 is what number?", a: "27", c: ["18", "24", "27", "30"], explain: "0.30 × 90 = 27. (Or use 10% = 9, then triple to 27.)" },
+
+  // Modular / Patterns — last digit cycles, year-mod-something, day-of-week,
+  // Floor/Ceiling arithmetic, sequences with growing differences, Martian truth-tellers
+  { cat: "Modular & Patterns", q: "Klatururu is a Martian. Martians speak the truth on Saturday and Sunday but LIE on every other day. On which day(s) of the week could Klatururu say: 'Yesterday, I lied'?", a: "Monday OR Saturday", c: ["Sunday only", "Monday only", "Saturday only", "Monday OR Saturday"], explain: "Case 1: statement is true. He's truthful (so today is Sat or Sun) AND yesterday he lied (Sat works since Fri he lied). Case 2: statement is false. He's lying (today is Mon-Fri) AND yesterday he told the truth (so today is Mon, since Sun he was truthful). So Monday OR Saturday." },
+  { cat: "Modular & Patterns", q: "Let Floor(x) be the greatest integer ≤ x. Simplify Floor(−4.2) + Floor(2.7).", a: "−3", c: ["−3", "−2", "−1", "0"], explain: "Floor(−4.2) = −5 (the greatest integer ≤ −4.2). Floor(2.7) = 2. Sum: −5 + 2 = −3." },
+  { cat: "Modular & Patterns", q: "Let Ceiling(x) be the LEAST integer ≥ x. Simplify Ceiling(−15.7) + Ceiling(7.4).", a: "−7", c: ["−9", "−7", "7", "9"], explain: "Ceiling(−15.7) = −15 (just to the right of −15.7). Ceiling(7.4) = 8. Sum: −15 + 8 = −7." },
+  { cat: "Modular & Patterns", q: "365 days after Sunday is what day of the week?", a: "Monday", c: ["Sunday", "Monday", "Tuesday", "Wednesday"], explain: "Days of the week repeat every 7. 365 mod 7 = 1 (since 364 = 52·7). Sun + 1 day = Mon. (That's why your birthday shifts by one day each non-leap year!)" },
+  { cat: "Modular & Patterns", q: "Last digit of 8⁵⁰?", a: "4", c: ["2", "4", "6", "8"], explain: "Powers of 8 cycle in last digit: 8, 4, 2, 6 (period 4). 50 mod 4 = 2 → 2nd in cycle = 4." },
+  { cat: "Modular & Patterns", q: "Last digit of 3⁹⁹?", a: "7", c: ["1", "3", "7", "9"], explain: "Powers of 3 cycle: 3, 9, 7, 1 (period 4). 99 mod 4 = 3 → 3rd in cycle = 7." },
+  { cat: "Modular & Patterns", q: "Last digit of 7⁴?", a: "1", c: ["1", "3", "7", "9"], explain: "Powers of 7 cycle: 7, 9, 3, 1 (period 4). 7⁴ → 1." },
+  { cat: "Modular & Patterns", q: "What is 2027 mod 5?", a: "2", c: ["1", "2", "3", "4"], explain: "2025 = 405·5. So 2027 = 2025 + 2 → remainder 2." },
+  { cat: "Modular & Patterns", q: "What is 500 mod 9?", a: "5", c: ["3", "5", "7", "8"], explain: "Trick: a number mod 9 equals its digit sum mod 9. 5 + 0 + 0 = 5." },
+  { cat: "Modular & Patterns", q: "What is 1000 mod 11?", a: "10", c: ["3", "5", "9", "10"], explain: "1001 = 7·11·13, so 1001 mod 11 = 0. Therefore 1000 mod 11 = −1 ≡ 10." },
+  { cat: "Modular & Patterns", q: "Pattern: 2, 6, 12, 20, 30, … . What is the 7th term?", a: "56", c: ["42", "48", "56", "64"], explain: "The pattern is n(n+1): 1·2, 2·3, 3·4, 4·5, … . So the 7th term is 7·8 = 56." },
+  { cat: "Modular & Patterns", q: "Pattern: 4, 7, 10, 13, … . What is the 9th term?", a: "28", c: ["25", "28", "31", "34"], explain: "Arithmetic sequence with common difference 3. nth term = 4 + (n−1)·3. For n = 9: 4 + 24 = 28." },
+  { cat: "Modular & Patterns", q: "200 days after Tuesday is what day?", a: "Saturday", c: ["Thursday", "Friday", "Saturday", "Sunday"], explain: "200 mod 7 = 4 (since 196 = 28·7). Tue + 4 days = Sat." },
+
+  // Sets / Inclusion-Exclusion — straight Venn (count) and percent-Venn types
+  { cat: "Sets & Logic", q: "In a class of 40 students, 22 like apples and 18 like bananas, while 10 students like BOTH. How many like NEITHER apples nor bananas?", a: "10", c: ["6", "8", "10", "14"], explain: "Use inclusion-exclusion: students who like at least one = 22 + 18 − 10 = 30. So 40 − 30 = 10 like neither." },
+  { cat: "Sets & Logic", q: "In a class of 24 students, 14 like pizza and 12 like burgers; 6 like BOTH. How many like AT LEAST ONE of pizza or burgers?", a: "20", c: ["18", "20", "24", "26"], explain: "|A ∪ B| = |A| + |B| − |A ∩ B| = 14 + 12 − 6 = 20." },
+  { cat: "Sets & Logic", q: "Set A has 10 items; Set B has 7 items; 4 items appear in BOTH sets. How many items are in A ∪ B (the union)?", a: "13", c: ["10", "13", "17", "21"], explain: "|A ∪ B| = 10 + 7 − 4 = 13." },
+  { cat: "Sets & Logic", q: "In a class of 32 students, 12 play soccer and 14 play tennis; 5 play BOTH sports. How many play NEITHER sport?", a: "11", c: ["8", "11", "13", "15"], explain: "At least one = 12 + 14 − 5 = 21. Then 32 − 21 = 11 play neither." },
+  { cat: "Sets & Logic", q: "At a school of 150 students, 90 take art and 70 take music; 40 take BOTH. How many take NEITHER?", a: "30", c: ["20", "30", "40", "50"], explain: "At least one = 90 + 70 − 40 = 120. So 150 − 120 = 30 take neither." },
+  { cat: "Sets & Logic", q: "In a group of 50 students, 28 like apples and 22 like bananas. EVERY student likes at least one of apples or bananas. How many like BOTH?", a: "0", c: ["0", "5", "6", "10"], explain: "The union equals 50 (everyone). So 50 = 28 + 22 − both, giving both = 0." },
+  { cat: "Sets & Logic", q: "In a class of 35 students, 20 like math and 18 like science; 8 like BOTH. How many like at least one?", a: "30", c: ["25", "28", "30", "32"], explain: "|A ∪ B| = 20 + 18 − 8 = 30." },
+  { cat: "Sets & Logic", q: "At a school of 100 students, 60 play sport A and 45 play sport B; 10 play NEITHER. How many play BOTH sports?", a: "15", c: ["10", "15", "20", "25"], explain: "At least one = 100 − 10 = 90. So 90 = 60 + 45 − both, giving both = 60 + 45 − 90 = 15." },
+];
+
+// Build category list dynamically
+const CATEGORIES = [...new Set(QUESTIONS.map(q => q.cat))];
+
+const GAME_DURATION = 600; // 10 minutes
+const PENALTY_POINTS = 10;
+const PENALTY_SECONDS = 5;
+const WRONG_REVIEW_PAUSE_MS = 10000; // pause 10s on wrong answer to review
+
+// Quick concept refresher tips shown during the wrong-answer review popup
+const CONCEPT_TIPS = {
+  "Number Theory": "🔢 <strong>Number Theory:</strong> Use divisibility rules (2,3,4,5,9,11) and prime factorization. A number is a perfect square only if every prime exponent is even. <em>Reference: guide section 1, 2.</em>",
+  "Fractions & Series": "➗ <strong>Fractions & Series:</strong> For arithmetic series: sum = (#terms) × (first+last)/2. Telescoping products cancel diagonally. Sum of -k to +k is 0 — only the tail matters. <em>Section 4, 5.</em>",
+  "Algebra": "✏️ <strong>Algebra:</strong> Translate words → equations. Pull out common factors (ax + bx = (a+b)x). For defined ops like a✱b, just plug in exactly as the rule says. <em>Section 6, 7, 8.</em>",
+  "Geometry": "📐 <strong>Geometry:</strong> Triangle = 180°. Pythagorean: a² + b² = c² (memorize 3-4-5, 5-12-13). Square diagonal = side × √2. Hexagon area = 6 equilateral triangles. <em>Section 11, 12, 14.</em>",
+  "Counting & Probability": "🎲 <strong>Counting & Probability:</strong> Multiply independent choices. C(n,2) = n(n-1)/2. P(first success on trial k) = P(fail)^(k-1) × P(success). <em>Section 9, 10.</em>",
+  "Percents & Word Problems": "💰 <strong>Percents:</strong> Successive percents MULTIPLY (not add!). +25% then -20% = ×1.25 × 0.80 = 1.0. Round-trip avg speed = harmonic mean: 2ab/(a+b). <em>Section 19, 21.</em>",
+  "Modular & Patterns": "🔁 <strong>Modular Math:</strong> Last digits cycle (powers of 7: 7,9,3,1; period 4). Use mod n for day-of-week and remainder problems. <em>Section 18.</em>",
+  "Sets & Logic": "🔗 <strong>Sets & Logic:</strong> Inclusion-Exclusion: |A∪B| = |A| + |B| − |A∩B|. For continued fractions, work from the inside out. <em>Section 16, 20.</em>",
+};
+
+let state = {};
+
+function fmtTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+function startGame() {
+  const name = (document.getElementById("playerName").value || "Player").trim().substring(0, 20);
+  state = {
+    name: name,
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    correct: 0,
+    wrong: 0,
+    timer: GAME_DURATION,
+    questionsAsked: [],
+    wrongQuestions: [],   // track missed ones for review
+    interval: null,
+    locked: false,
+  };
+  document.getElementById("gameSetup").classList.add("hidden");
+  document.getElementById("gameStats").classList.remove("hidden");
+  document.getElementById("gameArea").classList.remove("hidden");
+  document.getElementById("gameOver").classList.add("hidden");
+  document.getElementById("statPlayer").textContent = name;
+  updateStats();
+  nextQuestion();
+  startTimer();
+}
+
+function startTimer() {
+  if (state.interval) clearInterval(state.interval);
+  state.interval = setInterval(() => {
+    state.timer--;
+    updateStats();
+    const t = document.getElementById("timer");
+    t.classList.remove("warning", "danger");
+    if (state.timer <= 30) t.classList.add("danger");
+    else if (state.timer <= 60) t.classList.add("warning");
+    if (state.timer <= 0) endGame();
+  }, 1000);
+}
+
+function pickQuestion() {
+  // Random across ALL questions
+  let unseen = QUESTIONS.filter(q => !state.questionsAsked.includes(q.q));
+  if (unseen.length === 0) {
+    // Recycle when exhausted
+    state.questionsAsked = [];
+    unseen = QUESTIONS;
+  }
+  return unseen[Math.floor(Math.random() * unseen.length)];
+}
+
+function nextQuestion() {
+  state.locked = false;
+  // hide the wrong-review popup if visible
+  document.getElementById("wrongReview").classList.add("hidden");
+  const q = pickQuestion();
+  state.currentQ = q;
+  state.questionsAsked.push(q.q);
+  document.getElementById("qcat").textContent = q.cat;
+  document.getElementById("questionBox").innerHTML = q.q;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("feedback").className = "feedback";
+  const choicesEl = document.getElementById("choices");
+  choicesEl.innerHTML = "";
+  const shuffled = [...q.c].sort(() => Math.random() - 0.5);
+  shuffled.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.textContent = choice;
+    btn.onclick = (e) => answerQuestion(choice, btn, e);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function answerQuestion(choice, btnEl, evt) {
+  if (state.locked) return;
+  state.locked = true;
+  document.querySelectorAll(".choice").forEach(b => b.disabled = true);
+  const correct = choice === state.currentQ.a;
+  const fb = document.getElementById("feedback");
+  if (correct) {
+    btnEl.classList.add("correct");
+    state.streak++;
+    state.correct++;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    // Reward: base 10 + streak bonus (no time bonus, time is fixed)
+    const points = 10 + Math.min(state.streak, 10) * 2;
+    state.score += points;
+    fb.textContent = `+${points} ${state.streak >= 3 ? "🔥 STREAK x" + state.streak + "!" : "✓ Correct!"}`;
+    fb.className = "feedback correct";
+    spawnEmoji(evt, ["✨","⭐","🎉","💫","🌟"][Math.floor(Math.random()*5)]);
+    updateStats();
+    setTimeout(() => {
+      if (state.timer > 0) nextQuestion();
+    }, 700);
+  } else {
+    btnEl.classList.add("wrong");
+    document.querySelectorAll(".choice").forEach(b => {
+      if (b.textContent === state.currentQ.a) b.classList.add("correct");
+    });
+    state.streak = 0;
+    state.wrong++;
+    state.wrongQuestions.push({ cat: state.currentQ.cat, q: state.currentQ.q, a: state.currentQ.a });
+    // PENALTY: -10 points (don't go below 0) and -5 seconds
+    state.score = Math.max(0, state.score - PENALTY_POINTS);
+    state.timer = Math.max(0, state.timer - PENALTY_SECONDS);
+    fb.textContent = `−${PENALTY_POINTS} pts, −${PENALTY_SECONDS}s · Answer: ${state.currentQ.a}`;
+    fb.className = "feedback wrong";
+    spawnEmoji(evt, "💥");
+    updateStats();
+    showWrongReview(state.currentQ);
+  }
+}
+
+// Show concept review for at least 10 seconds. Skip button only appears after 10s
+// so kids are forced to actually read it. Main timer keeps running.
+function showWrongReview(q) {
+  const box = document.getElementById("wrongReview");
+  document.getElementById("wrTag").textContent = "📚 " + q.cat;
+  const explanation = q.explain
+    ? `<strong>${escapeHtml(q.cat)}:</strong> ${q.explain}`
+    : (CONCEPT_TIPS[q.cat] || "Review this concept in the guide below.");
+  document.getElementById("wrTip").innerHTML = explanation +
+    `<br><br>💡 The correct answer was <strong style="color:#86efac;">${escapeHtml(q.a)}</strong>.`;
+  box.classList.remove("hidden");
+
+  // hide the continue button until countdown finishes
+  const skipBtn = document.querySelector(".wr-skip");
+  skipBtn.classList.add("hidden");
+
+  let remaining = Math.floor(WRONG_REVIEW_PAUSE_MS / 1000);
+  document.getElementById("wrCountdown").textContent = remaining;
+  state.reviewInterval = setInterval(() => {
+    remaining--;
+    document.getElementById("wrCountdown").textContent = Math.max(0, remaining);
+    // game might end while review is showing — bail out then
+    if (state.timer <= 0) { finishReview(); return; }
+    if (remaining <= 0) {
+      // countdown done — show the continue button, stop the countdown,
+      // but DO NOT auto-advance. Kid must click to continue.
+      clearInterval(state.reviewInterval);
+      state.reviewInterval = null;
+      document.getElementById("wrCountdown").textContent = "0";
+      // swap the countdown text for a "Ready" indicator
+      const cdEl = document.querySelector(".wr-countdown");
+      if (cdEl) cdEl.innerHTML = "✅ Ready — click below";
+      skipBtn.classList.remove("hidden");
+      skipBtn.textContent = "▶ Continue to next question";
+    }
+  }, 1000);
+}
+
+function skipReview() {
+  // only callable after 10s when button appears
+  finishReview();
+}
+
+function finishReview() {
+  if (state.reviewInterval) { clearInterval(state.reviewInterval); state.reviewInterval = null; }
+  document.getElementById("wrongReview").classList.add("hidden");
+  // restore countdown text for next time
+  const cdEl = document.querySelector(".wr-countdown");
+  if (cdEl) cdEl.innerHTML = 'Next in <span id="wrCountdown">10</span>s';
+  if (state.timer > 0) {
+    nextQuestion();
+  } else {
+    endGame();
+  }
+}
+
+function spawnEmoji(evt, emoji) {
+  const el = document.createElement("div");
+  el.className = "floating-emoji";
+  el.textContent = emoji;
+  el.style.left = (evt.clientX - 16) + "px";
+  el.style.top = (evt.clientY - 16) + "px";
+  el.style.position = "fixed";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1200);
+}
+
+function updateStats() {
+  document.getElementById("score").textContent = state.score;
+  document.getElementById("streak").textContent = state.streak;
+  document.getElementById("correctCount").textContent = state.correct;
+  document.getElementById("wrongCount").textContent = state.wrong;
+  document.getElementById("timer").textContent = fmtTime(state.timer);
+}
+
+function endGame() {
+  if (state.ended) return;
+  state.ended = true;
+  if (state.interval) clearInterval(state.interval);
+  if (state.reviewInterval) clearInterval(state.reviewInterval);
+  document.getElementById("wrongReview").classList.add("hidden");
+  document.getElementById("gameStats").classList.add("hidden");
+  document.getElementById("gameArea").classList.add("hidden");
+  document.getElementById("gameOver").classList.remove("hidden");
+  document.getElementById("goName").textContent = state.name;
+  document.getElementById("finalScore").textContent = state.score;
+  document.getElementById("finalCorrect").textContent = state.correct;
+  document.getElementById("finalWrong").textContent = state.wrong;
+  const total = state.correct + state.wrong;
+  const acc = total > 0 ? Math.round((state.correct / total) * 100) : 0;
+  document.getElementById("finalAccuracy").textContent = acc + "%";
+  document.getElementById("finalStreak").textContent = state.bestStreak;
+  // Render concepts to review (from wrong answers)
+  renderReview();
+  let rank = "Math Apprentice 🌱";
+  let trophy = "🥉";
+  if (state.score >= 600) { rank = "MOEMS LEGEND! 👑"; trophy = "👑"; }
+  else if (state.score >= 400) { rank = "Math Olympian 🏆"; trophy = "🏆"; }
+  else if (state.score >= 250) { rank = "Math Wizard 🧙"; trophy = "🥇"; }
+  else if (state.score >= 100) { rank = "Math Hero ⚔️"; trophy = "🥈"; }
+  document.getElementById("rankBadge").textContent = rank;
+  document.getElementById("trophy").textContent = trophy;
+}
+
+function renderReview() {
+  const reviewBox = document.getElementById("reviewBox");
+  const reviewList = document.getElementById("reviewList");
+  if (!state.wrongQuestions || state.wrongQuestions.length === 0) {
+    reviewBox.classList.add("hidden");
+    return;
+  }
+  reviewBox.classList.remove("hidden");
+  // Group wrong questions by concept
+  const byConcept = {};
+  state.wrongQuestions.forEach(w => {
+    if (!byConcept[w.cat]) byConcept[w.cat] = [];
+    byConcept[w.cat].push(w);
+  });
+  // Sort concepts by # of wrong (most missed first)
+  const sorted = Object.entries(byConcept).sort((a,b) => b[1].length - a[1].length);
+  reviewList.innerHTML = sorted.map(([cat, items]) => `
+    <div class="review-item">
+      <div class="rcat">📚 ${escapeHtml(cat)} · missed ${items.length}</div>
+      ${items.map(it => `
+        <div class="rq">❓ ${escapeHtml(it.q)}</div>
+        <div class="ra"><span class="label">Answer:</span> ${escapeHtml(it.a)}</div>
+      `).join('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:6px 0;">')}
+    </div>
+  `).join("");
+}
+
+function resetToSetup() {
+  document.getElementById("gameOver").classList.add("hidden");
+  document.getElementById("gameStats").classList.add("hidden");
+  document.getElementById("gameArea").classList.add("hidden");
+  document.getElementById("gameSetup").classList.remove("hidden");
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+
+</body>
+</html>

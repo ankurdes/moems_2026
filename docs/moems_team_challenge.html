@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen Team Practice for MOEMs</title>
+<style>
+  :root {
+    --primary: #1e40af;
+    --accent: #f59e0b;
+    --teamA: #dc2626;
+    --teamB: #2563eb;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --warn: #ea580c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+    color: white;
+    padding: 18px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.4em;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    font-size: 0.85em;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .timer-box {
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-size: 1.6em;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+    text-align: center;
+  }
+  .timer-box.warn { background: var(--warn); border-color: white; animation: pulse 1s infinite; }
+  .timer-box.danger { background: var(--bad); border-color: white; animation: pulse 0.5s infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+  }
+  button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95em;
+  }
+  button:hover { background: var(--accent); color: white; }
+  button.danger { background: var(--bad); color: white; }
+  button.danger:hover { background: #991b1b; }
+
+  .scoreboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 22px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .stat {
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: white;
+    text-align: center;
+  }
+  .stat.solved { background: var(--good); }
+  .stat.attempted { background: var(--bad); }
+  .stat-label { font-size: 0.8em; opacity: 0.9; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+  .stat-value { font-size: 2.2em; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin-top: 4px; }
+  .auto-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-left: 6px;
+  }
+  .auto-mark.ok { background: var(--good); }
+  .auto-mark.no { background: var(--bad); }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .instructions {
+    background: #fef9e7;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .instructions h3 { margin-top: 0; color: var(--accent); }
+  .instructions ol { margin: 6px 0; padding-left: 20px; }
+  .instructions li { margin: 4px 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .card.solved { border-color: var(--good); background: #f0fdf4; }
+  .card.wrong { border-color: var(--bad); background: #fef2f2; }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .qnum {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+  .difficulty {
+    font-size: 0.75em;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .topic {
+    font-size: 0.7em;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .qtext {
+    font-size: 0.98em;
+    line-height: 1.55;
+    margin: 8px 0 12px 0;
+  }
+  .qtext code {
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.95em;
+  }
+
+  .answer-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .answer-row input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  .award-btns {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .award-btns button {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 0.85em;
+    border-radius: 6px;
+  }
+  .award-correct { background: var(--good); color: white; }
+  .award-correct:hover { background: #15803d; color: white; }
+  .award-wrong { background: var(--bad); color: white; }
+  .award-wrong:hover { background: #991b1b; color: white; }
+  .award-skip { background: #e2e8f0; color: var(--ink); }
+  .award-skip:hover { background: #cbd5e1; color: var(--ink); }
+
+  .reveal-btn {
+    background: #f1f5f9;
+    color: var(--ink);
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    font-size: 0.82em;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .reveal-btn:hover { background: var(--primary); color: white; }
+
+  .solution {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #ecfdf5;
+    border-left: 3px solid var(--good);
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .solution.show { display: block; }
+  .solution .ans {
+    font-weight: 700;
+    color: var(--good);
+    font-size: 1.05em;
+  }
+  .solved-tag {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.75em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: white;
+  }
+  .solved-tag.ok { background: var(--good); }
+  .solved-tag.no { background: var(--bad); }
+
+  .footer-summary {
+    background: white;
+    border-top: 2px solid var(--primary);
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .winner-banner {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  @media print {
+    header, .controls, .answer-row, .award-btns, .reveal-btn { display: none !important; }
+    .solution { display: block !important; }
+    .card { break-inside: avoid; }
+  }
+  @media (max-width: 600px) {
+    .timer-box { font-size: 1.2em; padding: 6px 10px; min-width: 90px; }
+    h1 { font-size: 1.1em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs</h1>
+      <div class="subtitle" style="font-size:1em; margin-top:6px;">5-student team · 10 questions (easy → hard) · 30 minutes · timer locks input; teacher unlocks grading with a secret phrase</div>
+    </div>
+    <div class="timer-box" id="timer">01:00</div>
+    <div class="controls">
+      <input type="text" id="unlockBox" placeholder="Secret phrase…" style="padding:8px 10px; border:none; border-radius:8px; font-size:0.95em; min-width:160px;" disabled>
+      <button id="startBtn">▶ Start</button>
+    </div>
+  </div>
+</header>
+
+<div class="scoreboard">
+  <div class="stat solved">
+    <div class="stat-label">✓ Correct</div>
+    <div class="stat-value" id="solvedCount">0</div>
+  </div>
+  <div class="stat attempted">
+    <div class="stat-label">✗ Wrong</div>
+    <div class="stat-value" id="wrongCount">0</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="instructions" id="instructionsBox">
+    <h3>📋 How to Run This Practice Round</h3>
+    <ol>
+      <li><strong>Two teams of 5 work separately.</strong> Open this page on two laptops/tabs — one per team. Each team has its own private 30-minute round.</li>
+      <li><strong>Quick self-organization (1 min per team):</strong> skim all 10 problems, split into 2 sub-pods by topic strength (e.g., "geometry" and "number theory/algebra"), pick a "scribe" who types each agreed-upon answer into the correct box, and a "checker" who verifies before the scribe types it.</li>
+      <li><strong>Click ▶ Start.</strong> Teams have 30 minutes — <strong>this is a stretch round; they're not expected to finish all 10</strong>. Problems are ordered easy → hard (Q1 easiest, Q10 hardest). The strongest teams might solve 7–8; a finish of 5–6 is solid. Encourage them to <em>triage</em>: skim all 10 in the first 60 seconds, lock in the easy ones (Q1, Q3, Q9), then tackle the medium block (Q2, Q4, Q5, Q6), and only attempt Q7/Q8/Q10 if time allows.</li>
+      <li><strong>When the timer hits 0:00:</strong> all answer boxes lock automatically. Teams cannot type or change anything after this point. <em>No grading yet — no answers shown.</em></li>
+      <li><strong>Teacher unlocks grading:</strong> walk to each laptop and type the secret phrase into the unlock box at the top of the page. The system instantly auto-grades all 10 answers, paints ✓ or ✗ next to each, and reveals detailed step-by-step explanations under every wrong (or blank) answer.</li>
+      <li><strong>Compare scores between teams</strong> and walk through the missed problems together as a class. The detailed explanations are written in plain teacher-walkthrough style — read them aloud verbatim.</li>
+    </ol>
+    <p style="margin: 8px 0 0 0; font-size: 0.9em; color: var(--muted);"><strong>Coaching tip:</strong> Walk between teams during the round. Don't give answers; ask "what does this remind you of?" or "have you tried small cases?" Watch which kids naturally lead, verify, or hang back — that information is more valuable than the score.</p>
+  </div>
+
+  <div class="grid" id="grid" style="display:none;"></div>
+
+  <div class="footer-summary" id="finalSummary" style="display:none;">
+    <div class="winner-banner" id="winnerText"></div>
+    <div style="color: var(--muted);">Click "Show solution" on each problem to review with the class.</div>
+  </div>
+
+</div>
+
+<script>
+
+// ===== Questions (MOEMS Div M Team-aligned, easy → hard) =====
+const QUESTIONS = [
+  {
+    n: 1, topic: "Number Theory · Last Digits", diff: 1,
+    q: "What is the units digit of <code>7<sup>100</sup></code>?",
+    a: "1",
+    accepts: ["1"],
+    sol: `<div class="ans">Answer: 1</div>
+      <p><strong>Step 1 — Find the cycle of units digits of powers of 7.</strong></p>
+      <p>7<sup>1</sup>=<u>7</u>, 7<sup>2</sup>=4<u>9</u>, 7<sup>3</sup>=34<u>3</u>, 7<sup>4</sup>=240<u>1</u>, 7<sup>5</sup>=1680<u>7</u>… The units digits cycle <strong>7, 9, 3, 1</strong> with period 4.</p>
+      <p><strong>Step 2 — Find 100 mod 4.</strong> 100 = 4·25 + 0, so 100 ≡ 0 (mod 4), which corresponds to the <em>4th</em> position in the cycle.</p>
+      <p><strong>Step 3 — Read it off.</strong> Position 4 in (7,9,3,1) is <strong>1</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Units-digit cycles appear nearly every year. Always list the first 4–5 powers, find the period, then reduce the exponent mod the period.</p>`
+  },
+  {
+    n: 2, topic: "Algebra · Telescoping Product", diff: 2,
+    q: "Find the value of <code>(1 + 1/1)(1 + 1/2)(1 + 1/3) · · · (1 + 1/2024)</code>.",
+    a: "2025",
+    accepts: ["2025"],
+    sol: `<div class="ans">Answer: 2025</div>
+      <p><strong>Step 1 — Rewrite each factor.</strong> 1 + 1/k = (k+1)/k. So the product is</p>
+      <p style="text-align:center;">(2/1)·(3/2)·(4/3)·(5/4) · · · (2025/2024)</p>
+      <p><strong>Step 2 — Telescope.</strong> Each numerator cancels the next denominator: the 2 in 2/1 cancels the 2 in 3/2's denominator, the 3 in 3/2 cancels the 3 in 4/3's denominator, and so on.</p>
+      <p><strong>Step 3 — Only the first denominator (1) and the last numerator (2025) survive.</strong> Product = 2025/1 = <strong>2025</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Telescoping products of the form ∏(1 + 1/k) collapse cleanly to (n+1)/1 = n+1. Always rewrite (1 + 1/k) as (k+1)/k first.</p>`
+  },
+  {
+    n: 3, topic: "Algebra · Signed-Series Pairing", diff: 2,
+    q: "Compute <code>100 − 99 + 98 − 97 + 96 − 95 + · · · + 2 − 1</code>.",
+    a: "50",
+    accepts: ["50"],
+    sol: `<div class="ans">Answer: 50</div>
+      <p><strong>Step 1 — Group in pairs.</strong> (100−99) + (98−97) + (96−95) + … + (2−1).</p>
+      <p><strong>Step 2 — Each pair equals 1.</strong></p>
+      <p><strong>Step 3 — Count the pairs.</strong> The 100 numbers form 50 pairs.</p>
+      <p>Total = 50 · 1 = <strong>50</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Alternating-sign sums of consecutive integers. Always pair adjacent terms — never compute term by term.</p>`
+  },
+  {
+    n: 4, topic: "Number Theory · Percent of a Class", diff: 2,
+    q: "In a certain class, exactly <code>5.2%</code> of the students are left-handed. What is the smallest possible number of students in the class?",
+    a: "250",
+    accepts: ["250"],
+    sol: `<div class="ans">Answer: 250</div>
+      <p><strong>Step 1 — Translate the percent into a fraction in lowest terms.</strong> 5.2% = 5.2/100 = 52/1000 = <strong>13/250</strong> (divide numerator and denominator by 4).</p>
+      <p><strong>Step 2 — The number of left-handers must be a whole number.</strong> If the class has N students, the number of left-handers is (13/250)·N. For this to be a whole number, N must be a multiple of 250.</p>
+      <p><strong>Step 3 — Smallest such N is 250</strong> (and indeed 13 students would be left-handed).</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> "Smallest class size given a percent" — always reduce the percent to a fraction <em>in lowest terms</em>. The denominator IS the answer.</p>`
+  },
+  {
+    n: 5, topic: "Geometry · Rectangle Interior Point", diff: 3,
+    q: "Point P lies inside rectangle ABCD. The areas of triangles PAB, PBC, and PCD are 8, 14, and 18 respectively. Find the area of triangle PDA.",
+    a: "12",
+    accepts: ["12"],
+    sol: `<div class="ans">Answer: 12</div>
+      <p><strong>Step 1 — Recall the opposite-pairs theorem.</strong> For any point P inside rectangle ABCD, the sum of the areas of the two triangles on opposite sides equals half the rectangle's area. So:</p>
+      <p style="text-align:center; font-weight:600;">[PAB] + [PCD] = [PBC] + [PDA]</p>
+      <p><strong>Why?</strong> [PAB] + [PCD] each have one of the rectangle's parallel sides as base; their heights add to the full width of the rectangle. Same for [PBC] + [PDA].</p>
+      <p><strong>Step 2 — Plug in.</strong> 8 + 18 = 14 + [PDA], so 26 = 14 + [PDA].</p>
+      <p><strong>Step 3 — Solve.</strong> [PDA] = <strong>12</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The opposite-pairs identity for interior points of a rectangle (or parallelogram) is a classic Team-Round shortcut. Memorize it.</p>`
+  },
+  {
+    n: 6, topic: "Sequences · Differences in AP", diff: 3,
+    q: "A sequence begins <code>8, 24, 48, 80, 120, 168, …</code>. The differences between consecutive terms form an arithmetic sequence. What is the 10th term of the original sequence?",
+    a: "440",
+    accepts: ["440"],
+    sol: `<div class="ans">Answer: 440</div>
+      <p><strong>Step 1 — Look at first differences.</strong> 24−8=16, 48−24=24, 80−48=32, 120−80=40, 168−120=48. Differences are 16, 24, 32, 40, 48 — an arithmetic progression with common difference 8.</p>
+      <p><strong>Step 2 — Continue the differences.</strong> Next ones: 56, 64, 72, 80.</p>
+      <p><strong>Step 3 — Build the sequence.</strong> 6th term = 168, 7th = 168+56 = 224, 8th = 224+64 = 288, 9th = 288+72 = 360, 10th = 360+80 = <strong>440</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> When a sequence isn't AP or GP, take first differences. If those form an AP, the original is "quadratic in n" — extending term-by-term is fastest for a 10th-term ask.</p>`
+  },
+  {
+    n: 7, topic: "Geometry · Integer Chords", diff: 3,
+    q: "A circle has radius 13. Point P lies inside the circle, exactly 5 units from the center. How many chords through P have integer length?",
+    a: "4",
+    accepts: ["4"],
+    sol: `<div class="ans">Answer: 4</div>
+      <p><strong>Step 1 — Find the shortest and longest chords through P.</strong></p>
+      <ul>
+        <li>The <strong>shortest</strong> chord through P is perpendicular to OP. Its half-length = √(13² − 5²) = √144 = 12, so its full length is <strong>24</strong>.</li>
+        <li>The <strong>longest</strong> chord through P is the diameter, length <strong>26</strong>.</li>
+      </ul>
+      <p><strong>Step 2 — Possible integer chord lengths: 24, 25, 26.</strong></p>
+      <p><strong>Step 3 — Count, remembering symmetry.</strong> Chords come in symmetric pairs (one on each side of the diameter through P), <em>except</em> the perpendicular chord (length 24) and the diameter (length 26), which are unique.</p>
+      <ul>
+        <li>Length 24: 1 chord (perpendicular)</li>
+        <li>Length 25: 2 chords (symmetric pair)</li>
+        <li>Length 26: 1 chord (diameter)</li>
+      </ul>
+      <p>Total = 1 + 2 + 1 = <strong>4</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Integer-chord-counting through an interior point is a recurring Team-Round geometry question. The trick is the <em>1-2-1 pattern</em>: 1 perpendicular, 2 of each intermediate length, 1 diameter.</p>`
+  },
+  {
+    n: 8, topic: "Logic · Day-of-Week Liar", diff: 4,
+    q: "On the planet Klatururu, a Martian tells the truth on Mondays, Wednesdays, and Fridays, and lies on every other day. One day the Martian says, \"Yesterday I told the truth.\" On what day of the week was this statement made?",
+    a: "Sunday",
+    accepts: ["Sunday", "sunday", "Sun", "sun"],
+    sol: `<div class="ans">Answer: Sunday</div>
+      <p><strong>Setup.</strong> Truth days (T) = Mon, Wed, Fri. Lie days (L) = Tue, Thu, Sat, Sun.</p>
+      <p><strong>Strategy:</strong> The Martian's statement must match today's role. On a truth day, the statement is true; on a lie day, the statement is false.</p>
+      <table style="border-collapse:collapse; margin:8px 0;">
+        <tr style="background:#e2e8f0;"><th style="padding:4px 10px; border:1px solid #cbd5e1;">Today</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Role</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Yesterday</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Y'day role</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Stmt "told truth y'day" is…</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Need</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">OK?</th></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">Mon</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">T</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">Sun</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">true</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">✗</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">Tue</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">Mon</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">T</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">true</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">✗</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">Wed</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">T</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">Tue</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">true</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">✗</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">Thu</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">Wed</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">T</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">true</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">✗</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">Fri</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">T</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">Thu</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">true</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">✗</td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">Sat</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">Fri</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">T</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">true</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">✗</td></tr>
+        <tr style="background:#dcfce7;"><td style="padding:4px 10px; border:1px solid #cbd5e1;"><strong>Sun</strong></td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">Sat</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">L</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">false</td><td style="padding:4px 10px; border:1px solid #cbd5e1;"><strong>✓</strong></td></tr>
+      </table>
+      <p>Only <strong>Sunday</strong> works: the Martian is lying (Sun is a lie day), and the false statement is "yesterday I told the truth" — but Saturday was also a lie day, so the claim is indeed false. Consistent!</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Truth-teller / liar puzzles tied to days of the week. Build a table; for each day check whether (today's role) matches (statement's truth value).</p>`
+  },
+  {
+    n: 9, topic: "Number Theory · Percent + LCM", diff: 4,
+    q: "In a certain class, exactly <code>5/9</code> of the students take Geometry and exactly <code>7/12</code> of the students take Biology. What is the smallest possible number of students in the class?",
+    a: "36",
+    accepts: ["36"],
+    sol: `<div class="ans">Answer: 36</div>
+      <p><strong>Step 1 — The class size N must make both fractions whole numbers.</strong></p>
+      <p>(5/9)·N must be an integer ⟹ N is a multiple of 9.</p>
+      <p>(7/12)·N must be an integer ⟹ N is a multiple of 12.</p>
+      <p><strong>Step 2 — Smallest N divisible by both 9 and 12.</strong> LCM(9, 12) = 36.</p>
+      <p><strong>Step 3 — Verify.</strong> N = 36: Geometry = 5·36/9 = 20, Biology = 7·36/12 = 21. Both whole ✓.</p>
+      <p>Answer = <strong>36</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> "Smallest class size such that several given fractions of it are whole" — always take the LCM of the denominators (in lowest terms).</p>`
+  },
+  {
+    n: 10, topic: "Combinatorics · Ordered Compositions", diff: 4,
+    q: "In how many different ways can the number <code>12</code> be written as an <em>ordered</em> sum of positive odd integers? (For example, <code>1+3+1+7</code> and <code>3+1+1+7</code> count as two different ways; the order matters.)",
+    a: "144",
+    accepts: ["144"],
+    sol: `<div class="ans">Answer: 144</div>
+      <p><strong>Step 1 — Set up small cases.</strong> Let f(n) = number of ordered sums of positive odd integers equaling n. List them by hand:</p>
+      <ul>
+        <li>f(1) = 1: just "1"</li>
+        <li>f(2) = 1: "1+1"</li>
+        <li>f(3) = 2: "3", "1+1+1"</li>
+        <li>f(4) = 3: "3+1", "1+3", "1+1+1+1"</li>
+        <li>f(5) = 5: "5", "3+1+1", "1+3+1", "1+1+3", "1+1+1+1+1"</li>
+      </ul>
+      <p><strong>Step 2 — Recognize the pattern.</strong> 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 — the <strong>Fibonacci numbers</strong>! So f(n) = F<sub>n</sub>.</p>
+      <p><strong>Why?</strong> Every ordered sum of positive odd integers ending in n either ends in "1" (so we prepend any composition of n−1) or ends in some odd number ≥3 (equivalent to taking a composition of n−2 and adding 2 to its last part, which keeps it odd). This gives the recurrence f(n) = f(n−1) + f(n−2).</p>
+      <p><strong>Step 3 — Compute f(12).</strong> Continue the Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, <strong>144</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> "Ordered sums" = compositions. The Fibonacci numbers always count compositions into odd parts. The contest tactic is to compute f(1) through f(5) by hand, recognize Fibonacci, then extend the sequence — never enumerate all compositions for n=12.</p>`
+  }
+];
+
+// ===== Answer normalization & auto-grading =====
+function normalize(str) {
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–—]/g, '-')        // various dashes -> minus
+    .replace(/[×·∗]/g, '*')         // multiplication symbols
+    .replace(/[÷]/g, '/')
+    .replace(/√/g, 'sqrt')
+    .replace(/[()]/g, '')           // strip parens for sqrt(15) -> sqrt15
+    .replace(/\*/g, '')             // strip * so 2*sqrt15 == 2sqrt15
+    .replace(/^0+(\d)/, '$1');      // leading zeros: 07 -> 7
+}
+// Try to compute a numeric value (handles "3.2", "16/5", "3 1/5", or plain integers)
+function toNumber(s) {
+  if (!s) return null;
+  const t = String(s).replace(/\s+/g, ' ').trim();
+  // mixed number like "3 1/5"
+  const mixed = t.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+  if (mixed) {
+    const whole = +mixed[1], num = +mixed[2], den = +mixed[3];
+    if (den !== 0) return whole + (whole < 0 ? -1 : 1) * (num / den);
+  }
+  // simple fraction "a/b"
+  const frac = t.match(/^(-?\d+)\/(-?\d+)$/);
+  if (frac) {
+    const num = +frac[1], den = +frac[2];
+    if (den !== 0) return num / den;
+  }
+  // plain decimal/integer
+  if (/^-?\d+(\.\d+)?$/.test(t)) return +t;
+  return null;
+}
+function autoGrade() {
+  QUESTIONS.forEach(q => {
+    const typed = (state.answers[q.n] || '').trim();
+    if (!typed) {
+      state.status[q.n] = 'no';   // blank counts as wrong
+      return;
+    }
+    const accepts = q.accepts || [q.a];
+    const normTyped = normalize(typed);
+    // First: normalized string match
+    let match = accepts.some(acc => normalize(acc) === normTyped);
+    // Second: numeric-equivalence match (for fractions vs decimals)
+    if (!match) {
+      const typedNum = toNumber(typed);
+      if (typedNum !== null) {
+        match = accepts.some(acc => {
+          const accNum = toNumber(acc);
+          return accNum !== null && Math.abs(accNum - typedNum) < 1e-3;
+        });
+      }
+    }
+    state.status[q.n] = match ? 'ok' : 'no';
+  });
+}
+
+// ===== State =====
+let state = {
+  status: {}, // n -> 'ok' or 'no'
+  answers: {}, // n -> string typed by teacher during the round
+  timeLeft: 1 * 60,
+  running: false,
+  intervalId: null,
+  timeUp: false,    // true when timer hits 0 — locks input but does NOT grade
+  finished: false   // true when teacher unlocks via secret phrase — auto-grades
+};
+
+const SECRET_PHRASE = "hansen2026";   // case-insensitive; spaces ignored
+
+// ===== Render =====
+const grid = document.getElementById('grid');
+function difficultyStars(d) {
+  return '★'.repeat(d) + '☆'.repeat(4-d);
+}
+function render() {
+  grid.innerHTML = '';
+  QUESTIONS.forEach(q => {
+    const st = state.status[q.n];
+    const card = document.createElement('div');
+    card.className = 'card' + (st === 'ok' ? ' solved' : st === 'no' ? ' wrong' : '');
+    const answerInput = `
+      <div class="answer-row">
+        <input type="text" placeholder="Team's answer..." id="ans-${q.n}" ${state.timeUp ? 'readonly' : ''}>
+        ${state.finished ? `<span class="auto-mark ${st}">${st === 'ok' ? '✓' : '✗'}</span>` : ''}
+      </div>
+    `;
+    const gradingControls = state.finished ? `
+      <div style="margin-top:10px; padding:8px 10px; background:${st === 'ok' ? '#ecfdf5' : '#fef2f2'}; border-left:3px solid ${st === 'ok' ? 'var(--good)' : 'var(--bad)'}; border-radius:4px; font-size:0.95em;">
+        <strong>Correct answer:</strong> <span class="ans" style="font-weight:700; color:var(--good);">${q.a}</span>
+      </div>
+      ${st === 'no' ? `
+        <div class="solution show" style="margin-top:10px;">
+          ${q.sol}
+        </div>
+      ` : `
+        <button class="reveal-btn" onclick="toggleSol(${q.n})">Show full explanation</button>
+        <div class="solution" id="sol-${q.n}">
+          ${q.sol}
+        </div>
+      `}
+    ` : '';
+    card.innerHTML = `
+      ${st === 'ok' ? `<span class="solved-tag ok">✓ Correct</span>` : st === 'no' ? `<span class="solved-tag no">✗ Wrong</span>` : ''}
+      <div class="card-head">
+        <span class="qnum">${q.n}</span>
+        <span class="difficulty">${difficultyStars(q.diff)}</span>
+      </div>
+      <div class="topic">${q.topic}</div>
+      <div class="qtext">${q.q}</div>
+      ${answerInput}
+      ${gradingControls}
+    `;
+    grid.appendChild(card);
+  });
+  // Restore typed answers (input fields are recreated on every render)
+  Object.keys(state.answers).forEach(n => {
+    const inp = document.getElementById('ans-' + n);
+    if (inp) inp.value = state.answers[n];
+  });
+  // Wire up answer-saving listeners
+  QUESTIONS.forEach(q => {
+    const inp = document.getElementById('ans-' + q.n);
+    if (inp) inp.oninput = (e) => { state.answers[q.n] = e.target.value; };
+  });
+  updateScores();
+}
+function mark(n, val) {
+  // legacy/no-op — auto-grading now handles all scoring
+  if (val === null) delete state.status[n];
+  else state.status[n] = val;
+  render();
+}
+function toggleSol(n) {
+  document.getElementById('sol-' + n).classList.toggle('show');
+}
+function updateScores() {
+  const vals = Object.values(state.status);
+  const ok = vals.filter(v => v === 'ok').length;
+  const no = vals.filter(v => v === 'no').length;
+  document.getElementById('solvedCount').textContent = ok;
+  document.getElementById('wrongCount').textContent = no;
+  if (state.finished) {
+    let rating;
+    if (ok >= 18) rating = "🌟 Exceptional — state-level ready!";
+    else if (ok >= 15) rating = "🏆 Excellent team coordination!";
+    else if (ok >= 12) rating = "✅ Strong — solid contest performance.";
+    else if (ok >= 8) rating = "👍 Good effort — review weak topics & try again.";
+    else rating = "📚 Keep practicing — review the concept guide together.";
+    document.getElementById('winnerText').innerHTML =
+      `<div style="font-size:1.6em; margin-bottom:8px;">✓ ${ok} correct &nbsp;·&nbsp; ✗ ${no} wrong</div>` +
+      `<div style="font-size:1em; color:var(--muted); font-weight:500;">${rating}</div>`;
+  }
+}
+
+// ===== Timer =====
+function fmt(s) {
+  const m = Math.floor(s/60), sec = s%60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+function tick() {
+  if (!state.running) return;
+  state.timeLeft--;
+  const t = document.getElementById('timer');
+  t.textContent = fmt(state.timeLeft);
+  t.classList.toggle('warn', state.timeLeft <= 5*60 && state.timeLeft > 60);
+  t.classList.toggle('danger', state.timeLeft <= 60);
+  if (state.timeLeft <= 0) {
+    state.running = false;
+    clearInterval(state.intervalId);
+    state.timeUp = true;
+    document.getElementById('timer').textContent = "TIME!";
+    // Lock all answer inputs but DO NOT grade yet — wait for secret phrase
+    render();
+    // Enable the secret-phrase unlock box
+    const unlock = document.getElementById('unlockBox');
+    unlock.disabled = false;
+    unlock.placeholder = "Teacher: enter secret phrase to grade";
+    unlock.focus();
+  }
+}
+function finishRound() {
+  document.getElementById('timer').textContent = "TIME!";
+  document.getElementById('finalSummary').style.display = 'block';
+  autoGrade();
+  render();
+  updateScores();
+  document.getElementById('finalSummary').scrollIntoView({ behavior: 'smooth' });
+}
+document.getElementById('startBtn').onclick = () => {
+  if (state.running || state.finished) return;
+  state.running = true;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').style.opacity = '0.5';
+  document.getElementById('instructionsBox').style.display = 'none';
+  document.getElementById('grid').style.display = 'grid';
+  state.intervalId = setInterval(tick, 1000);
+};
+// Secret-phrase unlock box: when teacher types the phrase, auto-grade and reveal
+document.getElementById('unlockBox').addEventListener('input', (e) => {
+  if (state.finished) return;
+  const typed = e.target.value.toLowerCase().replace(/\s+/g, '');
+  if (typed === SECRET_PHRASE.toLowerCase().replace(/\s+/g, '')) {
+    state.finished = true;
+    e.target.disabled = true;
+    e.target.value = '✓ unlocked';
+    e.target.style.background = '#16a34a';
+    e.target.style.color = 'white';
+    e.target.style.fontWeight = '700';
+    finishRound();
+  }
+});
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen Team Practice for MOEMs — Round 2</title>
+<style>
+  :root {
+    --primary: #1e40af;
+    --accent: #f59e0b;
+    --teamA: #dc2626;
+    --teamB: #2563eb;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --warn: #ea580c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+    color: white;
+    padding: 18px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.4em;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    font-size: 0.85em;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .timer-box {
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-size: 1.6em;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+    text-align: center;
+  }
+  .timer-box.warn { background: var(--warn); border-color: white; animation: pulse 1s infinite; }
+  .timer-box.danger { background: var(--bad); border-color: white; animation: pulse 0.5s infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+  }
+  button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95em;
+  }
+  button:hover { background: var(--accent); color: white; }
+  button.danger { background: var(--bad); color: white; }
+  button.danger:hover { background: #991b1b; }
+
+  .scoreboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 22px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .stat {
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: white;
+    text-align: center;
+  }
+  .stat.solved { background: var(--good); }
+  .stat.attempted { background: var(--bad); }
+  .stat-label { font-size: 0.8em; opacity: 0.9; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+  .stat-value { font-size: 2.2em; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin-top: 4px; }
+  .auto-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-left: 6px;
+  }
+  .auto-mark.ok { background: var(--good); }
+  .auto-mark.no { background: var(--bad); }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .instructions {
+    background: #fef9e7;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .instructions h3 { margin-top: 0; color: var(--accent); }
+  .instructions ol { margin: 6px 0; padding-left: 20px; }
+  .instructions li { margin: 4px 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .card.solved { border-color: var(--good); background: #f0fdf4; }
+  .card.wrong { border-color: var(--bad); background: #fef2f2; }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .qnum {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+  .difficulty {
+    font-size: 0.75em;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .topic {
+    font-size: 0.7em;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .qtext {
+    font-size: 0.98em;
+    line-height: 1.55;
+    margin: 8px 0 12px 0;
+  }
+  .qtext code {
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.95em;
+  }
+
+  .answer-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .answer-row input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  .award-btns {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .award-btns button {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 0.85em;
+    border-radius: 6px;
+  }
+  .award-correct { background: var(--good); color: white; }
+  .award-correct:hover { background: #15803d; color: white; }
+  .award-wrong { background: var(--bad); color: white; }
+  .award-wrong:hover { background: #991b1b; color: white; }
+  .award-skip { background: #e2e8f0; color: var(--ink); }
+  .award-skip:hover { background: #cbd5e1; color: var(--ink); }
+
+  .reveal-btn {
+    background: #f1f5f9;
+    color: var(--ink);
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    font-size: 0.82em;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .reveal-btn:hover { background: var(--primary); color: white; }
+
+  .solution {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #ecfdf5;
+    border-left: 3px solid var(--good);
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .solution.show { display: block; }
+  .solution .ans {
+    font-weight: 700;
+    color: var(--good);
+    font-size: 1.05em;
+  }
+  .solved-tag {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.75em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: white;
+  }
+  .solved-tag.ok { background: var(--good); }
+  .solved-tag.no { background: var(--bad); }
+
+  .footer-summary {
+    background: white;
+    border-top: 2px solid var(--primary);
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .winner-banner {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  @media print {
+    header, .controls, .answer-row, .award-btns, .reveal-btn { display: none !important; }
+    .solution { display: block !important; }
+    .card { break-inside: avoid; }
+  }
+  @media (max-width: 600px) {
+    .timer-box { font-size: 1.2em; padding: 6px 10px; min-width: 90px; }
+    h1 { font-size: 1.1em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs — Round 2</h1>
+      <div class="subtitle" style="font-size:1em; margin-top:6px;">Teacher-driven scoring · Two teams call out answers · 10 questions (easy → hard) · grade whenever you're ready</div>
+    </div>
+    <div class="controls">
+      <button id="gradeBtn" style="background:var(--good); color:white;">✓ Grade All Remaining</button>
+      <button id="startBtn">▶ Start</button>
+    </div>
+  </div>
+</header>
+
+<div class="scoreboard" style="grid-template-columns: 1fr 1fr;">
+  <div class="stat" style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%);">
+    <div class="stat-label">🔴 TEAM 1 SCORE</div>
+    <div class="stat-value"><span id="team1Score">0</span> / 10</div>
+  </div>
+  <div class="stat" style="background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%);">
+    <div class="stat-label">🔵 TEAM 2 SCORE</div>
+    <div class="stat-value"><span id="team2Score">0</span> / 10</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="instructions" id="instructionsBox">
+    <h3>📋 How to Run This Practice Round (Teacher-Driven)</h3>
+    <ol>
+      <li><strong>One screen, both teams in the same room.</strong> The two teams of 5 work simultaneously on paper at separate tables. You (the teacher) hold the laptop with this page.</li>
+      <li><strong>Click ▶ Start</strong> to reveal all 10 problems. Read each problem aloud (or hand out a printed copy). <em>No timer — work at whatever pace fits the room.</em></li>
+      <li><strong>For each question, type both teams' answers in the red and blue boxes, then click "✓ Grade Q#"</strong> directly below that question. The system instantly shows ✓/✗ next to each team's answer, reveals the correct answer, and — if either team got it wrong — auto-reveals the full step-by-step explanation right there for class review.</li>
+      <li><strong>Running scores</strong> at the top update after every question you grade.</li>
+      <li><strong>Optional:</strong> the "✓ Grade All Remaining" button at the top grades any remaining ungraded questions in one go (useful for cleanup at the end).</li>
+    </ol>
+    <p style="margin: 8px 0 0 0; font-size: 0.9em; color: var(--muted);"><strong>Coaching tip:</strong> Encourage runners to call out clean, simplified answers (e.g., "twelve" or "12", not "12 square units"). The grader is forgiving (handles fractions, decimals, dashes, etc.) but cleaner is better.</p>
+  </div>
+
+  <div class="grid" id="grid" style="display:none;"></div>
+
+  <div class="footer-summary" id="finalSummary" style="display:none;">
+    <div class="winner-banner" id="winnerText"></div>
+    <div style="color: var(--muted);">Click "Show solution" on each problem to review with the class.</div>
+  </div>
+
+</div>
+
+<script>
+
+// ===== Questions (MOEMS Div M Team-aligned, easy → hard) — ROUND 2 =====
+const QUESTIONS = [
+  {
+    n: 1, topic: "Number Theory · Last Digits", diff: 1,
+    q: "What is the units digit of <code>3<sup>2024</sup></code>?",
+    a: "1",
+    accepts: ["1"],
+    sol: `<div class="ans">Answer: 1</div>
+      <p><strong>Step 1 — Find the cycle of units digits of powers of 3.</strong></p>
+      <p>3<sup>1</sup>=<u>3</u>, 3<sup>2</sup>=<u>9</u>, 3<sup>3</sup>=2<u>7</u>, 3<sup>4</sup>=8<u>1</u>, 3<sup>5</sup>=24<u>3</u>… Units digits cycle <strong>3, 9, 7, 1</strong> with period 4.</p>
+      <p><strong>Step 2 — Find 2024 mod 4.</strong> 2024 = 4·506 + 0 ≡ 0 (mod 4) → 4th position in the cycle.</p>
+      <p><strong>Step 3 — Read it off.</strong> Position 4 in (3,9,7,1) is <strong>1</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Units-digit cycles. Always list the first 4 powers, find the period, reduce the exponent mod the period.</p>`
+  },
+  {
+    n: 2, topic: "Number Theory · Sum of Divisors", diff: 1,
+    q: "What is the sum of <em>all</em> the positive divisors of <code>36</code>?",
+    a: "91",
+    accepts: ["91"],
+    sol: `<div class="ans">Answer: 91</div>
+      <p><strong>Step 1 — List the divisors of 36.</strong> Pair them up: 1·36, 2·18, 3·12, 4·9, 6·6. Divisors: 1, 2, 3, 4, 6, 9, 12, 18, 36.</p>
+      <p><strong>Step 2 — Add.</strong> 1+2+3+4+6+9+12+18+36 = <strong>91</strong>.</p>
+      <p><strong>Faster (formula):</strong> 36 = 2²·3². Sum of divisors = (1+2+4)(1+3+9) = 7·13 = 91.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The σ(n) formula: for n = p<sup>a</sup>·q<sup>b</sup>, σ(n) = (1+p+…+p<sup>a</sup>)(1+q+…+q<sup>b</sup>). Saves time vs hand-listing for large n.</p>`
+  },
+  {
+    n: 3, topic: "Algebra · Symmetric Identity", diff: 2,
+    q: "If <code>x + 1/x = 5</code>, what is the value of <code>x² + 1/x²</code>?",
+    a: "23",
+    accepts: ["23"],
+    sol: `<div class="ans">Answer: 23</div>
+      <p><strong>Step 1 — Square both sides.</strong> (x + 1/x)² = 5² = 25.</p>
+      <p><strong>Step 2 — Expand.</strong> x² + 2·(x · 1/x) + 1/x² = 25, i.e., x² + 2 + 1/x² = 25.</p>
+      <p><strong>Step 3 — Subtract 2.</strong> x² + 1/x² = <strong>23</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The "x + 1/x" family. Squaring gives x² + 1/x²; cubing gives x³ + 1/x³. Never solve for x — always square/cube the original equation.</p>`
+  },
+  {
+    n: 4, topic: "Combinatorics · Pigeonhole", diff: 2,
+    q: "A bag contains 5 red, 7 blue, and 8 green marbles. Without looking, what is the smallest number of marbles you must draw to <strong>guarantee</strong> that you have at least 3 marbles of the same color?",
+    a: "7",
+    accepts: ["7"],
+    sol: `<div class="ans">Answer: 7</div>
+      <p><strong>Step 1 — Imagine the unluckiest possible draws.</strong> The worst case is: you draw 2 red, 2 blue, and 2 green — that's 6 marbles, and you still don't have 3 of any color.</p>
+      <p><strong>Step 2 — Force the next draw.</strong> The 7th marble <em>must</em> be red, blue, or green — and whichever color it is, you'll now have 3 of that color.</p>
+      <p>Answer: <strong>7</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Pigeonhole "guarantee" problems. Always think: <em>what's the maximum I could draw and still fail?</em> The answer is that number plus 1.</p>`
+  },
+  {
+    n: 5, topic: "Number Theory · Digit Reversal", diff: 2,
+    q: "How many 3-digit positive integers <code>N</code> have the property that <em>reversing</em> the digits of N produces a number exactly <strong>99 more</strong> than N? (For example, if N = 132, the reverse is 231, and 231 − 132 = 99 ✓)",
+    a: "80",
+    accepts: ["80"],
+    sol: `<div class="ans">Answer: 80</div>
+      <p><strong>Step 1 — Set up algebra.</strong> Let N = 100a + 10b + c where a is hundreds, b tens, c ones (a ∈ 1..9, b,c ∈ 0..9). The reverse is 100c + 10b + a.</p>
+      <p><strong>Step 2 — Translate the condition.</strong> Reverse − N = (100c + 10b + a) − (100a + 10b + c) = 99c − 99a = 99(c − a). Set equal to 99: <strong>c − a = 1</strong>.</p>
+      <p><strong>Step 3 — Count valid (a, b, c).</strong> Need c = a + 1.</p>
+      <ul>
+        <li>a ∈ {1,2,3,4,5,6,7,8} (so c = a+1 ≤ 9): <strong>8 choices</strong>.</li>
+        <li>b ∈ {0,1,…,9}: <strong>10 choices</strong>.</li>
+        <li>c is determined.</li>
+      </ul>
+      <p>Total = 8 · 10 = <strong>80</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Digit-reversal problems. Always write N as 100a+10b+c and let the algebra collapse the middle digit out — then count valid (a, c) pairs.</p>`
+  },
+  {
+    n: 6, topic: "Geometry · Heron's Formula", diff: 3,
+    q: "A triangle has side lengths <code>13, 14, 15</code>. What is its area?",
+    a: "84",
+    accepts: ["84"],
+    sol: `<div class="ans">Answer: 84</div>
+      <p><strong>Step 1 — Heron's formula.</strong> For a triangle with sides a, b, c and semi-perimeter s = (a+b+c)/2, area = √(s(s−a)(s−b)(s−c)).</p>
+      <p><strong>Step 2 — Plug in.</strong> s = (13+14+15)/2 = 21. So area = √(21·8·7·6) = √7056 = <strong>84</strong>.</p>
+      <p><strong>Alternative (no Heron):</strong> Drop an altitude from the vertex opposite the side of length 14. Let it hit the base at distance x from the side-13 vertex. Then 13² − x² = 15² − (14−x)², giving 169 − x² = 225 − 196 + 28x − x², so 169 = 29 + 28x, x = 5. Altitude h = √(169 − 25) = 12. Area = ½·14·12 = 84.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The 13-14-15 triangle is a famous "Heronian" triangle (integer sides + integer area). Memorize: area = 84. Also memorize 5-12-13, 8-15-17, 7-24-25 right triangles.</p>`
+  },
+  {
+    n: 7, topic: "Number Theory · Inclusion–Exclusion", diff: 3,
+    q: "How many positive integers less than <code>1000</code> are divisible by neither <code>2</code> nor <code>5</code>?",
+    a: "400",
+    accepts: ["400"],
+    sol: `<div class="ans">Answer: 400</div>
+      <p><strong>Step 1 — Total positive integers less than 1000:</strong> 999.</p>
+      <p><strong>Step 2 — Use inclusion–exclusion.</strong></p>
+      <ul>
+        <li>Multiples of 2 below 1000: ⌊999/2⌋ = <strong>499</strong>.</li>
+        <li>Multiples of 5 below 1000: ⌊999/5⌋ = <strong>199</strong>.</li>
+        <li>Multiples of <em>both</em> (i.e., of 10): ⌊999/10⌋ = <strong>99</strong>.</li>
+      </ul>
+      <p>Multiples of 2 <em>or</em> 5 = 499 + 199 − 99 = <strong>599</strong>.</p>
+      <p><strong>Step 3 — Subtract from total.</strong> 999 − 599 = <strong>400</strong>.</p>
+      <p><strong>Sanity check:</strong> Among any 10 consecutive integers, exactly 4 are coprime to 10 (the ones ending in 1, 3, 7, 9). So among 1–1000 we'd have 400. Checks out.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> "Divisible by neither A nor B" → use inclusion–exclusion. |A ∪ B| = |A| + |B| − |A ∩ B|, then subtract from total.</p>`
+  },
+  {
+    n: 8, topic: "Geometry · British Flag Theorem", diff: 4,
+    q: "Point P lies inside square ABCD. The distances from P to three vertices are <code>PA = 3</code>, <code>PB = 4</code>, and <code>PC = 5</code>. Find <code>PD²</code>.",
+    a: "18",
+    accepts: ["18"],
+    sol: `<div class="ans">Answer: 18</div>
+      <p><strong>Step 1 — Recall the British Flag Theorem.</strong> For any point P inside (or even outside) a rectangle ABCD, the sum of squared distances to opposite-corner pairs is equal:</p>
+      <p style="text-align:center; font-weight:600;">PA² + PC² = PB² + PD²</p>
+      <p><strong>Why?</strong> Drop perpendiculars from P to the rectangle's sides. By Pythagoras applied to each pair of opposite corners, both sums equal the same total of squared horizontal + squared vertical distances.</p>
+      <p><strong>Step 2 — Plug in.</strong> 3² + 5² = 4² + PD², so 9 + 25 = 16 + PD², giving 34 = 16 + PD².</p>
+      <p><strong>Step 3 — Solve.</strong> PD² = <strong>18</strong> (so PD = 3√2).</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The British Flag Theorem. Whenever a problem gives you 3 of the 4 distances from an interior point of a rectangle/square to the corners, the 4th comes free from PA²+PC² = PB²+PD².</p>`
+  },
+  {
+    n: 9, topic: "Combinatorics · Coin Change", diff: 4,
+    q: "In how many different ways can you make <code>$1.00</code> in change using only quarters (25¢), dimes (10¢), nickels (5¢), and pennies (1¢)? (You don't have to use every type of coin.)",
+    a: "242",
+    accepts: ["242"],
+    sol: `<div class="ans">Answer: 242</div>
+      <p><strong>Setup.</strong> Let q, d, n, p be the number of each coin used. We need 25q + 10d + 5n + p = 100 with all of q,d,n,p ≥ 0.</p>
+      <p><strong>Step 1 — Loop over q (q ∈ {0, 1, 2, 3, 4}).</strong> For each q, the remainder R = 100 − 25q must be made from d, n, p.</p>
+      <p><strong>Step 2 — For each q, loop over d.</strong> Once q and d are fixed, the remainder R' = R − 10d must be made from nickels and pennies. The number of (n, p) pairs with 5n + p = R' is ⌊R'/5⌋ + 1.</p>
+      <table style="border-collapse:collapse; margin:8px 0;">
+        <tr style="background:#e2e8f0;"><th style="padding:4px 10px; border:1px solid #cbd5e1;">q</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">R = 100−25q</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">d ranges</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Sum over d</th></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">0</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">100</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..10</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">21+19+17+15+13+11+9+7+5+3+1 = <strong>121</strong></td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">1</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">75</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..7</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">16+14+12+10+8+6+4+2 = <strong>72</strong></td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">2</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">50</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..5</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">11+9+7+5+3+1 = <strong>36</strong></td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">3</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">25</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..2</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">6+4+2 = <strong>12</strong></td></tr>
+        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">4</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0</td><td style="padding:4px 10px; border:1px solid #cbd5e1;"><strong>1</strong></td></tr>
+      </table>
+      <p>Total = 121 + 72 + 36 + 12 + 1 = <strong>242</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The "ways to make change for $1" answer of 242 is a famous result. The technique — fix the largest coin, recursively count the rest — is the standard "stars and bars with constraints" approach.</p>`
+  },
+  {
+    n: 10, topic: "Number Theory · Palindromes & Divisibility", diff: 4,
+    q: "How many 5-digit palindromes are divisible by <code>11</code>? (A palindrome reads the same forwards and backwards, e.g., <code>12321</code>.)",
+    a: "82",
+    accepts: ["82"],
+    sol: `<div class="ans">Answer: 82</div>
+      <p><strong>Step 1 — Write a 5-digit palindrome as <code>abcba</code>:</strong> N = 10000a + 1000b + 100c + 10b + a, where a ∈ {1..9}, b ∈ {0..9}, c ∈ {0..9}. There are 9 · 10 · 10 = 900 such palindromes total.</p>
+      <p><strong>Step 2 — Apply the divisibility-by-11 alternating-sum rule.</strong> N is divisible by 11 iff the alternating sum of its digits is divisible by 11:</p>
+      <p style="text-align:center;">a − b + c − b + a = <strong>2a − 2b + c</strong>.</p>
+      <p>So we need <strong>11 | (2a − 2b + c)</strong>.</p>
+      <p><strong>Step 3 — Count solutions.</strong> The expression 2a − 2b + c ranges from 2·1 − 2·9 + 0 = −16 to 2·9 − 2·0 + 9 = 27. The multiples of 11 in this range are <strong>−11, 0, 11, 22</strong>. For each (a, b) pair (90 pairs), check whether some c ∈ {0..9} makes 2a − 2b + c equal to one of these.</p>
+      <p>Carrying out the enumeration carefully (or by direct computer check): exactly <strong>82</strong> palindromes work.</p>
+      <p><strong>Verification:</strong> A brute-force check of all 900 5-digit palindromes confirms 82 are divisible by 11. ✓</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Use the alternating-sum rule for 11. Then translate the divisibility constraint into a counting problem over the digit variables.</p>`
+  }
+];
+
+// ===== Answer normalization & auto-grading =====
+function normalize(str) {
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–—]/g, '-')        // various dashes -> minus
+    .replace(/[×·∗]/g, '*')         // multiplication symbols
+    .replace(/[÷]/g, '/')
+    .replace(/√/g, 'sqrt')
+    .replace(/[()]/g, '')           // strip parens for sqrt(15) -> sqrt15
+    .replace(/\*/g, '')             // strip * so 2*sqrt15 == 2sqrt15
+    .replace(/^0+(\d)/, '$1');      // leading zeros: 07 -> 7
+}
+// Try to compute a numeric value (handles "3.2", "16/5", "3 1/5", or plain integers)
+function toNumber(s) {
+  if (!s) return null;
+  const t = String(s).replace(/\s+/g, ' ').trim();
+  // mixed number like "3 1/5"
+  const mixed = t.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+  if (mixed) {
+    const whole = +mixed[1], num = +mixed[2], den = +mixed[3];
+    if (den !== 0) return whole + (whole < 0 ? -1 : 1) * (num / den);
+  }
+  // simple fraction "a/b"
+  const frac = t.match(/^(-?\d+)\/(-?\d+)$/);
+  if (frac) {
+    const num = +frac[1], den = +frac[2];
+    if (den !== 0) return num / den;
+  }
+  // plain decimal/integer
+  if (/^-?\d+(\.\d+)?$/.test(t)) return +t;
+  return null;
+}
+function gradeOne(n) {
+  const q = QUESTIONS.find(x => x.n === n);
+  if (!q) return;
+  ['1','2'].forEach(team => {
+    const typed = (state.answers[team][q.n] || '').trim();
+    if (!typed) {
+      state.status[team][q.n] = 'no';
+      return;
+    }
+    const accepts = q.accepts || [q.a];
+    const normTyped = normalize(typed);
+    let match = accepts.some(acc => normalize(acc) === normTyped);
+    if (!match) {
+      const typedNum = toNumber(typed);
+      if (typedNum !== null) {
+        match = accepts.some(acc => {
+          const accNum = toNumber(acc);
+          return accNum !== null && Math.abs(accNum - typedNum) < 1e-3;
+        });
+      }
+    }
+    state.status[team][q.n] = match ? 'ok' : 'no';
+  });
+  state.graded[q.n] = true;
+  render();
+}
+function autoGrade() {
+  QUESTIONS.forEach(q => gradeOne(q.n));
+}
+
+// ===== State =====
+let state = {
+  status: { '1': {}, '2': {} },     // team -> n -> 'ok' or 'no'
+  answers: { '1': {}, '2': {} },    // team -> n -> typed string
+  graded: {},                        // n -> true once that question has been graded
+  running: false,
+  finished: false                    // true after teacher clicks "Grade All"
+};
+
+// ===== Render =====
+const grid = document.getElementById('grid');
+function difficultyStars(d) {
+  return '★'.repeat(d) + '☆'.repeat(4-d);
+}
+function render() {
+  grid.innerHTML = '';
+  QUESTIONS.forEach(q => {
+    const isGraded = !!state.graded[q.n];
+    const st1 = state.status['1'][q.n];
+    const st2 = state.status['2'][q.n];
+    const eitherWrong = isGraded && (st1 === 'no' || st2 === 'no');
+    const card = document.createElement('div');
+    card.className = 'card';
+    if (isGraded) {
+      if (st1 === 'ok' && st2 === 'ok') card.className += ' solved';
+      else if (eitherWrong) card.className += ' wrong';
+    }
+
+    const teamRow = (team, color, st) => `
+      <div class="answer-row" style="margin-top:6px;">
+        <div style="background:${color}; color:white; font-weight:800; padding:8px 12px; border-radius:6px; min-width:74px; text-align:center; font-size:0.85em; letter-spacing:0.05em;">TEAM ${team}</div>
+        <input type="text" placeholder="Team ${team}'s answer..." id="ans-${team}-${q.n}" ${isGraded ? 'readonly' : ''}>
+        ${isGraded ? `<span class="auto-mark ${st}">${st === 'ok' ? '✓' : '✗'}</span>` : ''}
+      </div>
+    `;
+
+    const gradeBtnRow = !isGraded ? `
+      <div style="margin-top:10px;">
+        <button class="reveal-btn" style="background:var(--good); color:white; border:none; font-weight:700;" onclick="gradeOne(${q.n})">✓ Grade Q${q.n}</button>
+      </div>
+    ` : '';
+
+    const gradingControls = isGraded ? `
+      <div style="margin-top:10px; padding:8px 10px; background:#f8fafc; border-left:3px solid var(--primary); border-radius:4px; font-size:0.95em;">
+        <strong>Correct answer:</strong> <span style="font-weight:700; color:var(--good);">${q.a}</span>
+      </div>
+      ${eitherWrong ? `
+        <div class="solution show" style="margin-top:10px;">
+          <div style="margin-bottom:8px; font-weight:700; color:var(--bad);">⚠️ At least one team missed this — review:</div>
+          ${q.sol}
+        </div>
+      ` : `
+        <button class="reveal-btn" onclick="toggleSol(${q.n})">Show full explanation (both teams got it ✓)</button>
+        <div class="solution" id="sol-${q.n}">
+          ${q.sol}
+        </div>
+      `}
+    ` : '';
+
+    card.innerHTML = `
+      ${isGraded ? `<span class="solved-tag ${eitherWrong ? 'no' : 'ok'}">${eitherWrong ? '✗ Missed' : '✓ Both correct'}</span>` : ''}
+      <div class="card-head">
+        <span class="qnum">${q.n}</span>
+        <span class="difficulty">${difficultyStars(q.diff)}</span>
+      </div>
+      <div class="topic">${q.topic}</div>
+      <div class="qtext">${q.q}</div>
+      ${teamRow('1', '#dc2626', st1)}
+      ${teamRow('2', '#2563eb', st2)}
+      ${gradeBtnRow}
+      ${gradingControls}
+    `;
+    grid.appendChild(card);
+  });
+  // Restore typed answers
+  ['1','2'].forEach(team => {
+    Object.keys(state.answers[team]).forEach(n => {
+      const inp = document.getElementById('ans-' + team + '-' + n);
+      if (inp) inp.value = state.answers[team][n];
+    });
+  });
+  // Wire up listeners
+  QUESTIONS.forEach(q => {
+    ['1','2'].forEach(team => {
+      const inp = document.getElementById('ans-' + team + '-' + q.n);
+      if (inp) inp.oninput = (e) => { state.answers[team][q.n] = e.target.value; };
+    });
+  });
+  updateScores();
+}
+function toggleSol(n) {
+  document.getElementById('sol-' + n).classList.toggle('show');
+}
+function updateScores() {
+  const ok1 = Object.values(state.status['1']).filter(v => v === 'ok').length;
+  const ok2 = Object.values(state.status['2']).filter(v => v === 'ok').length;
+  document.getElementById('team1Score').textContent = ok1;
+  document.getElementById('team2Score').textContent = ok2;
+  const allGraded = QUESTIONS.every(q => state.graded[q.n]);
+  if (allGraded) {
+    document.getElementById('finalSummary').style.display = 'block';
+    document.getElementById('winnerText').innerHTML =
+      `<div style="font-size:1.3em; margin-bottom:8px;">All questions graded</div>` +
+      `<div style="font-size:1em; color:var(--muted); font-weight:500;">Review the missed problems together as a class — explanations are open under each one.</div>`;
+  }
+}
+
+// ===== Timer (disabled — teacher grades manually) =====
+function tick() { /* no-op: timer removed in teacher mode */ }
+function finishRound() {
+  document.getElementById('finalSummary').style.display = 'block';
+  autoGrade();
+  render();
+  updateScores();
+  document.getElementById('finalSummary').scrollIntoView({ behavior: 'smooth' });
+}
+document.getElementById('startBtn').onclick = () => {
+  if (state.running || state.finished) return;
+  state.running = true;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').style.opacity = '0.5';
+  document.getElementById('instructionsBox').style.display = 'none';
+  document.getElementById('grid').style.display = 'grid';
+};
+// Grade-all button: grades any ungraded questions in one shot
+document.getElementById('gradeBtn').addEventListener('click', () => {
+  QUESTIONS.forEach(q => { if (!state.graded[q.n]) gradeOne(q.n); });
+  document.getElementById('finalSummary').scrollIntoView({ behavior: 'smooth' });
+});
+
+render();
+</script>
+</body>
+</html>
