@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen MOEMs Hub 🎯</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 30px 22px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.4em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+  .section {
+    background: white; border-radius: 16px;
+    padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    border-top: 6px solid var(--primary);
+  }
+  .section.housie { border-top-color: var(--pink); }
+  .section.team   { border-top-color: var(--info); }
+  .section.review { border-top-color: var(--good); }
+
+  .section h2 {
+    margin: 0 0 6px 0;
+    font-size: 1.5em; color: var(--primary);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section.housie h2 { color: var(--pink); }
+  .section.team h2   { color: var(--info); }
+  .section.review h2 { color: var(--good); }
+
+  .section .lede {
+    color: var(--muted); margin: 0 0 16px 0;
+    font-size: 0.95em;
+  }
+
+  .links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  a.link-card {
+    display: block; text-decoration: none; color: var(--ink);
+    background: #f8fafc;
+    border: 2px solid #e2e8f0; border-radius: 12px;
+    padding: 16px 18px;
+    transition: all 0.15s;
+  }
+  a.link-card:hover {
+    background: white; border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(124,58,237,0.18);
+  }
+  a.link-card .lc-title {
+    font-weight: 800; font-size: 1.05em;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  a.link-card .lc-desc {
+    font-size: 0.88em; color: var(--muted);
+  }
+  a.link-card .badge {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 8px;
+    font-size: 0.7em; font-weight: 800;
+    margin-left: auto;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .badge.student { background: #dbeafe; color: #1e3a8a; }
+  .badge.teacher { background: #fee2e2; color: #991b1b; }
+  .badge.combined { background: #f3e8ff; color: #6b21a8; }
+
+  footer {
+    text-align: center; padding: 30px 20px;
+    color: var(--muted); font-size: 0.85em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎯 Hansen MOEMs Hub</h1>
+  <div class="subtitle">All MOEMS practice tools in one place</div>
+</header>
+
+<div class="container">
+
+  <div class="section housie">
+    <h2>🎲 Housie (Math Bingo)</h2>
+    <p class="lede">30 unique-answer questions, 12 student cards, first to complete a row or full house wins. Open the teacher version on the projector and have each student open the student version on their device.</p>
+    <div class="links">
+      <a class="link-card" href="moems_housie_teacher.html">
+        <div class="lc-title">👩‍🏫 Housie — Teacher Console <span class="badge teacher">Teacher</span></div>
+        <div class="lc-desc">Show questions one by one · Peek answers privately · Validate BINGO claims against numbers called.</div>
+      </a>
+      <a class="link-card" href="moems_housie_student.html">
+        <div class="lc-title">🃏 Housie — Student Card <span class="badge student">Student</span></div>
+        <div class="lc-desc">Pick your name · See your unique card · Tap cells to mark when you have the answer.</div>
+      </a>
+      <a class="link-card" href="moems_housie.html">
+        <div class="lc-title">🎲 Housie — All-in-One <span class="badge combined">Combined</span></div>
+        <div class="lc-desc">Original single-screen version with questions, all 10 cards, and auto-tracked winners. Good for solo demo or small groups.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section team">
+    <h2>🏆 Team Challenges</h2>
+    <p class="lede">Multi-question team rounds modeled after MOEMS Division M. Each round has its own question set, different difficulty curve, and grading flow.</p>
+    <div class="links">
+      <a class="link-card" href="moems_team_challenge.html">
+        <div class="lc-title">📘 Round 1 — Team Challenge <span class="badge combined">Combined</span></div>
+        <div class="lc-desc">Original team round (5 questions, 30-min timer, mixed topics).</div>
+      </a>
+      <a class="link-card" href="moems_team_challenge_round2.html">
+        <div class="lc-title">📗 Round 2 — Two-Team Grading <span class="badge teacher">Teacher</span></div>
+        <div class="lc-desc">Two teams compete · Teacher grades each question after both teams submit answers. Per-question control.</div>
+      </a>
+      <a class="link-card" href="moems_team_challenge_round3_student.html">
+        <div class="lc-title">📙 Round 3 — Student (30 min) <span class="badge student">Student</span></div>
+        <div class="lc-desc">10 self-paced problems, easy → hard. Self-checked at the end. 30-minute stretch round.</div>
+      </a>
+      <a class="link-card" href="moems_team_challenge_round3_teacher.html">
+        <div class="lc-title">📙 Round 3 — Teacher (per-Q grade) <span class="badge teacher">Teacher</span></div>
+        <div class="lc-desc">Same 10 problems, teacher-driven · type student answers, grade live, see solutions.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section review">
+    <h2>📚 Review Guide</h2>
+    <p class="lede">Concept refreshers and worked examples for the topics that show up most on MOEMS Division M.</p>
+    <div class="links">
+      <a class="link-card" href="moems_review_guide.html">
+        <div class="lc-title">📖 MOEMs Review Guide <span class="badge combined">Reference</span></div>
+        <div class="lc-desc">Topic-by-topic playbook of MOEMS techniques with worked examples.</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Built for the Hansen MOEMs prep team · 2026
+</footer>
+
+</body>
+</html>
