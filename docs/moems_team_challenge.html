@@ -52,19 +52,6 @@
     opacity: 0.85;
     margin-top: 2px;
   }
-  .timer-box {
-    background: rgba(255,255,255,0.18);
-    border: 2px solid rgba(255,255,255,0.5);
-    border-radius: 12px;
-    padding: 8px 16px;
-    font-size: 1.6em;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    min-width: 120px;
-    text-align: center;
-  }
-  .timer-box.warn { background: var(--warn); border-color: white; animation: pulse 1s infinite; }
-  .timer-box.danger { background: var(--bad); border-color: white; animation: pulse 0.5s infinite; }
   @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -286,7 +273,6 @@
     .card { break-inside: avoid; }
   }
   @media (max-width: 600px) {
-    .timer-box { font-size: 1.2em; padding: 6px 10px; min-width: 90px; }
     h1 { font-size: 1.1em; }
   }
 </style>
@@ -297,12 +283,11 @@
   <div class="header-row">
     <div>
       <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs</h1>
-      <div class="subtitle" style="font-size:1em; margin-top:6px;">5-student team · 10 questions (easy → hard) · 30 minutes · timer locks input; teacher unlocks grading with a secret phrase</div>
+      <div class="subtitle" style="font-size:1em; margin-top:6px;">5-student team · 10 questions (easy → hard) · solve at your own pace · reveal answers when ready</div>
     </div>
-    <div class="timer-box" id="timer">01:00</div>
     <div class="controls">
-      <input type="text" id="unlockBox" placeholder="Secret phrase…" style="padding:8px 10px; border:none; border-radius:8px; font-size:0.95em; min-width:160px;" disabled>
       <button id="startBtn">▶ Start</button>
+      <button id="showAnswersBtn" class="reveal-btn" style="display:none; background:white; color:#16a34a;">Show Answers</button>
     </div>
   </div>
 </header>
@@ -323,11 +308,10 @@
   <div class="instructions" id="instructionsBox">
     <h3>📋 How to Run This Practice Round</h3>
     <ol>
-      <li><strong>Two teams of 5 work separately.</strong> Open this page on two laptops/tabs — one per team. Each team has its own private 30-minute round.</li>
-      <li><strong>Quick self-organization (1 min per team):</strong> skim all 10 problems, split into 2 sub-pods by topic strength (e.g., "geometry" and "number theory/algebra"), pick a "scribe" who types each agreed-upon answer into the correct box, and a "checker" who verifies before the scribe types it.</li>
-      <li><strong>Click ▶ Start.</strong> Teams have 30 minutes — <strong>this is a stretch round; they're not expected to finish all 10</strong>. Problems are ordered easy → hard (Q1 easiest, Q10 hardest). The strongest teams might solve 7–8; a finish of 5–6 is solid. Encourage them to <em>triage</em>: skim all 10 in the first 60 seconds, lock in the easy ones (Q1, Q3, Q9), then tackle the medium block (Q2, Q4, Q5, Q6), and only attempt Q7/Q8/Q10 if time allows.</li>
-      <li><strong>When the timer hits 0:00:</strong> all answer boxes lock automatically. Teams cannot type or change anything after this point. <em>No grading yet — no answers shown.</em></li>
-      <li><strong>Teacher unlocks grading:</strong> walk to each laptop and type the secret phrase into the unlock box at the top of the page. The system instantly auto-grades all 10 answers, paints ✓ or ✗ next to each, and reveals detailed step-by-step explanations under every wrong (or blank) answer.</li>
+      <li><strong>Two teams of 5 work separately.</strong> Open this page on two laptops/tabs — one per team.</li>
+      <li><strong>Quick self-organization:</strong> skim all 10 problems, split into 2 sub-pods by topic strength (e.g., "geometry" and "number theory/algebra"), pick a "scribe" who types each agreed-upon answer into the correct box, and a "checker" who verifies before the scribe types it.</li>
+      <li><strong>Click ▶ Start.</strong> Teams solve at their own pace. Problems are ordered easy → hard (Q1 easiest, Q10 hardest). Encourage them to <em>triage</em>: skim all 10 first, lock in the easy ones, then tackle the medium block, and only attempt the hardest ones after that.</li>
+      <li><strong>When ready to review:</strong> click <strong>Show Answers</strong>. The system auto-grades all 10 answers, paints ✓ or ✗ next to each, and reveals detailed step-by-step explanations under every wrong (or blank) answer.</li>
       <li><strong>Compare scores between teams</strong> and walk through the missed problems together as a class. The detailed explanations are written in plain teacher-walkthrough style — read them aloud verbatim.</li>
     </ol>
     <p style="margin: 8px 0 0 0; font-size: 0.9em; color: var(--muted);"><strong>Coaching tip:</strong> Walk between teams during the round. Don't give answers; ask "what does this remind you of?" or "have you tried small cases?" Watch which kids naturally lead, verify, or hang back — that information is more valuable than the score.</p>
@@ -557,14 +541,9 @@ function autoGrade() {
 let state = {
   status: {}, // n -> 'ok' or 'no'
   answers: {}, // n -> string typed by teacher during the round
-  timeLeft: 1 * 60,
   running: false,
-  intervalId: null,
-  timeUp: false,    // true when timer hits 0 — locks input but does NOT grade
-  finished: false   // true when teacher unlocks via secret phrase — auto-grades
+  finished: false
 };
-
-const SECRET_PHRASE = "hansen2026";   // case-insensitive; spaces ignored
 
 // ===== Render =====
 const grid = document.getElementById('grid');
@@ -579,7 +558,7 @@ function render() {
     card.className = 'card' + (st === 'ok' ? ' solved' : st === 'no' ? ' wrong' : '');
     const answerInput = `
       <div class="answer-row">
-        <input type="text" placeholder="Team's answer..." id="ans-${q.n}" ${state.timeUp ? 'readonly' : ''}>
+        <input type="text" placeholder="Team's answer..." id="ans-${q.n}">
         ${state.finished ? `<span class="auto-mark ${st}">${st === 'ok' ? '✓' : '✗'}</span>` : ''}
       </div>
     `;
@@ -651,34 +630,9 @@ function updateScores() {
   }
 }
 
-// ===== Timer =====
-function fmt(s) {
-  const m = Math.floor(s/60), sec = s%60;
-  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
-}
-function tick() {
-  if (!state.running) return;
-  state.timeLeft--;
-  const t = document.getElementById('timer');
-  t.textContent = fmt(state.timeLeft);
-  t.classList.toggle('warn', state.timeLeft <= 5*60 && state.timeLeft > 60);
-  t.classList.toggle('danger', state.timeLeft <= 60);
-  if (state.timeLeft <= 0) {
-    state.running = false;
-    clearInterval(state.intervalId);
-    state.timeUp = true;
-    document.getElementById('timer').textContent = "TIME!";
-    // Lock all answer inputs but DO NOT grade yet — wait for secret phrase
-    render();
-    // Enable the secret-phrase unlock box
-    const unlock = document.getElementById('unlockBox');
-    unlock.disabled = false;
-    unlock.placeholder = "Teacher: enter secret phrase to grade";
-    unlock.focus();
-  }
-}
 function finishRound() {
-  document.getElementById('timer').textContent = "TIME!";
+  if (state.finished) return;
+  state.finished = true;
   document.getElementById('finalSummary').style.display = 'block';
   autoGrade();
   render();
@@ -692,22 +646,9 @@ document.getElementById('startBtn').onclick = () => {
   document.getElementById('startBtn').style.opacity = '0.5';
   document.getElementById('instructionsBox').style.display = 'none';
   document.getElementById('grid').style.display = 'grid';
-  state.intervalId = setInterval(tick, 1000);
+  document.getElementById('showAnswersBtn').style.display = 'inline-block';
 };
-// Secret-phrase unlock box: when teacher types the phrase, auto-grade and reveal
-document.getElementById('unlockBox').addEventListener('input', (e) => {
-  if (state.finished) return;
-  const typed = e.target.value.toLowerCase().replace(/\s+/g, '');
-  if (typed === SECRET_PHRASE.toLowerCase().replace(/\s+/g, '')) {
-    state.finished = true;
-    e.target.disabled = true;
-    e.target.value = '✓ unlocked';
-    e.target.style.background = '#16a34a';
-    e.target.style.color = 'white';
-    e.target.style.fontWeight = '700';
-    finishRound();
-  }
-});
+document.getElementById('showAnswersBtn').onclick = finishRound;
 
 render();
 </script>

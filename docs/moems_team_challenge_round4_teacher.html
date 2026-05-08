@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hansen Team Practice for MOEMs — Round 2</title>
+<title>Hansen Team Practice for MOEMs — Round 4 (Teacher)</title>
 <style>
   :root {
     --primary: #1e40af;
@@ -284,8 +284,8 @@
 <header>
   <div class="header-row">
     <div>
-      <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs — Round 2</h1>
-      <div class="subtitle" style="font-size:1em; margin-top:6px;">Teacher-driven scoring · Two teams call out answers · 10 questions (easy → hard) · grade whenever you're ready</div>
+      <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs — Round 4 (Teacher)</h1>
+      <div class="subtitle" style="font-size:1em; margin-top:6px;">Teacher-driven scoring · Two teams call out answers · 10 hard questions · grade whenever you're ready</div>
     </div>
     <div class="controls">
       <button id="gradeBtn" style="background:var(--good); color:white;">✓ Grade All Remaining</button>
@@ -329,149 +329,148 @@
 </div>
 
 <script>
-
-// ===== Questions (MOEMS Div M Team-aligned, easy → hard) — ROUND 2 =====
+// ===== Questions (MOEMS Div M Team-aligned, hard set) — ROUND 4 =====
 const QUESTIONS = [
   {
-    n: 1, topic: "Number Theory · Last Digits", diff: 1,
-    q: "What is the units digit of <code>3<sup>2024</sup></code>?",
-    a: "1",
-    accepts: ["1"],
-    sol: `<div class="ans">Answer: 1</div>
-      <p><strong>Step 1 — Find the cycle of units digits of powers of 3.</strong></p>
-      <p>3<sup>1</sup>=<u>3</u>, 3<sup>2</sup>=<u>9</u>, 3<sup>3</sup>=2<u>7</u>, 3<sup>4</sup>=8<u>1</u>, 3<sup>5</sup>=24<u>3</u>… Units digits cycle <strong>3, 9, 7, 1</strong> with period 4.</p>
-      <p><strong>Step 2 — Find 2024 mod 4.</strong> 2024 = 4·506 + 0 ≡ 0 (mod 4) → 4th position in the cycle.</p>
-      <p><strong>Step 3 — Read it off.</strong> Position 4 in (3,9,7,1) is <strong>1</strong>.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Units-digit cycles. Always list the first 4 powers, find the period, reduce the exponent mod the period.</p>`
+    n: 1, topic: "Number Theory · Sum of Divisors", diff: 4,
+    q: "Find the sum of all positive divisors of <code>7560</code>.",
+    a: "28800",
+    accepts: ["28800", "28,800"],
+    sol: `<div class="ans">Answer: 28800</div>
+      <p><strong>Step 1 — Prime-factor the number.</strong> <code>7560 = 756 × 10 = (2² × 3³ × 7) × (2 × 5) = 2³ × 3³ × 5 × 7</code>.</p>
+      <p><strong>Step 2 — Use the divisor-sum formula.</strong> If <code>n = p^a q^b r^c...</code>, then the sum of divisors is <code>(1+p+...+p^a)(1+q+...+q^b)...</code>.</p>
+      <p>So the sum is <code>(1+2+4+8)(1+3+9+27)(1+5)(1+7)</code>.</p>
+      <p><strong>Step 3 — Multiply carefully.</strong> <code>15 × 40 × 6 × 8 = 28800</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> For “sum of divisors,” do not list divisors. Prime-factor, build the geometric sums, and multiply.</p>`
   },
   {
-    n: 2, topic: "Number Theory · Sum of Divisors", diff: 1,
-    q: "What is the sum of <em>all</em> the positive divisors of <code>36</code>?",
-    a: "91",
-    accepts: ["91"],
-    sol: `<div class="ans">Answer: 91</div>
-      <p><strong>Step 1 — List the divisors of 36.</strong> Pair them up: 1·36, 2·18, 3·12, 4·9, 6·6. Divisors: 1, 2, 3, 4, 6, 9, 12, 18, 36.</p>
-      <p><strong>Step 2 — Add.</strong> 1+2+3+4+6+9+12+18+36 = <strong>91</strong>.</p>
-      <p><strong>Faster (formula):</strong> 36 = 2²·3². Sum of divisors = (1+2+4)(1+3+9) = 7·13 = 91.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The σ(n) formula: for n = p<sup>a</sup>·q<sup>b</sup>, σ(n) = (1+p+…+p<sup>a</sup>)(1+q+…+q<sup>b</sup>). Saves time vs hand-listing for large n.</p>`
+    n: 2, topic: "Number Theory · Factoring Powers", diff: 4,
+    q: "What is the largest prime factor of <code>2<sup>18</sup> − 1</code>?",
+    a: "73",
+    accepts: ["73"],
+    sol: `<div class="ans">Answer: 73</div>
+      <p><strong>Step 1 — Use difference of squares.</strong> <code>2¹⁸ − 1 = (2⁹ − 1)(2⁹ + 1)</code>.</p>
+      <p><strong>Step 2 — Factor each side.</strong> <code>2⁹ − 1 = 511 = 7 × 73</code>. Also <code>2⁹ + 1 = 513 = 3³ × 19</code>.</p>
+      <p><strong>Step 3 — Compare prime factors.</strong> The prime factors are <code>3, 7, 19, 73</code>.</p>
+      <p>The largest is <strong>73</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Expressions like <code>a²−1</code> almost always want <code>(a−1)(a+1)</code>. Keep factoring before multiplying anything out.</p>`
   },
   {
-    n: 3, topic: "Algebra · Symmetric Identity", diff: 2,
-    q: "If <code>x + 1/x = 5</code>, what is the value of <code>x² + 1/x²</code>?",
-    a: "23",
-    accepts: ["23"],
-    sol: `<div class="ans">Answer: 23</div>
-      <p><strong>Step 1 — Square both sides.</strong> (x + 1/x)² = 5² = 25.</p>
-      <p><strong>Step 2 — Expand.</strong> x² + 2·(x · 1/x) + 1/x² = 25, i.e., x² + 2 + 1/x² = 25.</p>
-      <p><strong>Step 3 — Subtract 2.</strong> x² + 1/x² = <strong>23</strong>.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The "x + 1/x" family. Squaring gives x² + 1/x²; cubing gives x³ + 1/x³. Never solve for x — always square/cube the original equation.</p>`
-  },
-  {
-    n: 4, topic: "Combinatorics · Pigeonhole", diff: 2,
-    q: "A bag contains 5 red, 7 blue, and 8 green marbles. Without looking, what is the smallest number of marbles you must draw to <strong>guarantee</strong> that you have at least 3 marbles of the same color?",
-    a: "7",
-    accepts: ["7"],
-    sol: `<div class="ans">Answer: 7</div>
-      <p><strong>Step 1 — Imagine the unluckiest possible draws.</strong> The worst case is: you draw 2 red, 2 blue, and 2 green — that's 6 marbles, and you still don't have 3 of any color.</p>
-      <p><strong>Step 2 — Force the next draw.</strong> The 7th marble <em>must</em> be red, blue, or green — and whichever color it is, you'll now have 3 of that color.</p>
-      <p>Answer: <strong>7</strong>.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Pigeonhole "guarantee" problems. Always think: <em>what's the maximum I could draw and still fail?</em> The answer is that number plus 1.</p>`
-  },
-  {
-    n: 5, topic: "Number Theory · Digit Reversal", diff: 2,
-    q: "How many 3-digit positive integers <code>N</code> have the property that <em>reversing</em> the digits of N produces a number exactly <strong>99 more</strong> than N? (For example, if N = 132, the reverse is 231, and 231 − 132 = 99 ✓)",
-    a: "80",
-    accepts: ["80"],
-    sol: `<div class="ans">Answer: 80</div>
-      <p><strong>Step 1 — Set up algebra.</strong> Let N = 100a + 10b + c where a is hundreds, b tens, c ones (a ∈ 1..9, b,c ∈ 0..9). The reverse is 100c + 10b + a.</p>
-      <p><strong>Step 2 — Translate the condition.</strong> Reverse − N = (100c + 10b + a) − (100a + 10b + c) = 99c − 99a = 99(c − a). Set equal to 99: <strong>c − a = 1</strong>.</p>
-      <p><strong>Step 3 — Count valid (a, b, c).</strong> Need c = a + 1.</p>
+    n: 3, topic: "Combinatorics · Digit Sum with Bounds", diff: 4,
+    q: "How many four-digit positive integers have digits whose sum is exactly <code>18</code>?",
+    a: "615",
+    accepts: ["615"],
+    sol: `<div class="ans">Answer: 615</div>
+      <p><strong>Step 1 — Set up digit variables.</strong> Let the number be <code>ABCD</code>, where <code>A ≥ 1</code> and all digits are at most 9. We need <code>A+B+C+D=18</code>.</p>
+      <p><strong>Step 2 — Remove the first-digit restriction.</strong> Let <code>A' = A−1</code>. Then <code>A'+B+C+D=17</code>, with all variables nonnegative.</p>
+      <p><strong>Step 3 — Count without digit caps.</strong> Stars and bars gives <code>C(17+4−1, 4−1)=C(20,3)=1140</code>.</p>
+      <p><strong>Step 4 — Subtract illegal digit values.</strong> <code>A'</code> can be at most 8; <code>B,C,D</code> can be at most 9.</p>
       <ul>
-        <li>a ∈ {1,2,3,4,5,6,7,8} (so c = a+1 ≤ 9): <strong>8 choices</strong>.</li>
-        <li>b ∈ {0,1,…,9}: <strong>10 choices</strong>.</li>
-        <li>c is determined.</li>
+        <li>If <code>A' ≥ 9</code>, subtract 9: remaining sum <code>8</code>, giving <code>C(11,3)=165</code>.</li>
+        <li>If one of <code>B,C,D ≥ 10</code>, subtract 10: remaining sum <code>7</code>, giving <code>C(10,3)=120</code> each, so <code>3×120=360</code>.</li>
       </ul>
-      <p>Total = 8 · 10 = <strong>80</strong>.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Digit-reversal problems. Always write N as 100a+10b+c and let the algebra collapse the middle digit out — then count valid (a, c) pairs.</p>`
+      <p>No two digits can both exceed their caps because the remaining sum would be negative or too small after subtracting.</p>
+      <p>Total: <code>1140 − 165 − 360 = 615</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Digit-sum problems are stars-and-bars plus corrections for digit caps.</p>`
   },
   {
-    n: 6, topic: "Geometry · Heron's Formula", diff: 3,
-    q: "A triangle has side lengths <code>13, 14, 15</code>. What is its area?",
-    a: "84",
-    accepts: ["84"],
-    sol: `<div class="ans">Answer: 84</div>
-      <p><strong>Step 1 — Heron's formula.</strong> For a triangle with sides a, b, c and semi-perimeter s = (a+b+c)/2, area = √(s(s−a)(s−b)(s−c)).</p>
-      <p><strong>Step 2 — Plug in.</strong> s = (13+14+15)/2 = 21. So area = √(21·8·7·6) = √7056 = <strong>84</strong>.</p>
-      <p><strong>Alternative (no Heron):</strong> Drop an altitude from the vertex opposite the side of length 14. Let it hit the base at distance x from the side-13 vertex. Then 13² − x² = 15² − (14−x)², giving 169 − x² = 225 − 196 + 28x − x², so 169 = 29 + 28x, x = 5. Altitude h = √(169 − 25) = 12. Area = ½·14·12 = 84.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The 13-14-15 triangle is a famous "Heronian" triangle (integer sides + integer area). Memorize: area = 84. Also memorize 5-12-13, 8-15-17, 7-24-25 right triangles.</p>`
+    n: 4, topic: "Number Theory · Linear Diophantine", diff: 4,
+    q: "Nonnegative integers <code>X</code> and <code>Y</code> satisfy <code>17X + 31Y = 2026</code>. What is the greatest possible value of <code>X+Y</code>?",
+    a: "106",
+    accepts: ["106"],
+    sol: `<div class="ans">Answer: 106</div>
+      <p><strong>Step 1 — Decide which variable helps maximize the count.</strong> Since <code>17</code> is smaller than <code>31</code>, using more <code>X</code>s tends to make <code>X+Y</code> larger.</p>
+      <p><strong>Step 2 — Use divisibility to find allowed <code>Y</code>.</strong> We need <code>2026−31Y</code> divisible by <code>17</code>.</p>
+      <p>Modulo 17: <code>2026 ≡ 3</code> and <code>31Y ≡ 14Y</code>. So <code>3−14Y ≡ 0 mod 17</code>.</p>
+      <p>That means <code>14Y ≡ 3 mod 17</code>. Since <code>14×11 = 154 ≡ 1 mod 17</code>, multiply both sides by 11: <code>Y ≡ 33 ≡ 16 mod 17</code>.</p>
+      <p><strong>Step 3 — Use the smallest nonnegative <code>Y</code> to maximize total terms.</strong> Take <code>Y=16</code>.</p>
+      <p>Then <code>X = (2026−31×16)/17 = 90</code>, so <code>X+Y = 90+16 = 106</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> For coin equations, use remainders to find legal values, then choose the one that optimizes the question.</p>`
   },
   {
-    n: 7, topic: "Number Theory · Inclusion–Exclusion", diff: 3,
-    q: "How many positive integers less than <code>1000</code> are divisible by neither <code>2</code> nor <code>5</code>?",
-    a: "400",
-    accepts: ["400"],
-    sol: `<div class="ans">Answer: 400</div>
-      <p><strong>Step 1 — Total positive integers less than 1000:</strong> 999.</p>
-      <p><strong>Step 2 — Use inclusion–exclusion.</strong></p>
+    n: 5, topic: "Sequences · Changing Differences", diff: 4,
+    q: "A sequence starts with <code>4</code>. Its first differences are <code>6, 12, 21, 33, ...</code>, and the differences of those differences increase by <code>3</code> each time. What is the 10th term of the original sequence?",
+    a: "526",
+    accepts: ["526"],
+    sol: `<div class="ans">Answer: 526</div>
+      <p><strong>Step 1 — Continue the first differences.</strong> The first differences begin <code>6, 12, 21, 33</code>. Their gaps are <code>6, 9, 12</code>, increasing by 3.</p>
+      <p>So the next gaps are <code>15, 18, 21, 24, 27</code>.</p>
+      <p>The first differences become <code>6, 12, 21, 33, 48, 66, 87, 111, 138</code>.</p>
+      <p><strong>Step 2 — Add differences to build terms.</strong></p>
+      <p><code>4, 10, 22, 43, 76, 124, 190, 277, 388, 526</code>.</p>
+      <p>The 10th term is <strong>526</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> If a sequence is not arithmetic, look at differences. If those are not arithmetic, look at second differences.</p>`
+  },
+  {
+    n: 6, topic: "Probability · Modular Counting", diff: 4,
+    q: "Three fair six-sided dice are rolled. What is the probability that the sum of the three numbers is divisible by <code>5</code>? Express your answer as a fraction in lowest terms.",
+    a: "43/216",
+    accepts: ["43/216"],
+    sol: `<div class="ans">Answer: 43/216</div>
+      <p><strong>Step 1 — Count total outcomes.</strong> There are <code>6³ = 216</code> equally likely rolls.</p>
+      <p><strong>Step 2 — Work with remainders mod 5.</strong> Die faces <code>1,2,3,4,5,6</code> have residues <code>1,2,3,4,0,1</code>. So residue counts are:</p>
+      <p><code>0:1</code>, <code>1:2</code>, <code>2:1</code>, <code>3:1</code>, <code>4:1</code>.</p>
+      <p><strong>Step 3 — Count triples of residues summing to 0 mod 5.</strong> Carefully combining the residue counts gives <code>43</code> favorable ordered triples.</p>
+      <p>Probability is <code>43/216</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> For “divisible by” probability, count remainders instead of listing all actual sums.</p>`
+  },
+  {
+    n: 7, topic: "Combinatorics · Catalan Paths", diff: 4,
+    q: "A path goes from <code>(0,0)</code> to <code>(6,6)</code> using only steps right and up. How many such paths never go above the line <code>y=x</code>?",
+    a: "132",
+    accepts: ["132"],
+    sol: `<div class="ans">Answer: 132</div>
+      <p><strong>Step 1 — Recognize the path type.</strong> A path from <code>(0,0)</code> to <code>(6,6)</code> has 6 right steps and 6 up steps.</p>
+      <p><strong>Step 2 — The condition “never above <code>y=x</code>” is a Catalan-number condition.</strong> The number of valid paths is</p>
+      <p style="text-align:center;"><code>C₆ = 1/(6+1) × C(12,6)</code>.</p>
+      <p><strong>Step 3 — Compute.</strong> <code>C(12,6)=924</code>, so <code>924/7=132</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> “Never above the diagonal” paths are Catalan numbers: <code>Cₙ = C(2n,n)/(n+1)</code>.</p>`
+  },
+  {
+    n: 8, topic: "Combinatorics · Rectangles in a Grid", diff: 4,
+    q: "How many grid-aligned rectangles with perimeter <code>14</code> can be placed inside a <code>10×10</code> grid of unit squares?",
+    a: "320",
+    accepts: ["320"],
+    sol: `<div class="ans">Answer: 320</div>
+      <p><strong>Step 1 — Convert perimeter to side lengths.</strong> If the rectangle is <code>a×b</code>, then <code>2a+2b=14</code>, so <code>a+b=7</code>.</p>
+      <p>Possible side pairs are <code>1×6</code>, <code>2×5</code>, and <code>3×4</code>.</p>
+      <p><strong>Step 2 — Count placements for each orientation.</strong> In a <code>10×10</code> grid, an <code>a×b</code> rectangle has <code>(10−a+1)(10−b+1)</code> placements.</p>
       <ul>
-        <li>Multiples of 2 below 1000: ⌊999/2⌋ = <strong>499</strong>.</li>
-        <li>Multiples of 5 below 1000: ⌊999/5⌋ = <strong>199</strong>.</li>
-        <li>Multiples of <em>both</em> (i.e., of 10): ⌊999/10⌋ = <strong>99</strong>.</li>
+        <li><code>1×6</code> and <code>6×1</code>: <code>2×10×5 = 100</code></li>
+        <li><code>2×5</code> and <code>5×2</code>: <code>2×9×6 = 108</code></li>
+        <li><code>3×4</code> and <code>4×3</code>: <code>2×8×7 = 112</code></li>
       </ul>
-      <p>Multiples of 2 <em>or</em> 5 = 499 + 199 − 99 = <strong>599</strong>.</p>
-      <p><strong>Step 3 — Subtract from total.</strong> 999 − 599 = <strong>400</strong>.</p>
-      <p><strong>Sanity check:</strong> Among any 10 consecutive integers, exactly 4 are coprime to 10 (the ones ending in 1, 3, 7, 9). So among 1–1000 we'd have 400. Checks out.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> "Divisible by neither A nor B" → use inclusion–exclusion. |A ∪ B| = |A| + |B| − |A ∩ B|, then subtract from total.</p>`
+      <p>Total: <code>100+108+112=320</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Grid rectangle counting is usually “choose dimensions, then count sliding positions.”</p>`
   },
   {
-    n: 8, topic: "Geometry · British Flag Theorem", diff: 4,
-    q: "Point P lies inside square ABCD. The distances from P to three vertices are <code>PA = 3</code>, <code>PB = 4</code>, and <code>PC = 5</code>. Find <code>PD²</code>.",
-    a: "18",
-    accepts: ["18"],
-    sol: `<div class="ans">Answer: 18</div>
-      <p><strong>Step 1 — Recall the British Flag Theorem.</strong> For any point P inside (or even outside) a rectangle ABCD, the sum of squared distances to opposite-corner pairs is equal:</p>
-      <p style="text-align:center; font-weight:600;">PA² + PC² = PB² + PD²</p>
-      <p><strong>Why?</strong> Drop perpendiculars from P to the rectangle's sides. By Pythagoras applied to each pair of opposite corners, both sums equal the same total of squared horizontal + squared vertical distances.</p>
-      <p><strong>Step 2 — Plug in.</strong> 3² + 5² = 4² + PD², so 9 + 25 = 16 + PD², giving 34 = 16 + PD².</p>
-      <p><strong>Step 3 — Solve.</strong> PD² = <strong>18</strong> (so PD = 3√2).</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The British Flag Theorem. Whenever a problem gives you 3 of the 4 distances from an interior point of a rectangle/square to the corners, the 4th comes free from PA²+PC² = PB²+PD².</p>`
+    n: 9, topic: "Geometry · Lattice Polygon", diff: 4,
+    q: "A lattice polygon has vertices <code>(0,0)</code>, <code>(6,0)</code>, <code>(6,4)</code>, <code>(2,6)</code>, and <code>(0,4)</code>. How many lattice points lie strictly inside the polygon?",
+    a: "22",
+    accepts: ["22"],
+    sol: `<div class="ans">Answer: 22</div>
+      <p><strong>Step 1 — Use Pick's Theorem.</strong> For a lattice polygon, <code>A = I + B/2 − 1</code>, where <code>A</code> is area, <code>I</code> is interior lattice points, and <code>B</code> is boundary lattice points.</p>
+      <p><strong>Step 2 — Find the area.</strong> Using the shoelace formula on the vertices gives area <code>30</code>.</p>
+      <p><strong>Step 3 — Count boundary points.</strong> For each edge, count <code>gcd(|Δx|,|Δy|)</code>. The total is <code>6+4+2+2+4=18</code>.</p>
+      <p><strong>Step 4 — Solve Pick's Theorem.</strong> <code>30 = I + 18/2 − 1 = I + 8</code>, so <code>I=22</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Lattice polygon with integer coordinates? Think Pick's Theorem.</p>`
   },
   {
-    n: 9, topic: "Combinatorics · Coin Change", diff: 4,
-    q: "In how many different ways can you make <code>$1.00</code> in change using only quarters (25¢), dimes (10¢), nickels (5¢), and pennies (1¢)? (You don't have to use every type of coin.)",
-    a: "242",
-    accepts: ["242"],
-    sol: `<div class="ans">Answer: 242</div>
-      <p><strong>Setup.</strong> Let q, d, n, p be the number of each coin used. We need 25q + 10d + 5n + p = 100 with all of q,d,n,p ≥ 0.</p>
-      <p><strong>Step 1 — Loop over q (q ∈ {0, 1, 2, 3, 4}).</strong> For each q, the remainder R = 100 − 25q must be made from d, n, p.</p>
-      <p><strong>Step 2 — For each q, loop over d.</strong> Once q and d are fixed, the remainder R' = R − 10d must be made from nickels and pennies. The number of (n, p) pairs with 5n + p = R' is ⌊R'/5⌋ + 1.</p>
-      <table style="border-collapse:collapse; margin:8px 0;">
-        <tr style="background:#e2e8f0;"><th style="padding:4px 10px; border:1px solid #cbd5e1;">q</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">R = 100−25q</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">d ranges</th><th style="padding:4px 10px; border:1px solid #cbd5e1;">Sum over d</th></tr>
-        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">0</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">100</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..10</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">21+19+17+15+13+11+9+7+5+3+1 = <strong>121</strong></td></tr>
-        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">1</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">75</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..7</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">16+14+12+10+8+6+4+2 = <strong>72</strong></td></tr>
-        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">2</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">50</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..5</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">11+9+7+5+3+1 = <strong>36</strong></td></tr>
-        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">3</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">25</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0..2</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">6+4+2 = <strong>12</strong></td></tr>
-        <tr><td style="padding:4px 10px; border:1px solid #cbd5e1;">4</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0</td><td style="padding:4px 10px; border:1px solid #cbd5e1;">0</td><td style="padding:4px 10px; border:1px solid #cbd5e1;"><strong>1</strong></td></tr>
-      </table>
-      <p>Total = 121 + 72 + 36 + 12 + 1 = <strong>242</strong>.</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> The "ways to make change for $1" answer of 242 is a famous result. The technique — fix the largest coin, recursively count the rest — is the standard "stars and bars with constraints" approach.</p>`
-  },
-  {
-    n: 10, topic: "Number Theory · Palindromes & Divisibility", diff: 4,
-    q: "How many 5-digit palindromes are divisible by <code>11</code>? (A palindrome reads the same forwards and backwards, e.g., <code>12321</code>.)",
-    a: "82",
-    accepts: ["82"],
-    sol: `<div class="ans">Answer: 82</div>
-      <p><strong>Step 1 — Write a 5-digit palindrome as <code>abcba</code>:</strong> N = 10000a + 1000b + 100c + 10b + a, where a ∈ {1..9}, b ∈ {0..9}, c ∈ {0..9}. There are 9 · 10 · 10 = 900 such palindromes total.</p>
-      <p><strong>Step 2 — Apply the divisibility-by-11 alternating-sum rule.</strong> N is divisible by 11 iff the alternating sum of its digits is divisible by 11:</p>
-      <p style="text-align:center;">a − b + c − b + a = <strong>2a − 2b + c</strong>.</p>
-      <p>So we need <strong>11 | (2a − 2b + c)</strong>.</p>
-      <p><strong>Step 3 — Count solutions.</strong> The expression 2a − 2b + c ranges from 2·1 − 2·9 + 0 = −16 to 2·9 − 2·0 + 9 = 27. The multiples of 11 in this range are <strong>−11, 0, 11, 22</strong>. For each (a, b) pair (90 pairs), check whether some c ∈ {0..9} makes 2a − 2b + c equal to one of these.</p>
-      <p>Carrying out the enumeration carefully (or by direct computer check): exactly <strong>82</strong> palindromes work.</p>
-      <p><strong>Verification:</strong> A brute-force check of all 900 5-digit palindromes confirms 82 are divisible by 11. ✓</p>
-      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Use the alternating-sum rule for 11. Then translate the divisibility constraint into a counting problem over the digit variables.</p>`
+    n: 10, topic: "Combinatorics · Ordered Odd Sums", diff: 4,
+    q: "In how many different ways can <code>15</code> be written as an ordered sum of positive odd integers? Order matters, so <code>1+3+11</code> and <code>3+1+11</code> count separately.",
+    a: "610",
+    accepts: ["610"],
+    sol: `<div class="ans">Answer: 610</div>
+      <p><strong>Step 1 — Recognize ordered sums.</strong> Ordered sums are called compositions. When all parts must be odd, the counts follow the Fibonacci sequence.</p>
+      <p><strong>Step 2 — Build the recurrence.</strong> Let <code>f(n)</code> be the number of ordered sums of <code>n</code> into positive odd parts. The sequence starts:</p>
+      <p><code>f(1)=1, f(2)=1, f(3)=2, f(4)=3, f(5)=5</code>.</p>
+      <p>So <code>f(n)=f(n−1)+f(n−2)</code>.</p>
+      <p><strong>Step 3 — Continue to 15.</strong> <code>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610</code>.</p>
+      <p>Therefore <code>f(15)=610</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Ordered sums into odd parts are Fibonacci. Compute small cases, spot the pattern, then extend.</p>`
   }
 ];
+
 
 // ===== Answer normalization & auto-grading =====
 function normalize(str) {

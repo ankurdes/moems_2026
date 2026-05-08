@@ -52,19 +52,6 @@
     opacity: 0.85;
     margin-top: 2px;
   }
-  .timer-box {
-    background: rgba(255,255,255,0.18);
-    border: 2px solid rgba(255,255,255,0.5);
-    border-radius: 12px;
-    padding: 8px 16px;
-    font-size: 1.6em;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    min-width: 120px;
-    text-align: center;
-  }
-  .timer-box.warn { background: var(--warn); border-color: white; animation: pulse 1s infinite; }
-  .timer-box.danger { background: var(--bad); border-color: white; animation: pulse 0.5s infinite; }
   @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -286,56 +273,13 @@
     .card { break-inside: avoid; }
   }
   @media (max-width: 600px) {
-    .timer-box { font-size: 1.2em; padding: 6px 10px; min-width: 90px; }
     h1 { font-size: 1.1em; }
   }
 </style>
 </head>
 <body>
 
-<!-- ===== Teacher password gate (2-digit) ===== -->
-<div id="pwGate" style="position:fixed; inset:0; z-index:9999;
-     background:linear-gradient(135deg,#1e1b4b 0%,#7c3aed 50%,#ec4899 100%);
-     display:flex; align-items:center; justify-content:center;">
-  <div style="background:white; border-radius:16px; padding:32px 40px;
-       box-shadow:0 10px 40px rgba(0,0,0,0.3); text-align:center; max-width:360px;">
-    <div style="font-size:2.5em; margin-bottom:8px;">🔒</div>
-    <h2 style="margin:0 0 6px 0; color:#1e1b4b;">Teacher Page</h2>
-    <p style="color:#64748b; margin:0 0 18px 0; font-size:0.9em;">Enter the 2-digit teacher passcode to continue.</p>
-    <input id="pwInput" type="password" inputmode="numeric" maxlength="2"
-      style="width:120px; padding:12px; font-size:1.6em; text-align:center;
-      border:2px solid #cbd5e1; border-radius:10px; font-weight:800; letter-spacing:0.3em;
-      color:#1e1b4b;" autofocus>
-    <div id="pwError" style="color:#dc2626; font-weight:700; min-height:22px; margin-top:10px; font-size:0.9em;"></div>
-    <button id="pwBtn" style="margin-top:6px; background:#7c3aed; color:white; border:none;
-      border-radius:10px; padding:10px 24px; font-weight:800; cursor:pointer; font-size:1em;">Unlock</button>
-  </div>
-</div>
-<script>
-(function(){
-  const PASSWORD = "23";
-  if (sessionStorage.getItem("teacher_unlocked") === "1") {
-    document.getElementById("pwGate").remove();
-    return;
-  }
-  const input = document.getElementById("pwInput");
-  const err = document.getElementById("pwError");
-  const btn = document.getElementById("pwBtn");
-  function tryUnlock() {
-    if (input.value === PASSWORD) {
-      sessionStorage.setItem("teacher_unlocked", "1");
-      document.getElementById("pwGate").remove();
-    } else {
-      err.textContent = "Wrong passcode. Try again.";
-      input.value = "";
-      input.focus();
-    }
-  }
-  btn.addEventListener("click", tryUnlock);
-  input.addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
-})();
-</script>
-<!-- ===== End password gate ===== -->
+
 
 <header>
   <div class="header-row">
@@ -367,7 +311,7 @@
     <h3>📋 How to Run This Practice Round (Teacher-Driven)</h3>
     <ol>
       <li><strong>One screen, both teams in the same room.</strong> The two teams of 5 work simultaneously on paper at separate tables. You (the teacher) hold the laptop with this page.</li>
-      <li><strong>Click ▶ Start</strong> to reveal all 10 problems. Read each problem aloud (or hand out a printed copy). <em>No timer — work at whatever pace fits the room.</em></li>
+      <li><strong>Click ▶ Start</strong> to reveal all 10 problems. Read each problem aloud (or hand out a printed copy). <em>Work at whatever pace fits the room.</em></li>
       <li><strong>For each question, type both teams' answers in the red and blue boxes, then click "✓ Grade Q#"</strong> directly below that question. The system instantly shows ✓/✗ next to each team's answer, reveals the correct answer, and — if either team got it wrong — auto-reveals the full step-by-step explanation right there for class review.</li>
       <li><strong>Running scores</strong> at the top update after every question you grade.</li>
       <li><strong>Optional:</strong> the "✓ Grade All Remaining" button at the top grades any remaining ungraded questions in one go (useful for cleanup at the end).</li>
@@ -706,8 +650,6 @@ function updateScores() {
   }
 }
 
-// ===== Timer (disabled — teacher grades manually) =====
-function tick() { /* no-op: timer removed in teacher mode */ }
 function finishRound() {
   document.getElementById('finalSummary').style.display = 'block';
   autoGrade();

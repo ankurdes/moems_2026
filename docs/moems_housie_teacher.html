@@ -157,49 +157,7 @@
 </head>
 <body>
 
-<!-- ===== Teacher password gate (2-digit) ===== -->
-<div id="pwGate" style="position:fixed; inset:0; z-index:9999;
-     background:linear-gradient(135deg,#1e1b4b 0%,#7c3aed 50%,#ec4899 100%);
-     display:flex; align-items:center; justify-content:center;">
-  <div style="background:white; border-radius:16px; padding:32px 40px;
-       box-shadow:0 10px 40px rgba(0,0,0,0.3); text-align:center; max-width:360px;">
-    <div style="font-size:2.5em; margin-bottom:8px;">🔒</div>
-    <h2 style="margin:0 0 6px 0; color:#1e1b4b;">Teacher Page</h2>
-    <p style="color:#64748b; margin:0 0 18px 0; font-size:0.9em;">Enter the 2-digit teacher passcode to continue.</p>
-    <input id="pwInput" type="password" inputmode="numeric" maxlength="2"
-      style="width:120px; padding:12px; font-size:1.6em; text-align:center;
-      border:2px solid #cbd5e1; border-radius:10px; font-weight:800; letter-spacing:0.3em;
-      color:#1e1b4b;" autofocus>
-    <div id="pwError" style="color:#dc2626; font-weight:700; min-height:22px; margin-top:10px; font-size:0.9em;"></div>
-    <button id="pwBtn" style="margin-top:6px; background:#7c3aed; color:white; border:none;
-      border-radius:10px; padding:10px 24px; font-weight:800; cursor:pointer; font-size:1em;">Unlock</button>
-  </div>
-</div>
-<script>
-(function(){
-  const PASSWORD = "23";
-  if (sessionStorage.getItem("teacher_unlocked") === "1") {
-    document.getElementById("pwGate").remove();
-    return;
-  }
-  const input = document.getElementById("pwInput");
-  const err = document.getElementById("pwError");
-  const btn = document.getElementById("pwBtn");
-  function tryUnlock() {
-    if (input.value === PASSWORD) {
-      sessionStorage.setItem("teacher_unlocked", "1");
-      document.getElementById("pwGate").remove();
-    } else {
-      err.textContent = "Wrong passcode. Try again.";
-      input.value = "";
-      input.focus();
-    }
-  }
-  btn.addEventListener("click", tryUnlock);
-  input.addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
-})();
-</script>
-<!-- ===== End password gate ===== -->
+
 
 <header>
   <div class="header-row">

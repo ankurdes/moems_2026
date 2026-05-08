@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen Team Practice for MOEMs — Round 4 (Student)</title>
+<style>
+  :root {
+    --primary: #1e40af;
+    --accent: #f59e0b;
+    --teamA: #dc2626;
+    --teamB: #2563eb;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --warn: #ea580c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+    color: white;
+    padding: 18px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.4em;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    font-size: 0.85em;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+  }
+  button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95em;
+  }
+  button:hover { background: var(--accent); color: white; }
+  button.danger { background: var(--bad); color: white; }
+  button.danger:hover { background: #991b1b; }
+
+  .scoreboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 22px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .stat {
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: white;
+    text-align: center;
+  }
+  .stat.solved { background: var(--good); }
+  .stat.attempted { background: var(--bad); }
+  .stat-label { font-size: 0.8em; opacity: 0.9; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+  .stat-value { font-size: 2.2em; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin-top: 4px; }
+  .auto-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-left: 6px;
+  }
+  .auto-mark.ok { background: var(--good); }
+  .auto-mark.no { background: var(--bad); }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .instructions {
+    background: #fef9e7;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .instructions h3 { margin-top: 0; color: var(--accent); }
+  .instructions ol { margin: 6px 0; padding-left: 20px; }
+  .instructions li { margin: 4px 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .card.solved { border-color: var(--good); background: #f0fdf4; }
+  .card.wrong { border-color: var(--bad); background: #fef2f2; }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .qnum {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+  .difficulty {
+    font-size: 0.75em;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .topic {
+    font-size: 0.7em;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .qtext {
+    font-size: 0.98em;
+    line-height: 1.55;
+    margin: 8px 0 12px 0;
+  }
+  .qtext code {
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.95em;
+  }
+
+  .answer-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .answer-row input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  .award-btns {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .award-btns button {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 0.85em;
+    border-radius: 6px;
+  }
+  .award-correct { background: var(--good); color: white; }
+  .award-correct:hover { background: #15803d; color: white; }
+  .award-wrong { background: var(--bad); color: white; }
+  .award-wrong:hover { background: #991b1b; color: white; }
+  .award-skip { background: #e2e8f0; color: var(--ink); }
+  .award-skip:hover { background: #cbd5e1; color: var(--ink); }
+
+  .reveal-btn {
+    background: #f1f5f9;
+    color: var(--ink);
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    font-size: 0.82em;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .reveal-btn:hover { background: var(--primary); color: white; }
+
+  .solution {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #ecfdf5;
+    border-left: 3px solid var(--good);
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .solution.show { display: block; }
+  .solution .ans {
+    font-weight: 700;
+    color: var(--good);
+    font-size: 1.05em;
+  }
+  .solved-tag {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.75em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: white;
+  }
+  .solved-tag.ok { background: var(--good); }
+  .solved-tag.no { background: var(--bad); }
+
+  .footer-summary {
+    background: white;
+    border-top: 2px solid var(--primary);
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .winner-banner {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  @media print {
+    header, .controls, .answer-row, .award-btns, .reveal-btn { display: none !important; }
+    .solution { display: block !important; }
+    .card { break-inside: avoid; }
+  }
+  @media (max-width: 600px) {
+    h1 { font-size: 1.1em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1 style="font-size:2.2em; font-weight:900; letter-spacing:0.01em; line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,0.25);">🏆 Hansen Team Practice for MOEMs — Round 4</h1>
+      <div class="subtitle" style="font-size:1em; margin-top:6px;">5-student team · 10 hard questions · solve at your own pace · reveal answers when ready</div>
+    </div>
+    <div class="controls">
+      <button id="startBtn">▶ Start</button>
+      <button id="showAnswersBtn" class="reveal-btn" style="display:none; background:white; color:#16a34a;">Show Answers</button>
+    </div>
+  </div>
+</header>
+
+<div class="scoreboard">
+  <div class="stat solved">
+    <div class="stat-label">✓ Correct</div>
+    <div class="stat-value" id="solvedCount">0</div>
+  </div>
+  <div class="stat attempted">
+    <div class="stat-label">✗ Wrong</div>
+    <div class="stat-value" id="wrongCount">0</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="instructions" id="instructionsBox">
+    <h3>📋 How to Run This Practice Round</h3>
+    <ol>
+      <li><strong>Two teams of 5 work separately.</strong> Open this page on two laptops/tabs — one per team.</li>
+      <li><strong>Quick self-organization:</strong> skim all 10 problems, split into 2 sub-pods by topic strength (e.g., "geometry" and "number theory/algebra"), pick a "scribe" who types each agreed-upon answer into the correct box, and a "checker" who verifies before the scribe types it.</li>
+      <li><strong>Click ▶ Start.</strong> Teams solve at their own pace. All 10 problems are hard. Encourage teams to <em>triage</em>: skim all 10 first, choose the ones where they recognize the trick, and save the most unfamiliar ones for last.</li>
+      <li><strong>When ready to review:</strong> click <strong>Show Answers</strong>. The system auto-grades all 10 answers, paints ✓ or ✗ next to each, and reveals detailed step-by-step explanations under every wrong (or blank) answer.</li>
+      <li><strong>Compare scores between teams</strong> and walk through the missed problems together as a class. The detailed explanations are written in plain teacher-walkthrough style — read them aloud verbatim.</li>
+    </ol>
+    <p style="margin: 8px 0 0 0; font-size: 0.9em; color: var(--muted);"><strong>Coaching tip:</strong> Walk between teams during the round. Don't give answers; ask "what does this remind you of?" or "have you tried small cases?" Watch which kids naturally lead, verify, or hang back — that information is more valuable than the score.</p>
+  </div>
+
+  <div class="grid" id="grid" style="display:none;"></div>
+
+  <div class="footer-summary" id="finalSummary" style="display:none;">
+    <div class="winner-banner" id="winnerText"></div>
+    <div style="color: var(--muted);">Click "Show solution" on each problem to review with the class.</div>
+  </div>
+
+</div>
+
+<script>
+// ===== Questions (MOEMS Div M Team-aligned, hard set) — ROUND 4 =====
+const QUESTIONS = [
+  {
+    n: 1, topic: "Number Theory · Sum of Divisors", diff: 4,
+    q: "Find the sum of all positive divisors of <code>7560</code>.",
+    a: "28800",
+    accepts: ["28800", "28,800"],
+    sol: `<div class="ans">Answer: 28800</div>
+      <p><strong>Step 1 — Prime-factor the number.</strong> <code>7560 = 756 × 10 = (2² × 3³ × 7) × (2 × 5) = 2³ × 3³ × 5 × 7</code>.</p>
+      <p><strong>Step 2 — Use the divisor-sum formula.</strong> If <code>n = p^a q^b r^c...</code>, then the sum of divisors is <code>(1+p+...+p^a)(1+q+...+q^b)...</code>.</p>
+      <p>So the sum is <code>(1+2+4+8)(1+3+9+27)(1+5)(1+7)</code>.</p>
+      <p><strong>Step 3 — Multiply carefully.</strong> <code>15 × 40 × 6 × 8 = 28800</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> For “sum of divisors,” do not list divisors. Prime-factor, build the geometric sums, and multiply.</p>`
+  },
+  {
+    n: 2, topic: "Number Theory · Factoring Powers", diff: 4,
+    q: "What is the largest prime factor of <code>2<sup>18</sup> − 1</code>?",
+    a: "73",
+    accepts: ["73"],
+    sol: `<div class="ans">Answer: 73</div>
+      <p><strong>Step 1 — Use difference of squares.</strong> <code>2¹⁸ − 1 = (2⁹ − 1)(2⁹ + 1)</code>.</p>
+      <p><strong>Step 2 — Factor each side.</strong> <code>2⁹ − 1 = 511 = 7 × 73</code>. Also <code>2⁹ + 1 = 513 = 3³ × 19</code>.</p>
+      <p><strong>Step 3 — Compare prime factors.</strong> The prime factors are <code>3, 7, 19, 73</code>.</p>
+      <p>The largest is <strong>73</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Expressions like <code>a²−1</code> almost always want <code>(a−1)(a+1)</code>. Keep factoring before multiplying anything out.</p>`
+  },
+  {
+    n: 3, topic: "Combinatorics · Digit Sum with Bounds", diff: 4,
+    q: "How many four-digit positive integers have digits whose sum is exactly <code>18</code>?",
+    a: "615",
+    accepts: ["615"],
+    sol: `<div class="ans">Answer: 615</div>
+      <p><strong>Step 1 — Set up digit variables.</strong> Let the number be <code>ABCD</code>, where <code>A ≥ 1</code> and all digits are at most 9. We need <code>A+B+C+D=18</code>.</p>
+      <p><strong>Step 2 — Remove the first-digit restriction.</strong> Let <code>A' = A−1</code>. Then <code>A'+B+C+D=17</code>, with all variables nonnegative.</p>
+      <p><strong>Step 3 — Count without digit caps.</strong> Stars and bars gives <code>C(17+4−1, 4−1)=C(20,3)=1140</code>.</p>
+      <p><strong>Step 4 — Subtract illegal digit values.</strong> <code>A'</code> can be at most 8; <code>B,C,D</code> can be at most 9.</p>
+      <ul>
+        <li>If <code>A' ≥ 9</code>, subtract 9: remaining sum <code>8</code>, giving <code>C(11,3)=165</code>.</li>
+        <li>If one of <code>B,C,D ≥ 10</code>, subtract 10: remaining sum <code>7</code>, giving <code>C(10,3)=120</code> each, so <code>3×120=360</code>.</li>
+      </ul>
+      <p>No two digits can both exceed their caps because the remaining sum would be negative or too small after subtracting.</p>
+      <p>Total: <code>1140 − 165 − 360 = 615</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Digit-sum problems are stars-and-bars plus corrections for digit caps.</p>`
+  },
+  {
+    n: 4, topic: "Number Theory · Linear Diophantine", diff: 4,
+    q: "Nonnegative integers <code>X</code> and <code>Y</code> satisfy <code>17X + 31Y = 2026</code>. What is the greatest possible value of <code>X+Y</code>?",
+    a: "106",
+    accepts: ["106"],
+    sol: `<div class="ans">Answer: 106</div>
+      <p><strong>Step 1 — Decide which variable helps maximize the count.</strong> Since <code>17</code> is smaller than <code>31</code>, using more <code>X</code>s tends to make <code>X+Y</code> larger.</p>
+      <p><strong>Step 2 — Use divisibility to find allowed <code>Y</code>.</strong> We need <code>2026−31Y</code> divisible by <code>17</code>.</p>
+      <p>Modulo 17: <code>2026 ≡ 3</code> and <code>31Y ≡ 14Y</code>. So <code>3−14Y ≡ 0 mod 17</code>.</p>
+      <p>That means <code>14Y ≡ 3 mod 17</code>. Since <code>14×11 = 154 ≡ 1 mod 17</code>, multiply both sides by 11: <code>Y ≡ 33 ≡ 16 mod 17</code>.</p>
+      <p><strong>Step 3 — Use the smallest nonnegative <code>Y</code> to maximize total terms.</strong> Take <code>Y=16</code>.</p>
+      <p>Then <code>X = (2026−31×16)/17 = 90</code>, so <code>X+Y = 90+16 = 106</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> For coin equations, use remainders to find legal values, then choose the one that optimizes the question.</p>`
+  },
+  {
+    n: 5, topic: "Sequences · Changing Differences", diff: 4,
+    q: "A sequence starts with <code>4</code>. Its first differences are <code>6, 12, 21, 33, ...</code>, and the differences of those differences increase by <code>3</code> each time. What is the 10th term of the original sequence?",
+    a: "526",
+    accepts: ["526"],
+    sol: `<div class="ans">Answer: 526</div>
+      <p><strong>Step 1 — Continue the first differences.</strong> The first differences begin <code>6, 12, 21, 33</code>. Their gaps are <code>6, 9, 12</code>, increasing by 3.</p>
+      <p>So the next gaps are <code>15, 18, 21, 24, 27</code>.</p>
+      <p>The first differences become <code>6, 12, 21, 33, 48, 66, 87, 111, 138</code>.</p>
+      <p><strong>Step 2 — Add differences to build terms.</strong></p>
+      <p><code>4, 10, 22, 43, 76, 124, 190, 277, 388, 526</code>.</p>
+      <p>The 10th term is <strong>526</strong>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> If a sequence is not arithmetic, look at differences. If those are not arithmetic, look at second differences.</p>`
+  },
+  {
+    n: 6, topic: "Probability · Modular Counting", diff: 4,
+    q: "Three fair six-sided dice are rolled. What is the probability that the sum of the three numbers is divisible by <code>5</code>? Express your answer as a fraction in lowest terms.",
+    a: "43/216",
+    accepts: ["43/216"],
+    sol: `<div class="ans">Answer: 43/216</div>
+      <p><strong>Step 1 — Count total outcomes.</strong> There are <code>6³ = 216</code> equally likely rolls.</p>
+      <p><strong>Step 2 — Work with remainders mod 5.</strong> Die faces <code>1,2,3,4,5,6</code> have residues <code>1,2,3,4,0,1</code>. So residue counts are:</p>
+      <p><code>0:1</code>, <code>1:2</code>, <code>2:1</code>, <code>3:1</code>, <code>4:1</code>.</p>
+      <p><strong>Step 3 — Count triples of residues summing to 0 mod 5.</strong> Carefully combining the residue counts gives <code>43</code> favorable ordered triples.</p>
+      <p>Probability is <code>43/216</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> For “divisible by” probability, count remainders instead of listing all actual sums.</p>`
+  },
+  {
+    n: 7, topic: "Combinatorics · Catalan Paths", diff: 4,
+    q: "A path goes from <code>(0,0)</code> to <code>(6,6)</code> using only steps right and up. How many such paths never go above the line <code>y=x</code>?",
+    a: "132",
+    accepts: ["132"],
+    sol: `<div class="ans">Answer: 132</div>
+      <p><strong>Step 1 — Recognize the path type.</strong> A path from <code>(0,0)</code> to <code>(6,6)</code> has 6 right steps and 6 up steps.</p>
+      <p><strong>Step 2 — The condition “never above <code>y=x</code>” is a Catalan-number condition.</strong> The number of valid paths is</p>
+      <p style="text-align:center;"><code>C₆ = 1/(6+1) × C(12,6)</code>.</p>
+      <p><strong>Step 3 — Compute.</strong> <code>C(12,6)=924</code>, so <code>924/7=132</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> “Never above the diagonal” paths are Catalan numbers: <code>Cₙ = C(2n,n)/(n+1)</code>.</p>`
+  },
+  {
+    n: 8, topic: "Combinatorics · Rectangles in a Grid", diff: 4,
+    q: "How many grid-aligned rectangles with perimeter <code>14</code> can be placed inside a <code>10×10</code> grid of unit squares?",
+    a: "320",
+    accepts: ["320"],
+    sol: `<div class="ans">Answer: 320</div>
+      <p><strong>Step 1 — Convert perimeter to side lengths.</strong> If the rectangle is <code>a×b</code>, then <code>2a+2b=14</code>, so <code>a+b=7</code>.</p>
+      <p>Possible side pairs are <code>1×6</code>, <code>2×5</code>, and <code>3×4</code>.</p>
+      <p><strong>Step 2 — Count placements for each orientation.</strong> In a <code>10×10</code> grid, an <code>a×b</code> rectangle has <code>(10−a+1)(10−b+1)</code> placements.</p>
+      <ul>
+        <li><code>1×6</code> and <code>6×1</code>: <code>2×10×5 = 100</code></li>
+        <li><code>2×5</code> and <code>5×2</code>: <code>2×9×6 = 108</code></li>
+        <li><code>3×4</code> and <code>4×3</code>: <code>2×8×7 = 112</code></li>
+      </ul>
+      <p>Total: <code>100+108+112=320</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Grid rectangle counting is usually “choose dimensions, then count sliding positions.”</p>`
+  },
+  {
+    n: 9, topic: "Geometry · Lattice Polygon", diff: 4,
+    q: "A lattice polygon has vertices <code>(0,0)</code>, <code>(6,0)</code>, <code>(6,4)</code>, <code>(2,6)</code>, and <code>(0,4)</code>. How many lattice points lie strictly inside the polygon?",
+    a: "22",
+    accepts: ["22"],
+    sol: `<div class="ans">Answer: 22</div>
+      <p><strong>Step 1 — Use Pick's Theorem.</strong> For a lattice polygon, <code>A = I + B/2 − 1</code>, where <code>A</code> is area, <code>I</code> is interior lattice points, and <code>B</code> is boundary lattice points.</p>
+      <p><strong>Step 2 — Find the area.</strong> Using the shoelace formula on the vertices gives area <code>30</code>.</p>
+      <p><strong>Step 3 — Count boundary points.</strong> For each edge, count <code>gcd(|Δx|,|Δy|)</code>. The total is <code>6+4+2+2+4=18</code>.</p>
+      <p><strong>Step 4 — Solve Pick's Theorem.</strong> <code>30 = I + 18/2 − 1 = I + 8</code>, so <code>I=22</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Lattice polygon with integer coordinates? Think Pick's Theorem.</p>`
+  },
+  {
+    n: 10, topic: "Combinatorics · Ordered Odd Sums", diff: 4,
+    q: "In how many different ways can <code>15</code> be written as an ordered sum of positive odd integers? Order matters, so <code>1+3+11</code> and <code>3+1+11</code> count separately.",
+    a: "610",
+    accepts: ["610"],
+    sol: `<div class="ans">Answer: 610</div>
+      <p><strong>Step 1 — Recognize ordered sums.</strong> Ordered sums are called compositions. When all parts must be odd, the counts follow the Fibonacci sequence.</p>
+      <p><strong>Step 2 — Build the recurrence.</strong> Let <code>f(n)</code> be the number of ordered sums of <code>n</code> into positive odd parts. The sequence starts:</p>
+      <p><code>f(1)=1, f(2)=1, f(3)=2, f(4)=3, f(5)=5</code>.</p>
+      <p>So <code>f(n)=f(n−1)+f(n−2)</code>.</p>
+      <p><strong>Step 3 — Continue to 15.</strong> <code>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610</code>.</p>
+      <p>Therefore <code>f(15)=610</code>.</p>
+      <p style="background:#fef3c7; padding:6px 10px; border-radius:4px; margin-top:8px;"><strong>MOEMS signature:</strong> Ordered sums into odd parts are Fibonacci. Compute small cases, spot the pattern, then extend.</p>`
+  }
+];
+
+
+// ===== Answer normalization & auto-grading =====
+function normalize(str) {
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–—]/g, '-')        // various dashes -> minus
+    .replace(/[×·∗]/g, '*')         // multiplication symbols
+    .replace(/[÷]/g, '/')
+    .replace(/√/g, 'sqrt')
+    .replace(/[()]/g, '')           // strip parens for sqrt(15) -> sqrt15
+    .replace(/\*/g, '')             // strip * so 2*sqrt15 == 2sqrt15
+    .replace(/^0+(\d)/, '$1');      // leading zeros: 07 -> 7
+}
+// Try to compute a numeric value (handles "3.2", "16/5", "3 1/5", or plain integers)
+function toNumber(s) {
+  if (!s) return null;
+  const t = String(s).replace(/\s+/g, ' ').trim();
+  // mixed number like "3 1/5"
+  const mixed = t.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+  if (mixed) {
+    const whole = +mixed[1], num = +mixed[2], den = +mixed[3];
+    if (den !== 0) return whole + (whole < 0 ? -1 : 1) * (num / den);
+  }
+  // simple fraction "a/b"
+  const frac = t.match(/^(-?\d+)\/(-?\d+)$/);
+  if (frac) {
+    const num = +frac[1], den = +frac[2];
+    if (den !== 0) return num / den;
+  }
+  // plain decimal/integer
+  if (/^-?\d+(\.\d+)?$/.test(t)) return +t;
+  return null;
+}
+function autoGrade() {
+  QUESTIONS.forEach(q => {
+    const typed = (state.answers[q.n] || '').trim();
+    if (!typed) {
+      state.status[q.n] = 'no';   // blank counts as wrong
+      return;
+    }
+    const accepts = q.accepts || [q.a];
+    const normTyped = normalize(typed);
+    // First: normalized string match
+    let match = accepts.some(acc => normalize(acc) === normTyped);
+    // Second: numeric-equivalence match (for fractions vs decimals)
+    if (!match) {
+      const typedNum = toNumber(typed);
+      if (typedNum !== null) {
+        match = accepts.some(acc => {
+          const accNum = toNumber(acc);
+          return accNum !== null && Math.abs(accNum - typedNum) < 1e-3;
+        });
+      }
+    }
+    state.status[q.n] = match ? 'ok' : 'no';
+  });
+}
+
+// ===== State =====
+let state = {
+  status: {}, // n -> 'ok' or 'no'
+  answers: {}, // n -> string typed by teacher during the round
+  running: false,
+  finished: false
+};
+
+// ===== Render =====
+const grid = document.getElementById('grid');
+function difficultyStars(d) {
+  return '★'.repeat(d) + '☆'.repeat(4-d);
+}
+function render() {
+  grid.innerHTML = '';
+  QUESTIONS.forEach(q => {
+    const st = state.status[q.n];
+    const card = document.createElement('div');
+    card.className = 'card' + (st === 'ok' ? ' solved' : st === 'no' ? ' wrong' : '');
+    const answerInput = `
+      <div class="answer-row">
+        <input type="text" placeholder="Team's answer..." id="ans-${q.n}">
+        ${state.finished ? `<span class="auto-mark ${st}">${st === 'ok' ? '✓' : '✗'}</span>` : ''}
+      </div>
+    `;
+    const gradingControls = state.finished ? `
+      <div style="margin-top:10px; padding:8px 10px; background:${st === 'ok' ? '#ecfdf5' : '#fef2f2'}; border-left:3px solid ${st === 'ok' ? 'var(--good)' : 'var(--bad)'}; border-radius:4px; font-size:0.95em;">
+        <strong>Correct answer:</strong> <span class="ans" style="font-weight:700; color:var(--good);">${q.a}</span>
+      </div>
+      ${st === 'no' ? `
+        <div class="solution show" style="margin-top:10px;">
+          ${q.sol}
+        </div>
+      ` : `
+        <button class="reveal-btn" onclick="toggleSol(${q.n})">Show full explanation</button>
+        <div class="solution" id="sol-${q.n}">
+          ${q.sol}
+        </div>
+      `}
+    ` : '';
+    card.innerHTML = `
+      ${st === 'ok' ? `<span class="solved-tag ok">✓ Correct</span>` : st === 'no' ? `<span class="solved-tag no">✗ Wrong</span>` : ''}
+      <div class="card-head">
+        <span class="qnum">${q.n}</span>
+        <span class="difficulty">${difficultyStars(q.diff)}</span>
+      </div>
+      <div class="qtext">${q.q}</div>
+      ${answerInput}
+      ${gradingControls}
+    `;
+    grid.appendChild(card);
+  });
+  // Restore typed answers (input fields are recreated on every render)
+  Object.keys(state.answers).forEach(n => {
+    const inp = document.getElementById('ans-' + n);
+    if (inp) inp.value = state.answers[n];
+  });
+  // Wire up answer-saving listeners
+  QUESTIONS.forEach(q => {
+    const inp = document.getElementById('ans-' + q.n);
+    if (inp) inp.oninput = (e) => { state.answers[q.n] = e.target.value; };
+  });
+  updateScores();
+}
+function mark(n, val) {
+  // legacy/no-op — auto-grading now handles all scoring
+  if (val === null) delete state.status[n];
+  else state.status[n] = val;
+  render();
+}
+function toggleSol(n) {
+  document.getElementById('sol-' + n).classList.toggle('show');
+}
+function updateScores() {
+  const vals = Object.values(state.status);
+  const ok = vals.filter(v => v === 'ok').length;
+  const no = vals.filter(v => v === 'no').length;
+  document.getElementById('solvedCount').textContent = ok;
+  document.getElementById('wrongCount').textContent = no;
+  if (state.finished) {
+    let rating;
+    if (ok >= 18) rating = "🌟 Exceptional — state-level ready!";
+    else if (ok >= 15) rating = "🏆 Excellent team coordination!";
+    else if (ok >= 12) rating = "✅ Strong — solid contest performance.";
+    else if (ok >= 8) rating = "👍 Good effort — review weak topics & try again.";
+    else rating = "📚 Keep practicing — review the concept guide together.";
+    document.getElementById('winnerText').innerHTML =
+      `<div style="font-size:1.6em; margin-bottom:8px;">✓ ${ok} correct &nbsp;·&nbsp; ✗ ${no} wrong</div>` +
+      `<div style="font-size:1em; color:var(--muted); font-weight:500;">${rating}</div>`;
+  }
+}
+
+function finishRound() {
+  if (state.finished) return;
+  state.finished = true;
+  document.getElementById('finalSummary').style.display = 'block';
+  autoGrade();
+  render();
+  updateScores();
+  document.getElementById('finalSummary').scrollIntoView({ behavior: 'smooth' });
+}
+document.getElementById('startBtn').onclick = () => {
+  if (state.running || state.finished) return;
+  state.running = true;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').style.opacity = '0.5';
+  document.getElementById('instructionsBox').style.display = 'none';
+  document.getElementById('grid').style.display = 'grid';
+  document.getElementById('showAnswersBtn').style.display = 'inline-block';
+};
+document.getElementById('showAnswersBtn').onclick = finishRound;
+
+render();
+</script>
+</body>
+</html>
