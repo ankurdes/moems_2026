@@ -1,0 +1,22 @@
+docs/season/day01.html
+  s_7f3d1ac77af38c::t_5298ee43238302 1-249
+  s_7f3d1ac77af38c::t_14f3144312fc04 250-254
+docs/moems_hub.html
+  s_7f3d1ac77af38c::t_be5518102b71bc 44,54,110,115-125
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "433cb009bfc80c9b811dd71c35d0de04461f62d7",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
