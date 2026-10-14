@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen MOEMs 2027 - Day 1</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 26px 22px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.1em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+  .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+  .section {
+    background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
+  }
+  .section.warm  { border-top-color: var(--accent); }
+  .section.diag  { border-top-color: var(--info); }
+  .section.home  { border-top-color: var(--good); }
+  .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
+  .section.warm h2 { color: var(--accent); }
+  .section.diag h2 { color: var(--info); }
+  .section.home h2 { color: var(--good); }
+  .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f8fafc; }
+  td.t { white-space: nowrap; font-weight: 700; color: var(--primary); }
+
+  .prob {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+    background: #f8fafc;
+  }
+  .prob-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .qnum {
+    background: var(--info); color: white; border-radius: 50%; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+  .warm .qnum { background: var(--accent); }
+  .home .qnum { background: var(--good); }
+  .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .stars { margin-left: auto; color: var(--accent); letter-spacing: 1px; font-size: 0.85em; }
+  .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
+
+  button {
+    background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 14px; font-weight: 600; cursor: pointer; font-size: 0.88em;
+  }
+  button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
+  button.big:hover { background: #6d28d9; }
+
+  .solution {
+    display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
+    border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
+  }
+  .solution.show { display: block; }
+  .solution .ans { font-weight: 800; color: var(--good); font-size: 1.05em; }
+
+  .timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  #clock { font-size: 2em; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--info); min-width: 100px; }
+
+  .note { background: #fef9e7; border: 2px solid var(--accent); border-radius: 12px; padding: 12px 16px; font-size: 0.93em; }
+  .note ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+  footer { text-align: center; padding: 26px 20px; color: var(--muted); font-size: 0.85em; }
+  @media print { button, .timer-row { display: none !important; } .solution { display: block !important; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚀 Day 1: Kickoff and Diagnostic</h1>
+  <div class="subtitle">Hansen MOEMs prep · 2027 season · County tournament Sat, May 1, 2027</div>
+  <a class="back" href="../moems_hub.html">← Back to hub</a>
+</header>
+
+<div class="container">
+
+  <div class="section">
+    <h2>🗓️ Today's plan (60 min)</h2>
+    <table>
+      <tr><th>Time</th><th>What</th></tr>
+      <tr><td class="t">0-5</td><td><b>Welcome.</b> Goal for the year, 2 teams from Hansen, weekly hour, keep it fun. Everyone says their name and a favorite math topic.</td></tr>
+      <tr><td class="t">5-10</td><td><b>Brain teaser</b> (below). Let them argue before revealing.</td></tr>
+      <tr><td class="t">10-35</td><td><b>Diagnostic</b>, solo, 25 min. 5 problems, easy to hard. Paper and pencil, no calculator. Write answers on paper, or send to the coach in chat.</td></tr>
+      <tr><td class="t">35-50</td><td><b>Go-over.</b> Ask a student to explain how they got each answer, not just what it was.</td></tr>
+      <tr><td class="t">50-57</td><td><b>Teams.</b> Two balanced teams announced, each picks a team name.</td></tr>
+      <tr><td class="t">57-60</td><td><b>Homework</b> (3 optional problems below). Next week: number theory (factors, divisibility).</td></tr>
+    </table>
+  </div>
+
+  <div class="section warm">
+    <h2>🧩 Brain teaser (5-10 min)</h2>
+    <p class="lede">Don't just guess. Try a small case first, look for a pattern, then say why it works. Work in pairs if you like.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The 100 lockers</span><span class="stars">★★★★☆</span></div>
+      <div class="qtext">A hallway has 100 lockers, numbered 1 to 100, all <b>closed</b>. Student 1 walks by and <b>opens</b> every locker. Student 2 walks by and <b>flips</b> every 2nd locker (opens it if closed, closes it if open). Student 3 flips every 3rd locker, and so on, until Student 100 flips only locker 100. After all 100 students have gone by, <b>which lockers are open?</b></div>
+      <button onclick="toggle(this)">Show hint</button>
+      <div class="solution">Hint: try it with just 10 lockers first. Then ask yourself: how many times does locker 12 get flipped, and by which students?</div>
+      <br>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">The perfect squares: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 (10 lockers)</span><br>
+        Locker <i>n</i> is flipped once by each student whose number divides <i>n</i>. For locker 12 that is students 1, 2, 3, 4, 6, 12, which is 6 flips, so it ends closed. A locker ends open only if it is flipped an odd number of times, meaning <i>n</i> has an odd number of divisors. Divisors come in pairs (like 3 and 4 for 12), except when a divisor pairs with itself, which happens only when <i>n</i> is a perfect square (10 × 10 = 100). Lesson: divisors come in pairs, and this is a preview of next week.</div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Burning ropes (backup)</span><span class="stars">★★★★☆</span></div>
+      <div class="qtext">You have two ropes and a lighter. Each rope takes exactly <b>60 minutes</b> to burn from one end to the other, but they burn <b>unevenly</b> (half the rope's length might take 10 minutes or 50 minutes). You have no clock. How can you measure exactly <b>45 minutes</b>?</div>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Light rope A at both ends and rope B at one end at the same time.</span><br>
+        Rope A burning from both ends takes exactly 30 minutes, no matter how unevenly it burns. At that moment, light the other end of rope B. B has 30 minutes of burn left, and with two flames it finishes in 15 minutes. Total: 30 + 15 = 45 minutes. Lesson: lighting both ends halves the time, even if the rope is uneven.</div>
+    </div>
+  </div>
+
+  <div class="section diag">
+    <h2>📝 Diagnostic (25 min, solo)</h2>
+    <p class="lede">5 problems, easy to hard. Don't worry about finishing everything. Do the ones you can, show your work, and be honest about what felt hard.</p>
+
+    <div class="timer-row">
+      <div id="clock">25:00</div>
+      <button class="big" onclick="startTimer()">▶ Start</button>
+      <button onclick="resetTimer()">Reset</button>
+      <button onclick="showAll()">Show all answers</button>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Arithmetic / sequences</span><span class="stars">★★☆☆☆</span></div>
+      <div class="qtext">The sum of 7 consecutive odd integers is 217. What is the largest of the 7 integers?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">37</span><br>The middle number is the average: 217 ÷ 7 = 31. The odd numbers are 25, 27, 29, 31, 33, 35, 37, so the largest is 37.</div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Mixtures / percent</span><span class="stars">★★★☆☆</span></div>
+      <div class="qtext">A 40-liter mixture is 25% acid. How many liters of pure water must be added so that the mixture is 20% acid?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">10 liters</span><br>The acid stays the same: 25% of 40 = 10 liters. For this to be 20% of the new total, the total must be 10 ÷ 0.20 = 50 liters. So add 50 − 40 = 10 liters of water.</div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Counting</span><span class="stars">★★★★☆</span></div>
+      <div class="qtext">How many 4-digit numbers (1000 to 9999) have digits that add up to 5?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">35</span><br>Do casework on the first digit. First digit 1: the other three digits add to 4, which can happen in 15 ways. First digit 2: other digits add to 3, 10 ways. First digit 3: 6 ways. First digit 4: 3 ways. First digit 5: 1 way. Total 15 + 10 + 6 + 3 + 1 = 35. (Shortcut: stars and bars, C(7,3) = 35.)</div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Geometry</span><span class="stars">★★★★☆</span></div>
+      <div class="qtext">A right triangle has legs of length 9 and 12. What is the length of the altitude drawn from the right angle to the hypotenuse?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">7.2 (or 36/5)</span><br>The hypotenuse is 15 (a 9-12-15 triangle, which is 3 times the 3-4-5). The area is ½ × 9 × 12 = 54. Also, area = ½ × 15 × h, so 15h = 108 and h = 7.2. Trick: the area can be found two ways.</div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Number theory</span><span class="stars">★★★★★</span></div>
+      <div class="qtext">What is the <b>smallest</b> positive integer that has exactly 12 positive divisors?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">60</span><br>If n = p<sup>a</sup> q<sup>b</sup> r<sup>c</sup>..., the number of divisors is (a+1)(b+1)(c+1)... To get 12 the exponents can be 11, or 5 and 1, or 3 and 2, or 2, 1 and 1. The smallest number in each case: 2<sup>11</sup> = 2048, 2<sup>5</sup>·3 = 96, 2<sup>3</sup>·3<sup>2</sup> = 72, 2<sup>2</sup>·3·5 = 60. The smallest is 60.</div>
+    </div>
+  </div>
+
+  <div class="section home">
+    <h2>🏠 Homework (optional)</h2>
+    <p class="lede">Do any you like. We'll go over them at the start of next week.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Patterns</span><span class="stars">★★★☆☆</span></div>
+      <div class="qtext">What is the units (ones) digit of 3<sup>2027</sup>?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">7</span><br>The units digits of powers of 3 repeat every 4: 3, 9, 7, 1, 3, 9, 7, 1, ... Since 2027 = 4 × 506 + 3, the digit is the 3rd in the cycle, which is 7.</div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Counting / sets</span><span class="stars">★★★☆☆</span></div>
+      <div class="qtext">How many positive integers less than 100 are divisible by 3 or by 5, but <b>not</b> by both?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">40</span><br>Multiples of 3 under 100: 33. Multiples of 5: 19. Multiples of 15 (both): 6. We want to exclude the "both" numbers completely, so take (33 − 6) + (19 − 6) = 27 + 13 = 40.</div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Averages</span><span class="stars">★★☆☆☆</span></div>
+      <div class="qtext">The average of five numbers is 18. When one of the numbers is removed, the average of the remaining four numbers is 16. What number was removed?</div>
+      <button onclick="toggle(this)">Show solution</button>
+      <div class="solution"><span class="ans">26</span><br>The five numbers add up to 5 × 18 = 90. The remaining four add up to 4 × 16 = 64. The removed number is 90 − 64 = 26.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Tips for the team</b>
+    <ul>
+      <li>Show your work. Partial thinking helps us see where to help.</li>
+      <li>If you're stuck for more than 3 minutes, skip and come back. That's a real contest skill.</li>
+      <li>Check your answer by plugging it back into the problem.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
+
+<script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
+var total = 25 * 60, left = total, timer = null;
+function paint() {
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function startTimer() {
+  if (timer) return;
+  timer = setInterval(function () {
+    left--; paint();
+    if (left <= 0) { clearInterval(timer); timer = null; document.getElementById('clock').textContent = "Time!"; }
+  }, 1000);
+}
+function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+</script>
+
+</body>
+</html>
