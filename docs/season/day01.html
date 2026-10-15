@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hansen MOEMs 2027 - Day 1</title>
+<title>Hansen MOEMs 2027 - Session 1</title>
 <style>
   :root {
     --primary: #7c3aed;
@@ -33,18 +33,20 @@
   .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
   .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
 
-  .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+  .container { max-width: 1500px; margin: 0 auto; padding: 24px; }
   .section {
     background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
     box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
   }
+  .section.intro { border-top-color: var(--pink); }
+  .section.intro h2 { color: var(--pink); }
+  .intro ul { margin: 6px 0 0 0; padding-left: 20px; }
+  .intro .ice { margin-top: 12px; background: #fdf2f8; border-left: 4px solid var(--pink); border-radius: 6px; padding: 10px 14px; font-size: 1.1em; }
   .section.warm  { border-top-color: var(--accent); }
   .section.diag  { border-top-color: var(--info); }
-  .section.home  { border-top-color: var(--good); }
   .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
   .section.warm h2 { color: var(--accent); }
   .section.diag h2 { color: var(--info); }
-  .section.home h2 { color: var(--good); }
   .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
 
   table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
@@ -62,9 +64,7 @@
     display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
   }
   .warm .qnum { background: var(--accent); }
-  .home .qnum { background: var(--good); }
   .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .stars { margin-left: auto; color: var(--accent); letter-spacing: 1px; font-size: 0.85em; }
   .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
 
   button {
@@ -75,6 +75,19 @@
   button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
   button.big:hover { background: #6d28d9; }
 
+  .diag-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .diag-grid .prob { margin-bottom: 0; display: flex; flex-direction: column; padding: 12px 14px; }
+  .diag-grid .qtext { font-size: 1.05em; flex: 1; }
+  .diag-grid button { align-self: flex-start; }
+  @media (max-width: 1300px) { .diag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .diag-grid { grid-template-columns: 1fr; } }
+  .diag .solution { display: none !important; }
+  #modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+  #modal.show { display: flex; }
+  #modal .box { background: white; border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 28px; font-size: 1.1em; }
+  #modal .box ol { padding-left: 22px; } #modal .box li { margin: 8px 0; }
+  #modal .qt { background: #f8fafc; border-left: 4px solid var(--info); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px; }
+  #modal .close { float: right; }
   .solution {
     display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
     border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
@@ -95,120 +108,188 @@
 <body>
 
 <header>
-  <h1>🚀 Day 1: Kickoff and Diagnostic</h1>
+  <h1>🚀 Session 1 · Wed, Oct 14, 2026</h1>
   <div class="subtitle">Hansen MOEMs prep · 2027 season · County tournament Sat, May 1, 2027</div>
   <a class="back" href="../moems_hub.html">← Back to hub</a>
 </header>
 
 <div class="container">
 
-  <div class="section">
-    <h2>🗓️ Today's plan (60 min)</h2>
-    <table>
-      <tr><th>Time</th><th>What</th></tr>
-      <tr><td class="t">0-5</td><td><b>Welcome.</b> Goal for the year, 2 teams from Hansen, weekly hour, keep it fun. Everyone says their name and a favorite math topic.</td></tr>
-      <tr><td class="t">5-10</td><td><b>Brain teaser</b> (below). Let them argue before revealing.</td></tr>
-      <tr><td class="t">10-35</td><td><b>Diagnostic</b>, solo, 25 min. 5 problems, easy to hard. Paper and pencil, no calculator. Write answers on paper, or send to the coach in chat.</td></tr>
-      <tr><td class="t">35-50</td><td><b>Go-over.</b> Ask a student to explain how they got each answer, not just what it was.</td></tr>
-      <tr><td class="t">50-57</td><td><b>Teams.</b> Two balanced teams announced, each picks a team name.</td></tr>
-      <tr><td class="t">57-60</td><td><b>Homework</b> (3 optional problems below). Next week: number theory (factors, divisibility).</td></tr>
-    </table>
+  <div class="section intro">
+    <h2>👋 Welcome to the Hansen Math Team</h2>
+    <ul>
+      <li>2 teams from Hansen will represent our school at the San Joaquin County Math Tournament on Sat, May 1, 2027.</li>
+      <li>We meet once a week for an hour, and the goal is to learn some tricks and have fun with math.</li>
+      <li>Today: a couple of brain teasers, then a 10-problem warm-up so I know where everyone is. It's not graded.</li>
+    </ul>
+    <div class="ice"><b>Icebreaker:</b> If you could have one superpower during a math contest, what would it be and why?</div>
   </div>
 
   <div class="section warm">
-    <h2>🧩 Brain teaser (5-10 min)</h2>
-    <p class="lede">Don't just guess. Try a small case first, look for a pattern, then say why it works. Work in pairs if you like.</p>
+    <h2>🧩 Brain teaser (10 min)</h2>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">1</span><span class="topic">The 100 lockers</span><span class="stars">★★★★☆</span></div>
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The 100 lockers</span></div>
       <div class="qtext">A hallway has 100 lockers, numbered 1 to 100, all <b>closed</b>. Student 1 walks by and <b>opens</b> every locker. Student 2 walks by and <b>flips</b> every 2nd locker (opens it if closed, closes it if open). Student 3 flips every 3rd locker, and so on, until Student 100 flips only locker 100. After all 100 students have gone by, <b>which lockers are open?</b></div>
-      <button onclick="toggle(this)">Show hint</button>
-      <div class="solution">Hint: try it with just 10 lockers first. Then ask yourself: how many times does locker 12 get flipped, and by which students?</div>
-      <br>
       <button onclick="toggle(this)">Show answer</button>
-      <div class="solution"><span class="ans">The perfect squares: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 (10 lockers)</span><br>
-        Locker <i>n</i> is flipped once by each student whose number divides <i>n</i>. For locker 12 that is students 1, 2, 3, 4, 6, 12, which is 6 flips, so it ends closed. A locker ends open only if it is flipped an odd number of times, meaning <i>n</i> has an odd number of divisors. Divisors come in pairs (like 3 and 4 for 12), except when a divisor pairs with itself, which happens only when <i>n</i> is a perfect square (10 × 10 = 100). Lesson: divisors come in pairs, and this is a preview of next week.</div>
+      <div class="solution"><span class="ans">Answer: the perfect squares: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 (10 lockers)</span><ol>
+<li><b>What happens to one locker?</b> Locker 12 is touched by Student 1 (every locker), Student 2 (12 is a multiple of 2), Student 3, Student 4, Student 6 and Student 12. Nobody else, because 12 is not a multiple of 5, 7, 8 and so on. So the students who touch locker <i>n</i> are exactly the numbers that divide <i>n</i>.</li>
+<li><b>Count the flips.</b> Locker 12 has divisors 1, 2, 3, 4, 6, 12, which is 6 touches. It starts closed, and each touch flips it: open, closed, open, closed, open, closed. After 6 touches it is <b>closed</b>. Any even number of touches ends closed.</li>
+<li><b>So when is a locker open at the end?</b> Only when it is touched an <b>odd</b> number of times, which means <i>n</i> must have an odd number of divisors.</li>
+<li><b>Why are odd divisor counts rare?</b> Divisors come in pairs that multiply to <i>n</i>. For 12: (1, 12), (2, 6), (3, 4). Pairs make the count even.</li>
+<li><b>The one exception:</b> when a divisor pairs with itself. For 36 the pairs are (1, 36), (2, 18), (3, 12), (4, 9), and then 6 × 6, where 6 is alone. That gives 9 divisors, which is odd, so locker 36 ends open.</li>
+<li>That only happens when <i>n</i> is a perfect square. So the open lockers are 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, which is <b>10 lockers</b>.</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">2</span><span class="topic">Burning ropes (backup)</span><span class="stars">★★★★☆</span></div>
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Burning ropes</span></div>
       <div class="qtext">You have two ropes and a lighter. Each rope takes exactly <b>60 minutes</b> to burn from one end to the other, but they burn <b>unevenly</b> (half the rope's length might take 10 minutes or 50 minutes). You have no clock. How can you measure exactly <b>45 minutes</b>?</div>
       <button onclick="toggle(this)">Show answer</button>
-      <div class="solution"><span class="ans">Light rope A at both ends and rope B at one end at the same time.</span><br>
-        Rope A burning from both ends takes exactly 30 minutes, no matter how unevenly it burns. At that moment, light the other end of rope B. B has 30 minutes of burn left, and with two flames it finishes in 15 minutes. Total: 30 + 15 = 45 minutes. Lesson: lighting both ends halves the time, even if the rope is uneven.</div>
+      <div class="solution"><span class="ans">Answer: light both ends of rope A and one end of rope B at the same moment. When A is gone, light the other end of B. When B is gone, 45 minutes have passed.</span><ol>
+<li><b>The key fact:</b> a rope burns from one end in 60 minutes total, even if it burns unevenly. If you light <b>both</b> ends, two flames burn toward each other and meet, and the burning always takes exactly <b>30 minutes</b>. (Each flame still burns "its own" amount of rope, and together they use up all 60 minutes' worth of rope in half the time.) We don't know where they meet, and we don't need to.</li>
+<li><b>Minute 0:</b> light rope A at <b>both</b> ends, and light rope B at <b>one</b> end. Now start counting.</li>
+<li><b>Minute 30:</b> rope A has just finished burning. Rope B has been burning from one end for 30 minutes, so it has exactly <b>30 minutes of burning left</b> (60 minus 30).</li>
+<li><b>Minute 30:</b> right now, light the <b>other end</b> of rope B. It now has two flames, so the 30 minutes of burning left takes only <b>15 minutes</b>.</li>
+<li><b>Minute 45:</b> rope B finishes. Total time = 30 + 15 = <b>45 minutes</b>.</li></ol></div>
     </div>
   </div>
 
   <div class="section diag">
-    <h2>📝 Diagnostic (25 min, solo)</h2>
-    <p class="lede">5 problems, easy to hard. Don't worry about finishing everything. Do the ones you can, show your work, and be honest about what felt hard.</p>
+    <h2>📝 Diagnostic (30 min, solo)</h2>
+    <p class="lede">10 problems, easy to hard. The last 2 are hard. Don't worry about finishing everything. Do the ones you can, show your work, and be honest about what felt hard.</p>
 
     <div class="timer-row">
-      <div id="clock">25:00</div>
+      <div id="clock">30:00</div>
       <button class="big" onclick="startTimer()">▶ Start</button>
       <button onclick="resetTimer()">Reset</button>
-      <button onclick="showAll()">Show all answers</button>
+    </div>
+
+    <div class="diag-grid">
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Fractions / patterns</span></div>
+      <div class="qtext">Find the value of 1/2 + 1/6 + 1/12 + 1/20 + 1/30.</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 5/6</span><ol>
+<li>Look at the denominators: 2 = 1×2, 6 = 2×3, 12 = 3×4, 20 = 4×5, 30 = 5×6.</li>
+<li>So each term has the form 1/(n(n+1)), and 1/(n(n+1)) = 1/n − 1/(n+1). For example 1/6 = 1/2 − 1/3.</li>
+<li>Rewrite the sum: (1 − 1/2) + (1/2 − 1/3) + (1/3 − 1/4) + (1/4 − 1/5) + (1/5 − 1/6).</li>
+<li>Everything cancels in the middle (telescoping), leaving 1 − 1/6.</li>
+<li>1 − 1/6 = <b>5/6</b>.</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">1</span><span class="topic">Arithmetic / sequences</span><span class="stars">★★☆☆☆</span></div>
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Arithmetic / sequences</span></div>
       <div class="qtext">The sum of 7 consecutive odd integers is 217. What is the largest of the 7 integers?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">37</span><br>The middle number is the average: 217 ÷ 7 = 31. The odd numbers are 25, 27, 29, 31, 33, 35, 37, so the largest is 37.</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 37</span><ol>
+<li>For consecutive numbers, the middle one equals the average.</li>
+<li>Average = 217 ÷ 7 = 31, so the middle (4th) integer is 31.</li>
+<li>Consecutive odd integers differ by 2: 25, 27, 29, <b>31</b>, 33, 35, 37.</li>
+<li>Check: 25+27+29+31+33+35+37 = 217. ✓</li>
+<li>The largest is <b>37</b>.</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">2</span><span class="topic">Mixtures / percent</span><span class="stars">★★★☆☆</span></div>
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Mixtures / percent</span></div>
       <div class="qtext">A 40-liter mixture is 25% acid. How many liters of pure water must be added so that the mixture is 20% acid?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">10 liters</span><br>The acid stays the same: 25% of 40 = 10 liters. For this to be 20% of the new total, the total must be 10 ÷ 0.20 = 50 liters. So add 50 − 40 = 10 liters of water.</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 10 liters</span><ol>
+<li>Acid in the mixture now: 25% of 40 = 10 liters.</li>
+<li>Adding pure water does not change the acid, so it stays 10 liters.</li>
+<li>We want 10 liters to be 20% of the new total: total = 10 ÷ 0.20 = 50 liters.</li>
+<li>Water to add = 50 − 40 = <b>10 liters</b>.</li>
+<li>Check: 10 ÷ 50 = 20%. ✓</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">3</span><span class="topic">Counting</span><span class="stars">★★★★☆</span></div>
-      <div class="qtext">How many 4-digit numbers (1000 to 9999) have digits that add up to 5?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">35</span><br>Do casework on the first digit. First digit 1: the other three digits add to 4, which can happen in 15 ways. First digit 2: other digits add to 3, 10 ways. First digit 3: 6 ways. First digit 4: 3 ways. First digit 5: 1 way. Total 15 + 10 + 6 + 3 + 1 = 35. (Shortcut: stars and bars, C(7,3) = 35.)</div>
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Rates</span></div>
+      <div class="qtext">Ava drives from town A to town B at 40 miles per hour, then drives back the same way at 60 miles per hour. What is her average speed for the whole round trip, in miles per hour?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 48 mph</span><ol>
+<li>Careful: the answer is not (40 + 60) ÷ 2 = 50, because she spends more time at the slower speed.</li>
+<li>Average speed = total distance ÷ total time. Pick an easy distance: 120 miles each way (the answer doesn't depend on this).</li>
+<li>Going: 120 ÷ 40 = 3 hours. Returning: 120 ÷ 60 = 2 hours.</li>
+<li>Total distance = 240 miles, total time = 5 hours.</li>
+<li>240 ÷ 5 = <b>48 mph</b>.</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">4</span><span class="topic">Geometry</span><span class="stars">★★★★☆</span></div>
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Counting</span></div>
+      <div class="qtext">Five students stand in a row for a photo. In how many ways can they line up if Ann and Ben must <b>not</b> stand next to each other?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 72</span><ol>
+<li>Total ways to line up 5 students: 5! = 5×4×3×2×1 = 120.</li>
+<li>Count the bad ones (Ann and Ben together). Glue them into one block. Now there are 4 things to arrange: 4! = 24 ways.</li>
+<li>Inside the block, Ann and Ben can be in 2 orders (AB or BA): 24 × 2 = 48.</li>
+<li>Not together = total − together = 120 − 48 = <b>72</b>.</li></ol></div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">6</span><span class="topic">Geometry</span></div>
       <div class="qtext">A right triangle has legs of length 9 and 12. What is the length of the altitude drawn from the right angle to the hypotenuse?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">7.2 (or 36/5)</span><br>The hypotenuse is 15 (a 9-12-15 triangle, which is 3 times the 3-4-5). The area is ½ × 9 × 12 = 54. Also, area = ½ × 15 × h, so 15h = 108 and h = 7.2. Trick: the area can be found two ways.</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 7.2 (or 36/5)</span><ol>
+<li>Find the hypotenuse: 9² + 12² = 81 + 144 = 225, so it is 15. (It's the 3-4-5 triangle times 3.)</li>
+<li>Area using the legs as base and height: ½ × 9 × 12 = 54.</li>
+<li>Area using the hypotenuse as the base and the altitude h as the height: ½ × 15 × h.</li>
+<li>Set them equal: ½ × 15 × h = 54, so 15h = 108.</li>
+<li>h = 108 ÷ 15 = <b>7.2</b>.</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">5</span><span class="topic">Number theory</span><span class="stars">★★★★★</span></div>
+      <div class="prob-head"><span class="qnum">7</span><span class="topic">Counting</span></div>
+      <div class="qtext">How many 4-digit numbers (1000 to 9999) have digits that add up to 5?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 35</span><ol>
+<li>The first digit must be at least 1. Do casework on it. The other three digits (each 0 to 9) must make up the rest of the sum 5.</li>
+<li>First digit 1: other three digits add to 4. Count the ways: (4,0,0) type = 3 ways, (3,1,0) type = 6 ways, (2,2,0) type = 3 ways, (2,1,1) type = 3 ways. Total 15.</li>
+<li>First digit 2: other three add to 3: (3,0,0) = 3, (2,1,0) = 6, (1,1,1) = 1. Total 10.</li>
+<li>First digit 3: other three add to 2: (2,0,0) = 3, (1,1,0) = 3. Total 6.</li>
+<li>First digit 4: other three add to 1: 3 ways. First digit 5: other three add to 0: 1 way.</li>
+<li>Add up: 15 + 10 + 6 + 3 + 1 = <b>35</b>.</li>
+<li>Shortcut (stars and bars): put 5 as 4 digits where the first is at least 1, which is the same as C(7,3) = <b>35</b>.</li></ol></div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">8</span><span class="topic">Number theory</span></div>
       <div class="qtext">What is the <b>smallest</b> positive integer that has exactly 12 positive divisors?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">60</span><br>If n = p<sup>a</sup> q<sup>b</sup> r<sup>c</sup>..., the number of divisors is (a+1)(b+1)(c+1)... To get 12 the exponents can be 11, or 5 and 1, or 3 and 2, or 2, 1 and 1. The smallest number in each case: 2<sup>11</sup> = 2048, 2<sup>5</sup>·3 = 96, 2<sup>3</sup>·3<sup>2</sup> = 72, 2<sup>2</sup>·3·5 = 60. The smallest is 60.</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 60</span><ol>
+<li>If n = p<sup>a</sup> × q<sup>b</sup> × r<sup>c</sup> ..., the number of divisors is (a+1)(b+1)(c+1)...</li>
+<li>We need (a+1)(b+1)... = 12. The ways to split 12: 12, 6×2, 4×3, 3×2×2.</li>
+<li>That means exponent patterns: (11), (5,1), (3,2), (2,1,1).</li>
+<li>To make the number small, use the smallest primes, and put the biggest exponents on the smallest primes:
+  <br>(11): 2<sup>11</sup> = 2048
+  <br>(5,1): 2<sup>5</sup>×3 = 96
+  <br>(3,2): 2<sup>3</sup>×3<sup>2</sup> = 72
+  <br>(2,1,1): 2<sup>2</sup>×3×5 = 60</li>
+<li>Smallest is <b>60</b>. Check: divisors of 60 are 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60 = 12. ✓</li></ol></div>
     </div>
-  </div>
-
-  <div class="section home">
-    <h2>🏠 Homework (optional)</h2>
-    <p class="lede">Do any you like. We'll go over them at the start of next week.</p>
-
     <div class="prob">
-      <div class="prob-head"><span class="qnum">1</span><span class="topic">Patterns</span><span class="stars">★★★☆☆</span></div>
-      <div class="qtext">What is the units (ones) digit of 3<sup>2027</sup>?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">7</span><br>The units digits of powers of 3 repeat every 4: 3, 9, 7, 1, 3, 9, 7, 1, ... Since 2027 = 4 × 506 + 3, the digit is the 3rd in the cycle, which is 7.</div>
+      <div class="prob-head"><span class="qnum">9</span><span class="topic">Number theory (hard)</span></div>
+      <div class="qtext">Nonnegative integers <i>X</i> and <i>Y</i> satisfy 17<i>X</i> + 31<i>Y</i> = 2026. What is the greatest possible value of <i>X</i> + <i>Y</i>?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 106</span><ol>
+<li>Every solution has the form where 2026 − 31<i>Y</i> must be divisible by 17.</li>
+<li>Work mod 17: 2026 = 17×119 + 3, so 2026 ≡ 3. Also 31 ≡ 14. We need 14<i>Y</i> ≡ 3 (mod 17).</li>
+<li>Since 14 × 11 = 154 = 9×17 + 1, 11 is the inverse of 14. Multiply both sides by 11: <i>Y</i> ≡ 33 ≡ 16 (mod 17).</li>
+<li>So <i>Y</i> = 16, 33, 50, ... Each time <i>Y</i> goes up by 17, <i>X</i> goes down by 31, so <i>X</i> + <i>Y</i> drops by 14. The smallest <i>Y</i> gives the biggest total.</li>
+<li><i>Y</i> = 16 gives <i>X</i> = (2026 − 496) ÷ 17 = 1530 ÷ 17 = 90.</li>
+<li>Check: 17×90 + 31×16 = 1530 + 496 = 2026. ✓</li>
+<li><i>X</i> + <i>Y</i> = 90 + 16 = <b>106</b>.</li></ol></div>
     </div>
-
     <div class="prob">
-      <div class="prob-head"><span class="qnum">2</span><span class="topic">Counting / sets</span><span class="stars">★★★☆☆</span></div>
-      <div class="qtext">How many positive integers less than 100 are divisible by 3 or by 5, but <b>not</b> by both?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">40</span><br>Multiples of 3 under 100: 33. Multiples of 5: 19. Multiples of 15 (both): 6. We want to exclude the "both" numbers completely, so take (33 − 6) + (19 − 6) = 27 + 13 = 40.</div>
+      <div class="prob-head"><span class="qnum">10</span><span class="topic">Counting (hard)</span></div>
+      <div class="qtext">A path goes from (0,0) to (6,6) using only steps <b>right</b> or <b>up</b> (1 unit each). How many such paths <b>never go above</b> the line y = x?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 132</span><ol>
+<li>Any path has 6 right steps and 6 up steps. With no restriction there are C(12,6) = 924 paths.</li>
+<li>"Never above y = x" means that at every point along the way, the number of right steps so far is at least the number of up steps so far.</li>
+<li>Count a bad path (one that touches the line y = x + 1) by reflection: flip everything after the first touch across that line. Each bad path matches exactly one path from (0,0) to (5,7).</li>
+<li>Number of paths to (5,7) = C(12,5) = 792.</li>
+<li>Good paths = 924 − 792 = <b>132</b>.</li>
+<li>Check by building up: count paths to each point with y ≤ x, adding the counts from the left and from below. The corner (6,6) gets 132. These are the Catalan numbers: 1, 1, 2, 5, 14, 42, 132.</li></ol></div>
     </div>
-
-    <div class="prob">
-      <div class="prob-head"><span class="qnum">3</span><span class="topic">Averages</span><span class="stars">★★☆☆☆</span></div>
-      <div class="qtext">The average of five numbers is 18. When one of the numbers is removed, the average of the remaining four numbers is 16. What number was removed?</div>
-      <button onclick="toggle(this)">Show solution</button>
-      <div class="solution"><span class="ans">26</span><br>The five numbers add up to 5 × 18 = 90. The remaining four add up to 4 × 16 = 64. The removed number is 90 − 64 = 26.</div>
     </div>
   </div>
 
@@ -223,6 +304,8 @@
 
 </div>
 
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
+
 <footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
 
 <script>
@@ -232,10 +315,19 @@ function toggle(btn) {
   if (!btn.dataset.label) btn.dataset.label = btn.textContent;
   btn.textContent = shown ? 'Hide' : btn.dataset.label;
 }
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qtext').innerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
 function showAll() {
   document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
 }
-var total = 25 * 60, left = total, timer = null;
+var total = 30 * 60, left = total, timer = null;
 function paint() {
   var m = Math.floor(left / 60), s = left % 60;
   document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
