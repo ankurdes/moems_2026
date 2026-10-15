@@ -340,6 +340,19 @@ function startTimer() {
   }, 1000);
 }
 function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+
+// Answers are locked for students. Coach opens the page with ?answers=1 to enable them.
+(function () {
+  var open = /[?&]answers=1/.test(location.search);
+  if (open) return;
+  document.querySelectorAll('button[onclick^="toggle"], button[onclick^="openSol"]').forEach(function (b) {
+    b.disabled = true;
+    b.textContent = '🔒 Answer locked';
+    b.removeAttribute('onclick');
+    b.style.opacity = '0.55';
+    b.style.cursor = 'not-allowed';
+  });
+})();
 </script>
 
 </body>
