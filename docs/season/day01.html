@@ -110,7 +110,7 @@
 <header>
   <h1>🚀 Session 1 · Wed, Oct 14, 2026</h1>
   <div class="subtitle">Hansen MOEMs prep · 2027 season · County tournament Sat, May 1, 2027</div>
-  <a class="back" href="../moems_hub.html">← Back to hub</a>
+  <a class="back" href="../moems_hub_2027.html">← Back to 2027 hub</a>
 </header>
 
 <div class="container">
@@ -340,19 +340,6 @@ function startTimer() {
   }, 1000);
 }
 function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
-
-// Answers are locked for students. Coach opens the page with ?answers=1 to enable them.
-(function () {
-  var open = /[?&]answers=1/.test(location.search);
-  if (open) return;
-  document.querySelectorAll('button[onclick^="toggle"], button[onclick^="openSol"]').forEach(function (b) {
-    b.disabled = true;
-    b.textContent = '🔒 Answer locked';
-    b.removeAttribute('onclick');
-    b.style.opacity = '0.55';
-    b.style.cursor = 'not-allowed';
-  });
-})();
 </script>
 
 </body>
