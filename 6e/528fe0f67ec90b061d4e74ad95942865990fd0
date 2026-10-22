@@ -1,0 +1,19 @@
+docs/season/day02.html
+  s_7f3d1ac77af38c::t_74fc5b6b39688b 116,120-121,123-135,139-140,142-148,152-153,155-166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6e528fe0f67ec90b061d4e74ad95942865990fd0",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
