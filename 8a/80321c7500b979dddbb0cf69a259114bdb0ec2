@@ -1,0 +1,21 @@
+docs/season/race.html
+  s_7f3d1ac77af38c::t_0cc5e2fe22efc1 1-105
+docs/season/race_board_00a95b88.html
+  s_7f3d1ac77af38c::t_b7a4d930ada5d6 1-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a80321c7500b979dddbb0cf69a259114bdb0ec2",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "unknown"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
