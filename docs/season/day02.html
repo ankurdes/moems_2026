@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen MOEMs 2027 - Session 2</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 26px 22px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.1em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+  .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
+
+  .container { max-width: 1500px; margin: 0 auto; padding: 24px; }
+  .section {
+    background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
+  }
+  .section.warm  { border-top-color: var(--accent); }
+  .section.diag  { border-top-color: var(--info); }
+  .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
+  .section.warm h2 { color: var(--accent); }
+  .section.diag h2 { color: var(--info); }
+  .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f8fafc; }
+  td.t { white-space: nowrap; font-weight: 700; color: var(--primary); }
+
+  .prob {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+    background: #f8fafc;
+  }
+  .prob-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .qnum {
+    background: var(--info); color: white; border-radius: 50%; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+  .warm .qnum { background: var(--accent); }
+  .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
+
+  button {
+    background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 14px; font-weight: 600; cursor: pointer; font-size: 0.88em;
+  }
+  button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
+  button.big:hover { background: #6d28d9; }
+
+  .diag-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .diag-grid .prob { margin-bottom: 0; display: flex; flex-direction: column; padding: 12px 14px; }
+  .diag-grid .qtext { font-size: 1.05em; flex: 1; }
+  .diag-grid button { align-self: flex-start; }
+  @media (max-width: 1300px) { .diag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .diag-grid { grid-template-columns: 1fr; } }
+  .diag .solution { display: none !important; }
+  #modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+  #modal.show { display: flex; }
+  #modal .box { background: white; border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 28px; font-size: 1.1em; }
+  #modal .box ol { padding-left: 22px; } #modal .box li { margin: 8px 0; }
+  #modal .qt { background: #f8fafc; border-left: 4px solid var(--info); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px; }
+  #modal .close { float: right; }
+  .solution {
+    display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
+    border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
+  }
+  .solution.show { display: block; }
+  .solution .ans { font-weight: 800; color: var(--good); font-size: 1.05em; }
+
+  .timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  #clock { font-size: 2em; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--info); min-width: 100px; }
+
+  .note { background: #fef9e7; border: 2px solid var(--accent); border-radius: 12px; padding: 12px 16px; font-size: 0.93em; }
+  .note ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+  footer { text-align: center; padding: 26px 20px; color: var(--muted); font-size: 0.85em; }
+  @media print { button, .timer-row { display: none !important; } .solution { display: block !important; } }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚀 Session 2 · Wed, Oct 21, 2026</h1>
+  <div class="subtitle">Team brain teasers, then a 10-problem practice set</div>
+  <a class="back" href="../moems_hub_2027.html">← Back to 2027 hub</a>
+</header>
+
+<div class="container">
+
+  <div class="section warm">
+    <h2>🧩 Team brain teasers (15 min)</h2>
+    <p class="lede">Work on all three together as one team. Split up the work, compare answers, and make sure everyone on the team can explain why the answer is right.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The bridge at night</span></div>
+      <div class="qtext">Four friends must cross a narrow bridge at night. They have <b>one flashlight</b>, and the bridge holds at most <b>two people</b> at a time. Anyone crossing needs the flashlight, so someone has to walk it back for the others. Alone, the friends take <b>1, 2, 5 and 10 minutes</b> to cross. A pair walks at the speed of the slower person. What is the <b>least total time</b> for all four to get across?</div>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: 17 minutes</span><ol>
+<li><b>The obvious plan is not the best.</b> If the 1-minute friend escorts everyone: 2 (with the 2) + 1 (back) + 5 + 1 (back) + 10 = 19 minutes.</li>
+<li><b>The idea:</b> the two slowest friends (5 and 10) should cross <b>together</b>, so the 10 minutes is paid only once and the 5 minutes costs nothing extra.</li>
+<li>Minute 0 to 2: the 1 and the 2 cross together (2 minutes).</li>
+<li>The 1 walks back with the flashlight (1 minute). Total so far: 3.</li>
+<li>The 5 and the 10 cross together (10 minutes). Total so far: 13.</li>
+<li>The 2 (who is already across) walks back with the flashlight (2 minutes). Total so far: 15.</li>
+<li>The 1 and the 2 cross together one last time (2 minutes). Total: <b>17 minutes</b>.</li>
+<li>Trying every possible order of crossings by computer confirms that nothing beats 17.</li></ol></div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Squares on a chessboard</span></div>
+      <div class="qtext">How many squares of <b>any size</b> are on a standard 8 × 8 chessboard? (Not just the 64 small ones. A 2 × 2 block of small squares counts, and so does a 3 × 3 block.)<br><br><b>Bonus:</b> how many <b>rectangles</b> of any size (counting squares) are there?</div>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: 204 squares. Bonus: 1296 rectangles.</span><ol>
+<li><b>Split by size.</b> It works well to give each person on the team a few sizes.</li>
+<li>1 × 1 squares: 8 × 8 = 64. For a 2 × 2 square, the top-left corner can be in 7 columns and 7 rows, so 7 × 7 = 49. For a 3 × 3 square: 6 × 6 = 36.</li>
+<li>Keep going: 4 × 4: 25, 5 × 5: 16, 6 × 6: 9, 7 × 7: 4, 8 × 8: 1.</li>
+<li>Total: 64 + 49 + 36 + 25 + 16 + 9 + 4 + 1 = <b>204</b>.</li>
+<li><b>Bonus.</b> A rectangle is decided by choosing 2 of the 9 vertical grid lines for its left and right sides, and 2 of the 9 horizontal grid lines for its top and bottom.</li>
+<li>Ways to choose 2 of 9 lines: 9 × 8 ÷ 2 = 36. So the rectangles number 36 × 36 = <b>1296</b>.</li></ol></div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Knights and liars</span></div>
+      <div class="qtext">On an island, <b>knights always tell the truth</b> and <b>liars always lie</b>. Three islanders speak.<br>Ann says: "Ben is a liar."<br>Ben says: "Cal is a liar."<br>Cal says: "Ann and Ben are both liars."<br>Who is a knight and who is a liar?</div>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: Ben is the only knight. Ann and Cal are liars.</span><ol>
+<li><b>Try Cal as a knight.</b> Then his statement is true, so Ann and Ben are both liars. But then Ann, a liar, said "Ben is a liar", which would be true. A liar can't say something true. Contradiction, so Cal is a <b>liar</b>.</li>
+<li>Cal's statement is false, so it is not true that both Ann and Ben are liars. At least one of them is a knight.</li>
+<li><b>Try Ann as a knight.</b> Then "Ben is a liar" is true, so Ben is a liar. But Ben said "Cal is a liar", which is true, and a liar can't say that. Contradiction, so Ann is a <b>liar</b>.</li>
+<li>Ann is a liar, so Ben must be the knight from step 2.</li>
+<li><b>Check everything.</b> Ann (liar) says Ben is a liar: false, as it should be. Ben (knight) says Cal is a liar: true. Cal (liar) says Ann and Ben are both liars: false, because Ben is a knight. ✓</li></ol></div>
+    </div>
+  </div>
+
+  <div class="section diag">
+    <h2>📝 Practice set (30 min)</h2>
+    <p class="lede">10 problems, easy to hard. The last 2 are hard. Show your work, and skip and come back if you're stuck for more than 3 minutes.</p>
+
+    <div class="timer-row">
+      <div id="clock">30:00</div>
+      <button class="big" onclick="startTimer()">▶ Start</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="diag-grid">
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Fractions / patterns</span></div>
+      <div class="qtext">Find the value of 1/(1×3) + 1/(3×5) + 1/(5×7) + ... + 1/(19×21).</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 10/21</span><ol>
+<li>Each term has the form 1/(<i>k</i>(<i>k</i>+2)) with <i>k</i> = 1, 3, 5, ..., 19. That is 10 terms.</li>
+<li>Split each term: 1/(<i>k</i>(<i>k</i>+2)) = ½ × (1/<i>k</i> − 1/(<i>k</i>+2)). Test it on the first term: ½ × (1 − 1/3) = 1/3 = 1/(1×3). ✓</li>
+<li>Write out the sum: ½ × [(1 − 1/3) + (1/3 − 1/5) + (1/5 − 1/7) + ... + (1/19 − 1/21)].</li>
+<li>Everything in the middle cancels (telescoping), leaving ½ × (1 − 1/21).</li>
+<li>½ × 20/21 = <b>10/21</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Arithmetic / sequences</span></div>
+      <div class="qtext">The sum of 12 consecutive integers is 354. What is the largest of the 12 integers?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 35</span><ol>
+<li>The average of the 12 numbers is 354 ÷ 12 = 29.5.</li>
+<li>With an even number of consecutive integers there is no single middle number. The middle two are 29 and 30 (their average is 29.5).</li>
+<li>There are 6 numbers on each side of the middle: 24, 25, ..., 29 and then 30, 31, ..., 35.</li>
+<li>Check: pair up the ends. 24 + 35 = 59, and there are 6 such pairs, so 6 × 59 = 354. ✓</li>
+<li>The largest is <b>35</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Mixtures / percent</span></div>
+      <div class="qtext">How many liters of a 30% salt solution must be mixed with 20 liters of a 60% salt solution to make a 40% salt solution?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 40 liters</span><ol>
+<li>Let <i>x</i> be the liters of 30% solution. The salt from it is 0.30<i>x</i>. The salt from the 20 liters of 60% solution is 0.60 × 20 = 12.</li>
+<li>The total mixture is <i>x</i> + 20 liters and it should be 40% salt, so it holds 0.40(<i>x</i> + 20) = 0.40<i>x</i> + 8 liters of salt.</li>
+<li>Salt in = salt out: 0.30<i>x</i> + 12 = 0.40<i>x</i> + 8.</li>
+<li>Subtract: 4 = 0.10<i>x</i>, so <i>x</i> = <b>40</b>.</li>
+<li>Check: 40 L at 30% gives 12 L of salt. Add 12 L from the other solution for 24 L of salt in 60 L total, and 24 ÷ 60 = 40%. ✓</li>
+<li>Shortcut: 40% is 10 points above 30% and 20 points below 60%. The mix is closer to the 30%, so you need twice as much of it: 2 × 20 = 40.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Rates</span></div>
+      <div class="qtext">Ben drives 60 miles at 20 miles per hour, then the next 60 miles at 30 miles per hour, then the last 60 miles at 60 miles per hour. What is his average speed for the whole 180 miles, in miles per hour?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 30 mph</span><ol>
+<li>Careful: the answer is not (20 + 30 + 60) ÷ 3, which is about 36.7. He spends more time at the slow speeds.</li>
+<li>Average speed = total distance ÷ total time.</li>
+<li>Time for each leg: 60 ÷ 20 = 3 hours, 60 ÷ 30 = 2 hours, 60 ÷ 60 = 1 hour.</li>
+<li>Total time = 3 + 2 + 1 = 6 hours. Total distance = 180 miles.</li>
+<li>180 ÷ 6 = <b>30 mph</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Counting</span></div>
+      <div class="qtext">Seven students sit around a round table. In how many ways can they sit if Ann and Ben must <b>not</b> sit next to each other? (Two seatings are the same if one can be rotated to look like the other.)</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 480</span><ol>
+<li>Around a round table, rotations don't count as different. So fix one student in a seat to remove rotations, then arrange the other 6: 6! = 720 ways in total.</li>
+<li>Now count the bad seatings, where Ann and Ben ARE next to each other. Glue them into one block. Now there are 6 things around the table: 5! = 120 ways.</li>
+<li>Inside the block Ann and Ben can swap (AB or BA), so multiply by 2: 120 × 2 = 240.</li>
+<li>Not next to each other = 720 − 240 = <b>480</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">6</span><span class="topic">Geometry</span></div>
+      <div class="qtext">A right triangle has legs of length 9 and 12. What is the radius of the circle drawn <b>inside</b> the triangle, touching all three sides?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 3</span><ol>
+<li>The hypotenuse is 15, since 9² + 12² = 81 + 144 = 225 = 15². (It is the 3-4-5 triangle times 3.)</li>
+<li>Area = ½ × 9 × 12 = 54.</li>
+<li>Draw lines from the center of the inside circle to the three vertices. This cuts the triangle into three smaller triangles. Each has height <i>r</i> (the radius) and the sides 9, 12 and 15 as bases.</li>
+<li>So the area is also ½ × <i>r</i> × (9 + 12 + 15) = ½ × <i>r</i> × 36 = 18<i>r</i>.</li>
+<li>Set equal: 18<i>r</i> = 54, so <i>r</i> = <b>3</b>.</li>
+<li>Shortcut for right triangles: <i>r</i> = (leg + leg − hypotenuse) ÷ 2 = (9 + 12 − 15) ÷ 2 = 3. ✓</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">7</span><span class="topic">Counting</span></div>
+      <div class="qtext">How many 4-digit numbers (1000 to 9999) have digits that add up to 10?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 219</span><ol>
+<li>Do casework on the first digit <i>A</i> (it can be 1 to 9). The other three digits (each 0 to 9) must add up to 10 − <i>A</i>.</li>
+<li>The number of ways three digits can add to <i>m</i> is C(<i>m</i>+2, 2). Test it: <i>m</i> = 1 can be (1,0,0), (0,1,0), (0,0,1), which is 3 ways, and C(3,2) = 3. ✓</li>
+<li><i>A</i> = 1: <i>m</i> = 9 gives 55. <i>A</i> = 2: <i>m</i> = 8 gives 45. <i>A</i> = 3: 36. <i>A</i> = 4: 28. <i>A</i> = 5: 21. <i>A</i> = 6: 15. <i>A</i> = 7: 10. <i>A</i> = 8: 6. <i>A</i> = 9: 3.</li>
+<li>No digit ever has to be more than 9, because <i>m</i> is at most 9, so there are no extra cases to remove.</li>
+<li>Add: 55 + 45 + 36 + 28 + 21 + 15 + 10 + 6 + 3 = <b>219</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">8</span><span class="topic">Number theory</span></div>
+      <div class="qtext">What is the <b>smallest</b> positive integer that has exactly 18 positive divisors?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 180</span><ol>
+<li>If <i>n</i> = <i>p</i><sup>a</sup> × <i>q</i><sup>b</sup> × <i>r</i><sup>c</sup> ..., the number of divisors is (a+1)(b+1)(c+1)...</li>
+<li>We need that product to be 18. The ways to split 18: 18, 9×2, 6×3, 3×3×2. So the exponent patterns are (17), (8,1), (5,2) and (2,2,1).</li>
+<li>For the smallest number, use the smallest primes and put the biggest exponents on the smallest primes:
+  <br>(17): 2<sup>17</sup> = 131072
+  <br>(8,1): 2<sup>8</sup> × 3 = 768
+  <br>(5,2): 2<sup>5</sup> × 3<sup>2</sup> = 288
+  <br>(2,2,1): 2<sup>2</sup> × 3<sup>2</sup> × 5 = 180</li>
+<li>The smallest is <b>180</b>. Check: 180 = 2<sup>2</sup> × 3<sup>2</sup> × 5 has (2+1)(2+1)(1+1) = 18 divisors. ✓</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">9</span><span class="topic">Number theory (hard)</span></div>
+      <div class="qtext">Nonnegative integers <i>X</i> and <i>Y</i> satisfy 19<i>X</i> + 43<i>Y</i> = 2027. What is the greatest possible value of <i>X</i> + <i>Y</i>?</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 89</span><ol>
+<li>2027 − 43<i>Y</i> must be divisible by 19. Work mod 19: 2027 = 19 × 106 + 13, so 2027 ≡ 13. Also 43 = 2 × 19 + 5, so 43 ≡ 5.</li>
+<li>We need 5<i>Y</i> ≡ 13 (mod 19). Since 5 × 4 = 20 ≡ 1, the number 4 undoes the 5. Multiply both sides by 4: <i>Y</i> ≡ 52 ≡ 14 (mod 19).</li>
+<li>So <i>Y</i> = 14, 33, 52, ... But 43 × 52 = 2236 is already more than 2027, so only <i>Y</i> = 14 and <i>Y</i> = 33 are possible.</li>
+<li><i>Y</i> = 14: <i>X</i> = (2027 − 602) ÷ 19 = 1425 ÷ 19 = 75, so <i>X</i> + <i>Y</i> = 89.</li>
+<li><i>Y</i> = 33: <i>X</i> = (2027 − 1419) ÷ 19 = 608 ÷ 19 = 32, so <i>X</i> + <i>Y</i> = 65.</li>
+<li>Check: 19 × 75 + 43 × 14 = 1425 + 602 = 2027. ✓ The greatest is <b>89</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">10</span><span class="topic">Counting (hard)</span></div>
+      <div class="qtext">How many <b>ordered</b> pairs (<i>a</i>, <i>b</i>) of positive integers have a least common multiple of 360? (For example, (8, 45) and (45, 8) count as different pairs.)</div>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 105</span><ol>
+<li>Prime factor: 360 = 2<sup>3</sup> × 3<sup>2</sup> × 5.</li>
+<li>The LCM takes the <b>larger</b> exponent of each prime. So for each prime, at least one of <i>a</i> and <i>b</i> must have the full exponent from 360.</li>
+<li><b>Prime 2</b> (exponent 3): each number has an exponent from 0 to 3, so 4 × 4 = 16 combinations. Remove those where neither reaches 3 (both use 0 to 2: 3 × 3 = 9). That leaves 16 − 9 = 7.</li>
+<li><b>Prime 3</b> (exponent 2): 3 × 3 = 9 combinations, minus 2 × 2 = 4 where neither reaches 2. That leaves 5.</li>
+<li><b>Prime 5</b> (exponent 1): 2 × 2 = 4 combinations, minus 1 where neither has a 5. That leaves 3.</li>
+<li>The primes don't affect each other, so multiply: 7 × 5 × 3 = <b>105</b>.</li></ol></div>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
+
+<footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
+
+<script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qtext').innerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
+var total = 30 * 60, left = total, timer = null;
+function paint() {
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function startTimer() {
+  if (timer) return;
+  timer = setInterval(function () {
+    left--; paint();
+    if (left <= 0) { clearInterval(timer); timer = null; document.getElementById('clock').textContent = "Time!"; }
+  }, 1000);
+}
+function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+</script>
+
+</body>
+</html>
