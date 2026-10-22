@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach copy - Session 2</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 26px 22px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.1em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+  .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
+
+  .container { max-width: 1500px; margin: 0 auto; padding: 24px; }
+  .section {
+    background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
+  }
+  .section.warm  { border-top-color: var(--accent); }
+  .section.diag  { border-top-color: var(--info); }
+  .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
+  .section.warm h2 { color: var(--accent); }
+  .section.diag h2 { color: var(--info); }
+  .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f8fafc; }
+  td.t { white-space: nowrap; font-weight: 700; color: var(--primary); }
+
+  .prob {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+    background: #f8fafc;
+  }
+  .prob-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .qnum {
+    background: var(--info); color: white; border-radius: 50%; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+  .warm .qnum { background: var(--accent); }
+  .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
+
+  button {
+    background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 14px; font-weight: 600; cursor: pointer; font-size: 0.88em;
+  }
+  button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
+  button.big:hover { background: #6d28d9; }
+
+  .diag-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .diag-grid .prob { margin-bottom: 0; display: flex; flex-direction: column; padding: 12px 14px; }
+  .diag-grid .qtext { font-size: 1.05em; flex: 1; }
+  .diag-grid button { align-self: flex-start; }
+  @media (max-width: 1300px) { .diag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .diag-grid { grid-template-columns: 1fr; } }
+  .diag .solution { display: none !important; }
+  #modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+  #modal.show { display: flex; }
+  #modal .box { background: white; border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 28px; font-size: 1.1em; }
+  #modal .box ol { padding-left: 22px; } #modal .box li { margin: 8px 0; }
+  #modal .qt { background: #f8fafc; border-left: 4px solid var(--info); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px; }
+  #modal .close { float: right; }
+  .solution {
+    display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
+    border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
+  }
+  .solution.show { display: block; }
+  .solution .ans { font-weight: 800; color: var(--good); font-size: 1.05em; }
+
+  .timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  #clock { font-size: 2em; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--info); min-width: 100px; }
+
+  .note { background: #fef9e7; border: 2px solid var(--accent); border-radius: 12px; padding: 12px 16px; font-size: 0.93em; }
+  .note ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+  footer { text-align: center; padding: 26px 20px; color: var(--muted); font-size: 0.85em; }
+  @media print { button, .timer-row { display: none !important; } .solution { display: block !important; } }
+
+  .qimg { display:block; max-width:100%; height:auto; margin:6px 0 10px; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  #modal .qt img { width:100%; max-width:380px; }
+  button:disabled { opacity:.55; cursor:not-allowed; background:#f1f5f9 !important; color:var(--ink) !important; border-color:#cbd5e1 !important; }
+  .coachbar { background:#fef3c7; border-bottom:2px solid #f59e0b; text-align:center; padding:6px; font-weight:700; color:#92400e; }
+</style>
+</head>
+<body>
+<div class="coachbar">COACH COPY · answers enabled · do not share the link</div>
+
+<header>
+  <h1>🚀 Session 2 · Wed, Oct 21, 2026</h1>
+  <div class="subtitle">Team brain teasers, then a 10-problem practice set</div>
+  
+</header>
+
+<div class="container">
+
+  <div class="section warm">
+    <h2>🧩 Team brain teasers (20 min)</h2>
+    <p class="lede">Work on all three together as one team. Split up the work, compare answers, and make sure everyone on the team can explain why the answer is right.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The chicken nugget problem</span></div>
+      <img class="qimg" src="img/s2_q01.png" alt="Question image" width="974" draggable="false">
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: 43</span><ol>
+<li><b>Show that 43 can't be bought.</b> Boxes of 6 and 9 are both multiples of 3, so with no 20-boxes you can only reach multiples of 3. 43 is not one.</li>
+<li>With one 20-box, the rest (43 − 20 = 23) must come from 6s and 9s, so it must be a multiple of 3. 23 is not.</li>
+<li>With two 20-boxes, the rest is 43 − 40 = 3. You can't make 3 from 6s and 9s. Three 20-boxes is 60, which is too many. So <b>43 is impossible</b>.</li>
+<li><b>Show that everything above 43 works.</b> Find 6 numbers in a row that can be bought:
+  <br>44 = 20 + 6 + 6 + 6 + 6
+  <br>45 = 9 × 5
+  <br>46 = 20 + 20 + 6
+  <br>47 = 20 + 9 + 9 + 9
+  <br>48 = 6 × 8
+  <br>49 = 20 + 20 + 9</li>
+<li>Now you can add a 6-box to any of these to get the number 6 higher. Starting from 44 to 49, adding 6s reaches 50 to 55, then 56 to 61, and so on, so <b>every number from 44 up</b> can be bought.</li>
+<li>The largest number you can't buy is <b>43</b>. (A computer search agrees.)</li></ol></div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">The circle of 100</span></div>
+      <img class="qimg" src="img/s2_q02.png" alt="Question image" width="978" draggable="false">
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: 73</span><ol>
+<li><b>Try small circles first</b> and see who survives. With 1 student: 1. With 2: 1. With 3: 3. With 4: 1. With 5: 3. With 6: 5. With 7: 7. With 8: 1. With 9: 3.</li>
+<li><b>Spot the pattern.</b> When the number of students is a power of 2 (1, 2, 4, 8, ...), student 1 survives. After that the survivor goes up by 2 each time (1, 3, 5, 7, then back to 1 at the next power of 2).</li>
+<li><b>Why a power of 2 gives student 1.</b> In one trip around the circle, all the even numbers go out and exactly half the students are left. Student 1 stays and the next trip starts from student 1 again, with half as many students. This repeats, so 1 always survives.</li>
+<li><b>Now use it for 100.</b> The biggest power of 2 below 100 is 64. We have 100 − 64 = 36 extra students. Eliminate exactly 36 students first: that removes 2, 4, 6, ..., 72.</li>
+<li>Now 64 students remain (a power of 2) and the next student in the count is <b>73</b>. That student is now "first" in a circle of 64, so student 73 survives.</li>
+<li>As a formula: 100 = 64 + 36, and the survivor is 2 × 36 + 1 = <b>73</b>. (A computer simulation agrees.)</li></ol></div>
+    </div>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">The 12 coins</span></div>
+      <img class="qimg" src="img/s2_q03.png" alt="Question image" width="983" draggable="false">
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: yes, it can always be done in 3 weighings. Here is one method.</span><ol>
+<li>Number the coins 1 to 12. <b>Weighing 1:</b> coins 1, 2, 3, 4 on the left and 5, 6, 7, 8 on the right. There are 3 outcomes.</li>
+<li><b>If it balances:</b> the fake is one of 9, 10, 11, 12, and coins 1 to 8 are all real. <b>Weighing 2:</b> put 9, 10, 11 on the left and three real coins (1, 2, 3) on the right.
+  <br>• If it balances, the fake is <b>12</b>. <b>Weighing 3:</b> weigh 12 against a real coin. Heavier means 12 is heavy, lighter means 12 is light.
+  <br>• If the left side (9, 10, 11) is heavier, the fake is one of those and it is <b>heavy</b>. <b>Weighing 3:</b> weigh 9 against 10. The heavier one is the fake. If they balance, it is 11.
+  <br>• If the left side is lighter, the fake is one of 9, 10, 11 and it is <b>light</b>. Weigh 9 against 10. The lighter one is the fake, and if they balance it is 11.</li>
+<li><b>If the left side (1, 2, 3, 4) is heavier in weighing 1:</b> then either one of 1 to 4 is a heavy fake, or one of 5 to 8 is a light fake. Coins 9 to 12 are real. <b>Weighing 2:</b> put 1, 2, 5 on the left and 3, 6, 9 on the right (9 is real).
+  <br>• If the left is heavier: the fake is 1 (heavy), 2 (heavy) or 6 (light). <b>Weighing 3:</b> weigh 1 against 2. The heavier one is the fake. If they balance, 6 is the light fake.
+  <br>• If the left is lighter: the fake is 5 (light) or 3 (heavy). <b>Weighing 3:</b> weigh 5 against a real coin. If 5 is lighter, 5 is the fake. If they balance, 3 is the heavy fake.
+  <br>• If it balances: the fake is 4 (heavy), 7 (light) or 8 (light). <b>Weighing 3:</b> weigh 7 against 8. The lighter one is the fake. If they balance, 4 is the heavy fake.</li>
+<li><b>If the left side (1, 2, 3, 4) is lighter in weighing 1:</b> do the exact mirror image of the step above. Swap the roles of coins 1 to 4 and coins 5 to 8, so you use 5, 6, 1 against 7, 2, 9, and so on.</li>
+<li>Why it works: there are 24 possibilities (12 coins, each heavy or light), and 3 weighings give 3 × 3 × 3 = 27 outcomes, so there is just enough room. The key idea is to use known-real coins as a reference in the later weighings. (Testing this method on all 24 cases by computer finds the fake and its weight every time.)</li></ol></div>
+    </div>
+  </div>
+
+  <div class="section diag">
+    <h2>📝 Practice set (30 min)</h2>
+    <p class="lede">10 problems, easy to hard. The last 2 are hard. Show your work, and skip and come back if you're stuck for more than 3 minutes.</p>
+
+    <div class="timer-row">
+      <div id="clock">30:00</div>
+      <button class="big" onclick="startTimer()">▶ Start</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="diag-grid">
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Fractions / patterns</span></div>
+      <img class="qimg" src="img/s2_q04.png" alt="Question image" width="199" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 10/21</span><ol>
+<li>Each term has the form 1/(<i>k</i>(<i>k</i>+2)) with <i>k</i> = 1, 3, 5, ..., 19. That is 10 terms.</li>
+<li>Split each term: 1/(<i>k</i>(<i>k</i>+2)) = ½ × (1/<i>k</i> − 1/(<i>k</i>+2)). Test it on the first term: ½ × (1 − 1/3) = 1/3 = 1/(1×3). ✓</li>
+<li>Write out the sum: ½ × [(1 − 1/3) + (1/3 − 1/5) + (1/5 − 1/7) + ... + (1/19 − 1/21)].</li>
+<li>Everything in the middle cancels (telescoping), leaving ½ × (1 − 1/21).</li>
+<li>½ × 20/21 = <b>10/21</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Arithmetic / sequences</span></div>
+      <img class="qimg" src="img/s2_q05.png" alt="Question image" width="210" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 35</span><ol>
+<li>The average of the 12 numbers is 354 ÷ 12 = 29.5.</li>
+<li>With an even number of consecutive integers there is no single middle number. The middle two are 29 and 30 (their average is 29.5).</li>
+<li>There are 6 numbers on each side of the middle: 24, 25, ..., 29 and then 30, 31, ..., 35.</li>
+<li>Check: pair up the ends. 24 + 35 = 59, and there are 6 such pairs, so 6 × 59 = 354. ✓</li>
+<li>The largest is <b>35</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Mixtures / percent</span></div>
+      <img class="qimg" src="img/s2_q06.png" alt="Question image" width="238" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 40 liters</span><ol>
+<li>Let <i>x</i> be the liters of 30% solution. The salt from it is 0.30<i>x</i>. The salt from the 20 liters of 60% solution is 0.60 × 20 = 12.</li>
+<li>The total mixture is <i>x</i> + 20 liters and it should be 40% salt, so it holds 0.40(<i>x</i> + 20) = 0.40<i>x</i> + 8 liters of salt.</li>
+<li>Salt in = salt out: 0.30<i>x</i> + 12 = 0.40<i>x</i> + 8.</li>
+<li>Subtract: 4 = 0.10<i>x</i>, so <i>x</i> = <b>40</b>.</li>
+<li>Check: 40 L at 30% gives 12 L of salt. Add 12 L from the other solution for 24 L of salt in 60 L total, and 24 ÷ 60 = 40%. ✓</li>
+<li>Shortcut: 40% is 10 points above 30% and 20 points below 60%. The mix is closer to the 30%, so you need twice as much of it: 2 × 20 = 40.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Rates</span></div>
+      <img class="qimg" src="img/s2_q07.png" alt="Question image" width="244" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 30 mph</span><ol>
+<li>Careful: the answer is not (20 + 30 + 60) ÷ 3, which is about 36.7. He spends more time at the slow speeds.</li>
+<li>Average speed = total distance ÷ total time.</li>
+<li>Time for each leg: 60 ÷ 20 = 3 hours, 60 ÷ 30 = 2 hours, 60 ÷ 60 = 1 hour.</li>
+<li>Total time = 3 + 2 + 1 = 6 hours. Total distance = 180 miles.</li>
+<li>180 ÷ 6 = <b>30 mph</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Counting</span></div>
+      <img class="qimg" src="img/s2_q08.png" alt="Question image" width="246" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 480</span><ol>
+<li>Around a round table, rotations don't count as different. So fix one student in a seat to remove rotations, then arrange the other 6: 6! = 720 ways in total.</li>
+<li>Now count the bad seatings, where Ann and Ben ARE next to each other. Glue them into one block. Now there are 6 things around the table: 5! = 120 ways.</li>
+<li>Inside the block Ann and Ben can swap (AB or BA), so multiply by 2: 120 × 2 = 240.</li>
+<li>Not next to each other = 720 − 240 = <b>480</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">6</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s2_q09.png" alt="Question image" width="247" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 3</span><ol>
+<li>The hypotenuse is 15, since 9² + 12² = 81 + 144 = 225 = 15². (It is the 3-4-5 triangle times 3.)</li>
+<li>Area = ½ × 9 × 12 = 54.</li>
+<li>Draw lines from the center of the inside circle to the three vertices. This cuts the triangle into three smaller triangles. Each has height <i>r</i> (the radius) and the sides 9, 12 and 15 as bases.</li>
+<li>So the area is also ½ × <i>r</i> × (9 + 12 + 15) = ½ × <i>r</i> × 36 = 18<i>r</i>.</li>
+<li>Set equal: 18<i>r</i> = 54, so <i>r</i> = <b>3</b>.</li>
+<li>Shortcut for right triangles: <i>r</i> = (leg + leg − hypotenuse) ÷ 2 = (9 + 12 − 15) ÷ 2 = 3. ✓</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">7</span><span class="topic">Counting</span></div>
+      <img class="qimg" src="img/s2_q10.png" alt="Question image" width="238" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 219</span><ol>
+<li>Do casework on the first digit <i>A</i> (it can be 1 to 9). The other three digits (each 0 to 9) must add up to 10 − <i>A</i>.</li>
+<li>The number of ways three digits can add to <i>m</i> is C(<i>m</i>+2, 2). Test it: <i>m</i> = 1 can be (1,0,0), (0,1,0), (0,0,1), which is 3 ways, and C(3,2) = 3. ✓</li>
+<li><i>A</i> = 1: <i>m</i> = 9 gives 55. <i>A</i> = 2: <i>m</i> = 8 gives 45. <i>A</i> = 3: 36. <i>A</i> = 4: 28. <i>A</i> = 5: 21. <i>A</i> = 6: 15. <i>A</i> = 7: 10. <i>A</i> = 8: 6. <i>A</i> = 9: 3.</li>
+<li>No digit ever has to be more than 9, because <i>m</i> is at most 9, so there are no extra cases to remove.</li>
+<li>Add: 55 + 45 + 36 + 28 + 21 + 15 + 10 + 6 + 3 = <b>219</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">8</span><span class="topic">Number theory</span></div>
+      <img class="qimg" src="img/s2_q11.png" alt="Question image" width="225" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 180</span><ol>
+<li>If <i>n</i> = <i>p</i><sup>a</sup> × <i>q</i><sup>b</sup> × <i>r</i><sup>c</sup> ..., the number of divisors is (a+1)(b+1)(c+1)...</li>
+<li>We need that product to be 18. The ways to split 18: 18, 9×2, 6×3, 3×3×2. So the exponent patterns are (17), (8,1), (5,2) and (2,2,1).</li>
+<li>For the smallest number, use the smallest primes and put the biggest exponents on the smallest primes:
+  <br>(17): 2<sup>17</sup> = 131072
+  <br>(8,1): 2<sup>8</sup> × 3 = 768
+  <br>(5,2): 2<sup>5</sup> × 3<sup>2</sup> = 288
+  <br>(2,2,1): 2<sup>2</sup> × 3<sup>2</sup> × 5 = 180</li>
+<li>The smallest is <b>180</b>. Check: 180 = 2<sup>2</sup> × 3<sup>2</sup> × 5 has (2+1)(2+1)(1+1) = 18 divisors. ✓</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">9</span><span class="topic">Number theory (hard)</span></div>
+      <img class="qimg" src="img/s2_q12.png" alt="Question image" width="243" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 89</span><ol>
+<li>2027 − 43<i>Y</i> must be divisible by 19. Work mod 19: 2027 = 19 × 106 + 13, so 2027 ≡ 13. Also 43 = 2 × 19 + 5, so 43 ≡ 5.</li>
+<li>We need 5<i>Y</i> ≡ 13 (mod 19). Since 5 × 4 = 20 ≡ 1, the number 4 undoes the 5. Multiply both sides by 4: <i>Y</i> ≡ 52 ≡ 14 (mod 19).</li>
+<li>So <i>Y</i> = 14, 33, 52, ... But 43 × 52 = 2236 is already more than 2027, so only <i>Y</i> = 14 and <i>Y</i> = 33 are possible.</li>
+<li><i>Y</i> = 14: <i>X</i> = (2027 − 602) ÷ 19 = 1425 ÷ 19 = 75, so <i>X</i> + <i>Y</i> = 89.</li>
+<li><i>Y</i> = 33: <i>X</i> = (2027 − 1419) ÷ 19 = 608 ÷ 19 = 32, so <i>X</i> + <i>Y</i> = 65.</li>
+<li>Check: 19 × 75 + 43 × 14 = 1425 + 602 = 2027. ✓ The greatest is <b>89</b>.</li></ol></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">10</span><span class="topic">Counting (hard)</span></div>
+      <img class="qimg" src="img/s2_q13.png" alt="Question image" width="241" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 105</span><ol>
+<li>Prime factor: 360 = 2<sup>3</sup> × 3<sup>2</sup> × 5.</li>
+<li>The LCM takes the <b>larger</b> exponent of each prime. So for each prime, at least one of <i>a</i> and <i>b</i> must have the full exponent from 360.</li>
+<li><b>Prime 2</b> (exponent 3): each number has an exponent from 0 to 3, so 4 × 4 = 16 combinations. Remove those where neither reaches 3 (both use 0 to 2: 3 × 3 = 9). That leaves 16 − 9 = 7.</li>
+<li><b>Prime 3</b> (exponent 2): 3 × 3 = 9 combinations, minus 2 × 2 = 4 where neither reaches 2. That leaves 5.</li>
+<li><b>Prime 5</b> (exponent 1): 2 × 2 = 4 combinations, minus 1 where neither has a 5. That leaves 3.</li>
+<li>The primes don't affect each other, so multiply: 7 × 5 × 3 = <b>105</b>.</li></ol></div>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
+
+<footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
+
+<script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qimg').outerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
+var total = 30 * 60, left = total, timer = null;
+function paint() {
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function startTimer() {
+  if (timer) return;
+  timer = setInterval(function () {
+    left--; paint();
+    if (left <= 0) { clearInterval(timer); timer = null; document.getElementById('clock').textContent = "Time!"; }
+  }, 1000);
+}
+function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+</script>
+
+</body>
+</html>
