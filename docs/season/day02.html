@@ -117,18 +117,17 @@
     <p class="lede">Work on all three together as one team. Split up the work, compare answers, and make sure everyone on the team can explain why the answer is right.</p>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">1</span><span class="topic">The bridge at night</span></div>
-      <div class="qtext">Four friends must cross a narrow bridge at night. They have <b>one flashlight</b>, and the bridge holds at most <b>two people</b> at a time. Anyone crossing needs the flashlight, so someone has to walk it back for the others. Alone, the friends take <b>1, 2, 5 and 10 minutes</b> to cross. A pair walks at the speed of the slower person. What is the <b>least total time</b> for all four to get across?</div>
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Five greedy pirates</span></div>
+      <div class="qtext">Five pirates, <b>A, B, C, D and E</b> (A is the most senior, then B, then C, and so on), find <b>100 gold coins</b>. They split them like this: the most senior pirate proposes how to divide the coins, and then <b>all</b> the pirates vote, including the one who proposed. If <b>at least half</b> of the pirates vote yes, the split happens. Otherwise the proposer is thrown overboard and the next most senior pirate proposes a new split.<br><br>Every pirate is perfectly logical and cares about three things, in this order: (1) staying alive, (2) getting as many coins as possible, (3) if nothing else changes, throwing others overboard. <b>What split should A propose so that it passes, and A keeps as many coins as possible?</b></div>
       <button onclick="toggle(this)">Show answer</button>
-      <div class="solution"><span class="ans">Answer: 17 minutes</span><ol>
-<li><b>The obvious plan is not the best.</b> If the 1-minute friend escorts everyone: 2 (with the 2) + 1 (back) + 5 + 1 (back) + 10 = 19 minutes.</li>
-<li><b>The idea:</b> the two slowest friends (5 and 10) should cross <b>together</b>, so the 10 minutes is paid only once and the 5 minutes costs nothing extra.</li>
-<li>Minute 0 to 2: the 1 and the 2 cross together (2 minutes).</li>
-<li>The 1 walks back with the flashlight (1 minute). Total so far: 3.</li>
-<li>The 5 and the 10 cross together (10 minutes). Total so far: 13.</li>
-<li>The 2 (who is already across) walks back with the flashlight (2 minutes). Total so far: 15.</li>
-<li>The 1 and the 2 cross together one last time (2 minutes). Total: <b>17 minutes</b>.</li>
-<li>Trying every possible order of crossings by computer confirms that nothing beats 17.</li></ol></div>
+      <div class="solution"><span class="ans">Answer: A 98, B 0, C 1, D 0, E 1</span><ol>
+<li><b>Start with the smallest case and work backward.</b> Imagine only D and E are left. D proposes 100 for D and 0 for E. D's own vote is 1 out of 2, which is at least half, so it passes. <b>With 2 pirates left: D gets 100, E gets 0.</b></li>
+<li><b>Three left (C, D, E).</b> C needs 2 votes out of 3, so C needs one more vote besides their own. D would get 100 if C were thrown overboard, so D will never vote for C. But E would get 0 in that case, so E will vote yes for anything better than 0. C offers E 1 coin. <b>With 3 left: C 99, D 0, E 1.</b></li>
+<li><b>Four left (B, C, D, E).</b> B needs 2 votes out of 4, so one more besides their own. If B is thrown overboard, C gets 99, D gets 0, E gets 1. So D would take any offer above 0. B offers D 1 coin. <b>With 4 left: B 99, C 0, D 1, E 0.</b></li>
+<li><b>Five left (A, B, C, D, E).</b> A needs 3 votes out of 5, so two more besides their own. If A is thrown overboard, B gets 99, C gets 0, D gets 1, E gets 0. So C and E would each take any offer above 0, and A should buy those two cheapest votes with 1 coin each.</li>
+<li>A proposes: A 98, B 0, C 1, D 0, E 1. A, C and E vote yes, which is 3 out of 5, so it passes. ✓</li>
+<li>Why not give B or D a coin? B would get 99 if A were gone, and D would get 1, so a single coin isn't enough to buy them. C and E are the only cheap votes.</li>
+<li>Running the rules by computer gives the same split.</li></ol></div>
     </div>
 
     <div class="prob">
