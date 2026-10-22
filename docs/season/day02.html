@@ -113,46 +113,57 @@
 <div class="container">
 
   <div class="section warm">
-    <h2>🧩 Team brain teasers (15 min)</h2>
+    <h2>🧩 Team brain teasers (20 min)</h2>
     <p class="lede">Work on all three together as one team. Split up the work, compare answers, and make sure everyone on the team can explain why the answer is right.</p>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">1</span><span class="topic">Five greedy pirates</span></div>
-      <div class="qtext">Five pirates, <b>A, B, C, D and E</b> (A is the most senior, then B, then C, and so on), find <b>100 gold coins</b>. They split them like this: the most senior pirate proposes how to divide the coins, and then <b>all</b> the pirates vote, including the one who proposed. If <b>at least half</b> of the pirates vote yes, the split happens. Otherwise the proposer is thrown overboard and the next most senior pirate proposes a new split.<br><br>Every pirate is perfectly logical and cares about three things, in this order: (1) staying alive, (2) getting as many coins as possible, (3) if nothing else changes, throwing others overboard. <b>What split should A propose so that it passes, and A keeps as many coins as possible?</b></div>
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The chicken nugget problem</span></div>
+      <div class="qtext">A restaurant sells chicken nuggets only in boxes of <b>6</b>, <b>9</b> and <b>20</b>. You can buy any combination of boxes. For example, you can get exactly 15 nuggets (6 + 9) or 26 nuggets (20 + 6), but you can't get exactly 10. What is the <b>largest</b> number of nuggets that you <b>cannot</b> buy exactly? You must also be able to explain why every larger number can be bought.</div>
       <button onclick="toggle(this)">Show answer</button>
-      <div class="solution"><span class="ans">Answer: A 98, B 0, C 1, D 0, E 1</span><ol>
-<li><b>Start with the smallest case and work backward.</b> Imagine only D and E are left. D proposes 100 for D and 0 for E. D's own vote is 1 out of 2, which is at least half, so it passes. <b>With 2 pirates left: D gets 100, E gets 0.</b></li>
-<li><b>Three left (C, D, E).</b> C needs 2 votes out of 3, so C needs one more vote besides their own. D would get 100 if C were thrown overboard, so D will never vote for C. But E would get 0 in that case, so E will vote yes for anything better than 0. C offers E 1 coin. <b>With 3 left: C 99, D 0, E 1.</b></li>
-<li><b>Four left (B, C, D, E).</b> B needs 2 votes out of 4, so one more besides their own. If B is thrown overboard, C gets 99, D gets 0, E gets 1. So D would take any offer above 0. B offers D 1 coin. <b>With 4 left: B 99, C 0, D 1, E 0.</b></li>
-<li><b>Five left (A, B, C, D, E).</b> A needs 3 votes out of 5, so two more besides their own. If A is thrown overboard, B gets 99, C gets 0, D gets 1, E gets 0. So C and E would each take any offer above 0, and A should buy those two cheapest votes with 1 coin each.</li>
-<li>A proposes: A 98, B 0, C 1, D 0, E 1. A, C and E vote yes, which is 3 out of 5, so it passes. ✓</li>
-<li>Why not give B or D a coin? B would get 99 if A were gone, and D would get 1, so a single coin isn't enough to buy them. C and E are the only cheap votes.</li>
-<li>Running the rules by computer gives the same split.</li></ol></div>
+      <div class="solution"><span class="ans">Answer: 43</span><ol>
+<li><b>Show that 43 can't be bought.</b> Boxes of 6 and 9 are both multiples of 3, so with no 20-boxes you can only reach multiples of 3. 43 is not one.</li>
+<li>With one 20-box, the rest (43 − 20 = 23) must come from 6s and 9s, so it must be a multiple of 3. 23 is not.</li>
+<li>With two 20-boxes, the rest is 43 − 40 = 3. You can't make 3 from 6s and 9s. Three 20-boxes is 60, which is too many. So <b>43 is impossible</b>.</li>
+<li><b>Show that everything above 43 works.</b> Find 6 numbers in a row that can be bought:
+  <br>44 = 20 + 6 + 6 + 6 + 6
+  <br>45 = 9 × 5
+  <br>46 = 20 + 20 + 6
+  <br>47 = 20 + 9 + 9 + 9
+  <br>48 = 6 × 8
+  <br>49 = 20 + 20 + 9</li>
+<li>Now you can add a 6-box to any of these to get the number 6 higher. Starting from 44 to 49, adding 6s reaches 50 to 55, then 56 to 61, and so on, so <b>every number from 44 up</b> can be bought.</li>
+<li>The largest number you can't buy is <b>43</b>. (A computer search agrees.)</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">2</span><span class="topic">Squares on a chessboard</span></div>
-      <div class="qtext">How many squares of <b>any size</b> are on a standard 8 × 8 chessboard? (Not just the 64 small ones. A 2 × 2 block of small squares counts, and so does a 3 × 3 block.)<br><br><b>Bonus:</b> how many <b>rectangles</b> of any size (counting squares) are there?</div>
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">The circle of 100</span></div>
+      <div class="qtext">100 students numbered 1 to 100 stand in a circle. Starting with student 1, they count off around the circle: student 1 stays, <b>student 2 is out</b>, student 3 stays, <b>student 4 is out</b>, and so on. The count keeps going around and around the circle (skipping students who are already out) until only <b>one student is left</b>. Which number is the last student standing?</div>
       <button onclick="toggle(this)">Show answer</button>
-      <div class="solution"><span class="ans">Answer: 204 squares. Bonus: 1296 rectangles.</span><ol>
-<li><b>Split by size.</b> It works well to give each person on the team a few sizes.</li>
-<li>1 × 1 squares: 8 × 8 = 64. For a 2 × 2 square, the top-left corner can be in 7 columns and 7 rows, so 7 × 7 = 49. For a 3 × 3 square: 6 × 6 = 36.</li>
-<li>Keep going: 4 × 4: 25, 5 × 5: 16, 6 × 6: 9, 7 × 7: 4, 8 × 8: 1.</li>
-<li>Total: 64 + 49 + 36 + 25 + 16 + 9 + 4 + 1 = <b>204</b>.</li>
-<li><b>Bonus.</b> A rectangle is decided by choosing 2 of the 9 vertical grid lines for its left and right sides, and 2 of the 9 horizontal grid lines for its top and bottom.</li>
-<li>Ways to choose 2 of 9 lines: 9 × 8 ÷ 2 = 36. So the rectangles number 36 × 36 = <b>1296</b>.</li></ol></div>
+      <div class="solution"><span class="ans">Answer: 73</span><ol>
+<li><b>Try small circles first</b> and see who survives. With 1 student: 1. With 2: 1. With 3: 3. With 4: 1. With 5: 3. With 6: 5. With 7: 7. With 8: 1. With 9: 3.</li>
+<li><b>Spot the pattern.</b> When the number of students is a power of 2 (1, 2, 4, 8, ...), student 1 survives. After that the survivor goes up by 2 each time (1, 3, 5, 7, then back to 1 at the next power of 2).</li>
+<li><b>Why a power of 2 gives student 1.</b> In one trip around the circle, all the even numbers go out and exactly half the students are left. Student 1 stays and the next trip starts from student 1 again, with half as many students. This repeats, so 1 always survives.</li>
+<li><b>Now use it for 100.</b> The biggest power of 2 below 100 is 64. We have 100 − 64 = 36 extra students. Eliminate exactly 36 students first: that removes 2, 4, 6, ..., 72.</li>
+<li>Now 64 students remain (a power of 2) and the next student in the count is <b>73</b>. That student is now "first" in a circle of 64, so student 73 survives.</li>
+<li>As a formula: 100 = 64 + 36, and the survivor is 2 × 36 + 1 = <b>73</b>. (A computer simulation agrees.)</li></ol></div>
     </div>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">3</span><span class="topic">Knights and liars</span></div>
-      <div class="qtext">On an island, <b>knights always tell the truth</b> and <b>liars always lie</b>. Three islanders speak.<br>Ann says: "Ben is a liar."<br>Ben says: "Cal is a liar."<br>Cal says: "Ann and Ben are both liars."<br>Who is a knight and who is a liar?</div>
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">The 12 coins</span></div>
+      <div class="qtext">You have <b>12 coins</b> that look identical. <b>One</b> of them is fake. The fake has a different weight from the others, but you don't know whether it is <b>heavier or lighter</b>. You have a balance scale (two pans, no weights). Using the scale <b>only 3 times</b>, how can you always find the fake coin <b>and</b> tell whether it is heavier or lighter?</div>
       <button onclick="toggle(this)">Show answer</button>
-      <div class="solution"><span class="ans">Answer: Ben is the only knight. Ann and Cal are liars.</span><ol>
-<li><b>Try Cal as a knight.</b> Then his statement is true, so Ann and Ben are both liars. But then Ann, a liar, said "Ben is a liar", which would be true. A liar can't say something true. Contradiction, so Cal is a <b>liar</b>.</li>
-<li>Cal's statement is false, so it is not true that both Ann and Ben are liars. At least one of them is a knight.</li>
-<li><b>Try Ann as a knight.</b> Then "Ben is a liar" is true, so Ben is a liar. But Ben said "Cal is a liar", which is true, and a liar can't say that. Contradiction, so Ann is a <b>liar</b>.</li>
-<li>Ann is a liar, so Ben must be the knight from step 2.</li>
-<li><b>Check everything.</b> Ann (liar) says Ben is a liar: false, as it should be. Ben (knight) says Cal is a liar: true. Cal (liar) says Ann and Ben are both liars: false, because Ben is a knight. ✓</li></ol></div>
+      <div class="solution"><span class="ans">Answer: yes, it can always be done in 3 weighings. Here is one method.</span><ol>
+<li>Number the coins 1 to 12. <b>Weighing 1:</b> coins 1, 2, 3, 4 on the left and 5, 6, 7, 8 on the right. There are 3 outcomes.</li>
+<li><b>If it balances:</b> the fake is one of 9, 10, 11, 12, and coins 1 to 8 are all real. <b>Weighing 2:</b> put 9, 10, 11 on the left and three real coins (1, 2, 3) on the right.
+  <br>• If it balances, the fake is <b>12</b>. <b>Weighing 3:</b> weigh 12 against a real coin. Heavier means 12 is heavy, lighter means 12 is light.
+  <br>• If the left side (9, 10, 11) is heavier, the fake is one of those and it is <b>heavy</b>. <b>Weighing 3:</b> weigh 9 against 10. The heavier one is the fake. If they balance, it is 11.
+  <br>• If the left side is lighter, the fake is one of 9, 10, 11 and it is <b>light</b>. Weigh 9 against 10. The lighter one is the fake, and if they balance it is 11.</li>
+<li><b>If the left side (1, 2, 3, 4) is heavier in weighing 1:</b> then either one of 1 to 4 is a heavy fake, or one of 5 to 8 is a light fake. Coins 9 to 12 are real. <b>Weighing 2:</b> put 1, 2, 5 on the left and 3, 6, 9 on the right (9 is real).
+  <br>• If the left is heavier: the fake is 1 (heavy), 2 (heavy) or 6 (light). <b>Weighing 3:</b> weigh 1 against 2. The heavier one is the fake. If they balance, 6 is the light fake.
+  <br>• If the left is lighter: the fake is 5 (light) or 3 (heavy). <b>Weighing 3:</b> weigh 5 against a real coin. If 5 is lighter, 5 is the fake. If they balance, 3 is the heavy fake.
+  <br>• If it balances: the fake is 4 (heavy), 7 (light) or 8 (light). <b>Weighing 3:</b> weigh 7 against 8. The lighter one is the fake. If they balance, 4 is the heavy fake.</li>
+<li><b>If the left side (1, 2, 3, 4) is lighter in weighing 1:</b> do the exact mirror image of the step above. Swap the roles of coins 1 to 4 and coins 5 to 8, so you use 5, 6, 1 against 7, 2, 9, and so on.</li>
+<li>Why it works: there are 24 possibilities (12 coins, each heavy or light), and 3 weighings give 3 × 3 × 3 = 27 outcomes, so there is just enough room. The key idea is to use known-real coins as a reference in the later weighings. (Testing this method on all 24 cases by computer finds the fake and its weight every time.)</li></ol></div>
     </div>
   </div>
 
