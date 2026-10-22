@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Race Leaderboard</title>
+<style>
+  :root{--primary:#7c3aed;--accent:#f59e0b;--ink:#1e1b4b;--muted:#64748b;--good:#16a34a;--bad:#dc2626;--info:#3b82f6;--pink:#ec4899}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#fdf4ff 0%,#fef3c7 50%,#dbeafe 100%);background-attachment:fixed;color:var(--ink);line-height:1.5;min-height:100vh}
+  header{background:linear-gradient(135deg,#7c3aed 0%,#ec4899 50%,#f59e0b 100%);color:#fff;padding:22px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+  h1{margin:0;font-size:2.1em;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+  .subtitle{opacity:.95;margin-top:4px}
+  .container{max-width:760px;margin:0 auto;padding:20px}
+  .card{background:#fff;border-radius:16px;padding:22px 26px;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,.08);border-top:6px solid var(--primary)}
+  h2{margin:0 0 10px;color:var(--primary)}
+  label{display:block;font-weight:700;margin:12px 0 4px}
+  input[type=text]{width:100%;padding:12px 14px;font-size:1.1em;border:2px solid #cbd5e1;border-radius:10px;color:var(--ink)}
+  input[type=text]:focus{outline:none;border-color:var(--primary)}
+  button{background:#f1f5f9;color:var(--ink);border:1px solid #cbd5e1;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer;font-size:1em}
+  button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+  button.big{background:var(--primary);color:#fff;border:none;padding:13px 26px;font-size:1.15em;margin-top:16px}
+  button.big:hover{background:#6d28d9}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  ul.rules{margin:10px 0 0;padding-left:20px;color:var(--muted)}
+  [hidden]{display:none!important}
+
+  .container{max-width:900px}
+  textarea{width:100%;min-height:130px;font-family:ui-monospace,Menlo,monospace;padding:12px;border:2px solid #cbd5e1;border-radius:10px;color:var(--ink)}
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:1.1em}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid #e2e8f0}th{background:#f8fafc}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr.top1 td{background:#fef3c7;font-weight:800}tr.top2 td{background:#f1f5f9;font-weight:700}tr.top3 td{background:#ffedd5;font-weight:700}
+  .bad{color:var(--bad);font-size:.95em;margin-top:8px}
+  .coach{background:#fef3c7;border-bottom:2px solid #f59e0b;text-align:center;padding:6px;font-weight:700;color:#92400e}
+</style></head><body>
+<div class="coach">COACH PAGE · paste the codes students send in chat, one per line</div>
+<header><h1>🏆 Math Race Leaderboard</h1><div class="subtitle" id="count">0 players</div></header>
+<div class="container">
+  <div class="card"><h2>Paste codes</h2>
+    <textarea id="codes" placeholder="Paste each student's code on its own line (lines like 'Ayaan: abc123...' also work)"></textarea>
+    <button id="upd" class="big">Update leaderboard</button> <button id="cp">📋 Copy results as text</button>
+    <div class="bad" id="bad"></div></div>
+  <div class="card" id="res" hidden><h2>🥇 Players</h2>
+    <table><thead><tr><th>#</th><th>Name</th><th>Team</th><th class="n">Score</th><th class="n">Correct</th><th class="n">Time</th></tr></thead><tbody id="rows"></tbody></table>
+    <h2 style="margin-top:22px" id="th">👥 Teams</h2>
+    <table id="tt"><thead><tr><th>Team</th><th class="n">Players</th><th class="n">Total</th><th class="n">Average</th></tr></thead><tbody id="trows"></tbody></table></div>
+</div>
+<script>
+var CSALT="a8496c19cbb6";
+function cyrb53(str,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
+ h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
+function decode(c){try{var b=c.replace(/-/g,'+').replace(/_/g,'/');while(b.length%4)b+='=';var p=decodeURIComponent(escape(atob(b))).split('|');if(p.length!==6)return null;
+ var chk=p.pop();if(cyrb53(p.join('|')+'|'+CSALT).toString(36).slice(-5)!==chk)return null;
+ return {name:p[0],team:p[1],score:+p[2],correct:+p[3],secs:+p[4]};}catch(e){return null;}}
+var $=function(id){return document.getElementById(id);};var LAST='';
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function update(){var lines=$('codes').value.split('\n'),best={},bad=[];
+ lines.forEach(function(l){l=l.trim();if(!l)return;var m=l.match(/[A-Za-z0-9_-]{16,}/g);var tok=m?m[m.length-1]:l;var r=decode(tok);
+  if(!r){bad.push(l.slice(0,40));return;}var k=r.name.toLowerCase();if(!best[k]||r.score>best[k].score)best[k]=r;});
+ var ps=Object.keys(best).map(function(k){return best[k];}).sort(function(a,b){return b.score-a.score||a.secs-b.secs;});
+ $('count').textContent=ps.length+' player'+(ps.length===1?'':'s');
+ $('bad').textContent=bad.length?'⚠️ Could not read '+bad.length+' code(s) (typo or edited): '+bad.join(' | '):'';
+ $('res').hidden=ps.length===0;var med=['🥇','🥈','🥉'],out=[];
+ $('rows').innerHTML=ps.map(function(p,i){out.push((med[i]||(i+1)+'.')+' '+p.name+(p.team?' ('+p.team+')':'')+' - '+p.score+' pts, '+p.correct+' correct');
+  return '<tr class="'+(i<3?'top'+(i+1):'')+'"><td>'+(med[i]||(i+1))+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.team)+'</td><td class="n">'+p.score+'</td><td class="n">'+p.correct+'</td><td class="n">'+p.secs+'s</td></tr>';}).join('');
+ var T={};ps.forEach(function(p){if(!p.team)return;var k=p.team.toLowerCase();T[k]=T[k]||{team:p.team,n:0,sum:0};T[k].n++;T[k].sum+=p.score;});
+ var ts=Object.keys(T).map(function(k){return T[k];}).sort(function(a,b){return b.sum-a.sum;});
+ $('th').hidden=$('tt').hidden=ts.length===0;
+ $('trows').innerHTML=ts.map(function(t){out.push('Team '+t.team+': total '+t.sum+', average '+Math.round(t.sum/t.n));return '<tr><td>'+esc(t.team)+'</td><td class="n">'+t.n+'</td><td class="n">'+t.sum+'</td><td class="n">'+Math.round(t.sum/t.n)+'</td></tr>';}).join('');
+ LAST=out.join('\n');}
+$('upd').onclick=update;
+$('cp').onclick=function(){var t=document.createElement('textarea');t.value=LAST;document.body.appendChild(t);t.select();try{document.execCommand('copy');$('cp').textContent='✅ Copied!';}catch(e){}document.body.removeChild(t);};
+</script></body></html>
