@@ -1,0 +1,19 @@
+science/index.html
+  s_9d12362d8da935::t_67ad4b349978f7 1-671
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bff9edf8c8b507e7695e6c06199a1c54bef16c87",
+  "prompts": {},
+  "sessions": {
+    "s_9d12362d8da935": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12436057-620a-4330-bcf5-746c920815af",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
