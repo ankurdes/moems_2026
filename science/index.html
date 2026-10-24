@@ -178,10 +178,11 @@ img{max-width:100%}
     <div class="hero">
       <div class="eyebrow">Division A &middot; Grades 3&ndash;6 &middot; Team selection</div>
       <h1>Make the <em>team.</em></h1>
-      <p>The tryout test is general science across every branch, so the trick is not being clever. It is knowing the facts cold. Drill a little every day and the questions stop being guesses.</p>
+      <p>The tryout test is general science across every branch, so the trick is not being clever. It is knowing the facts cold. A quarter of the questions in here hide that science inside stage lighting, costume fabric, baking and filming, because that is the version you actually remember at 7am on test day.</p>
       <div class="facts">
         <div class="fact"><b id="fQ">0</b> questions</div>
         <div class="fact"><b>7</b> topics</div>
+        <div class="fact"><b id="fFun">0</b> backstage</div>
         <div class="fact" id="fBest">best run &mdash;</div>
         <div class="fact" id="fSeen">0% seen</div>
       </div>
@@ -199,6 +200,11 @@ img{max-width:100%}
           <span class="k">40 questions</span>
           <span class="t">Full Tryout Sim</span>
           <span class="d">Same spread as a real screening test. Sit down, no phone, see where you land.</span>
+        </button>
+        <button class="mode" data-mode="fun">
+          <span class="k">50 questions</span>
+          <span class="t">Backstage Science</span>
+          <span class="d">Stage lights, costume fabric, your camera, the kitchen. Same science the test asks, wrapped in things you actually care about.</span>
         </button>
         <button class="mode" data-mode="missed" id="missedBtn">
           <span class="k">Your misses</span>
@@ -244,7 +250,7 @@ img{max-width:100%}
       </div>
     </div>
 
-    <p class="foot">Some questions are wrapped in baking, fabric, stage lights and camera stuff on purpose, because that is how you remember them. The science underneath is exactly what gets asked. Built for a 6th grader going for Division A.</p>
+    <p class="foot">50 of these questions are wrapped in stage lights, costume fabric, baking and filming on purpose, because that is how you remember them. The science underneath is exactly what gets asked, and the plain-worded version shows up in the other drills so nothing surprises you on test day. Built for a 6th grader going for Division A.</p>
   </section>
 
   <!-- QUIZ -->
@@ -301,9 +307,9 @@ const BANK=[
 {t:"bio",q:"Where is a cell's DNA stored?",a:["Nucleus","Cytoplasm","Cell membrane","Vacuole"],c:0,e:"The nucleus is the control center and holds the chromosomes. Bacteria are the exception, since they have no nucleus."},
 {t:"bio",q:"What is the correct order from smallest to largest?",a:["Cell, tissue, organ, organ system","Tissue, cell, organ, organ system","Cell, organ, tissue, organ system","Organ, cell, tissue, organ system"],c:0,e:"Cells group into tissues, tissues into organs, organs into organ systems, and systems into an organism."},
 {t:"bio",q:"Bacteria are called prokaryotes because they have no",a:["nucleus","cell membrane","DNA","ribosomes"],c:0,e:"Prokaryote means before nucleus. Their DNA floats loose in the cytoplasm instead of being wrapped in a nuclear membrane."},
-{t:"bio",q:"Hair, fingernails and the outer layer of skin are mostly made of which protein?",a:["Keratin","Collagen","Insulin","Hemoglobin"],c:0,e:"Keratin is a tough, waterproof protein. Heat styling works by temporarily breaking and reforming bonds inside keratin."},
+{t:"bio",f:1,q:"Hair, fingernails and the outer layer of skin are mostly made of which protein?",a:["Keratin","Collagen","Insulin","Hemoglobin"],c:0,e:"Keratin is a tough, waterproof protein. Heat styling works by temporarily breaking and reforming bonds inside keratin."},
 {t:"bio",q:"Which body system moves oxygen and nutrients to every cell?",a:["Circulatory","Digestive","Skeletal","Nervous"],c:0,e:"The heart, blood and blood vessels make up the circulatory system. It partners with the respiratory system, which brings the oxygen in."},
-{t:"bio",q:"Your heart pounds during dance rehearsal mainly because",a:["muscles need more oxygen delivered faster","your body is getting rid of extra water","your bones are growing","your brain is using less energy"],c:0,e:"Working muscles burn through oxygen and glucose quickly, so the heart speeds up to deliver more and carry carbon dioxide away."},
+{t:"bio",f:1,q:"Your heart pounds during dance rehearsal mainly because",a:["muscles need more oxygen delivered faster","your body is getting rid of extra water","your bones are growing","your brain is using less energy"],c:0,e:"Working muscles burn through oxygen and glucose quickly, so the heart speeds up to deliver more and carry carbon dioxide away."},
 {t:"bio",q:"Most nutrients from food are absorbed in the",a:["small intestine","stomach","large intestine","esophagus"],c:0,e:"The small intestine is lined with tiny villi that create a huge surface area. The large intestine mainly absorbs water."},
 {t:"bio",q:"Which organ filters waste out of the blood to make urine?",a:["Kidneys","Liver","Lungs","Pancreas"],c:0,e:"The kidneys filter blood and send waste to the bladder. The liver detoxifies but does not make urine."},
 {t:"bio",q:"The main job of red blood cells is to",a:["carry oxygen","fight infection","clot wounds","digest fat"],c:0,e:"Hemoglobin in red blood cells binds oxygen. White blood cells fight infection and platelets clot wounds."},
@@ -392,7 +398,7 @@ const BANK=[
 /* ---------------- PHYSICS & MATTER ---------------- */
 {t:"phys",q:"What are the three most common states of matter?",a:["Solid, liquid, gas","Solid, liquid, plasma","Hot, cold, frozen","Hard, soft, liquid"],c:0,e:"Plasma is the fourth state and is actually the most common in the universe, since stars are made of it."},
 {t:"phys",q:"Changing from a liquid to a gas is called",a:["evaporation","condensation","melting","sublimation"],c:0,e:"Gas back to liquid is condensation. Solid straight to gas, like dry ice, is sublimation."},
-{t:"phys",q:"Water droplets forming on a cold glass of lemonade is",a:["condensation","evaporation","sublimation","precipitation"],c:0,e:"Water vapor in the warm air cools when it touches the glass and turns back to liquid. The water came from the air, not through the glass."},
+{t:"phys",f:1,q:"Water droplets forming on a cold glass of lemonade is",a:["condensation","evaporation","sublimation","precipitation"],c:0,e:"Water vapor in the warm air cools when it touches the glass and turns back to liquid. The water came from the air, not through the glass."},
 {t:"phys",q:"What is the formula for density?",a:["mass divided by volume","volume divided by mass","mass times volume","mass plus volume"],c:0,e:"Density equals mass over volume, usually in g/cm3. It does not change when you cut an object in half."},
 {t:"phys",q:"An object will float in water if its density is",a:["less than 1 g/cm3","more than 1 g/cm3","exactly 2 g/cm3","equal to its mass"],c:0,e:"Water is 1 g/cm3. Anything less dense floats, which is why oil sits on top of water."},
 {t:"phys",q:"What is the difference between mass and weight?",a:["Mass is the amount of matter, weight is the force of gravity on it","They are identical","Mass is measured in newtons","Weight never changes"],c:0,e:"Your mass is the same on the moon but your weight is about one sixth, because lunar gravity is weaker."},
@@ -412,12 +418,12 @@ const BANK=[
 {t:"phys",q:"How do you make a simple electromagnet?",a:["Wrap a coil of wire around an iron nail and run current through it","Rub two magnets together","Heat a copper wire","Place a battery near iron"],c:0,e:"The current creates a magnetic field and the iron core concentrates it. Turn the current off and the magnetism stops."},
 {t:"phys",q:"Sound travels fastest through",a:["a solid","a liquid","a gas","a vacuum"],c:0,e:"Tightly packed particles pass vibrations along faster. Sound cannot travel through a vacuum at all, so space is silent."},
 {t:"phys",q:"Singing a higher note means the sound wave has a higher",a:["frequency","amplitude","volume","speed"],c:0,e:"Frequency controls pitch and amplitude controls loudness. Shorter, faster waves sound higher."},
-{t:"phys",q:"Turning up the volume on a speaker increases the wave's",a:["amplitude","frequency","pitch","speed"],c:0,e:"Taller waves carry more energy, which your ear reads as louder. The pitch stays the same."},
+{t:"phys",f:1,q:"Turning up the volume on a speaker increases the wave's",a:["amplitude","frequency","pitch","speed"],c:0,e:"Taller waves carry more energy, which your ear reads as louder. The pitch stays the same."},
 {t:"phys",q:"Light bending as it passes from air into water is called",a:["refraction","reflection","absorption","diffraction"],c:0,e:"Refraction is why a straw looks broken in a glass of water. Reflection is light bouncing off a surface."},
-{t:"phys",q:"A ring light works mainly because of",a:["reflection of light off your face toward the camera","refraction inside the lens","sound waves","magnetism"],c:0,e:"You only see an object when light bounces off it into the camera. Even, bright light from the front removes harsh shadows."},
+{t:"phys",f:1,q:"A ring light works mainly because of",a:["reflection of light off your face toward the camera","refraction inside the lens","sound waves","magnetism"],c:0,e:"You only see an object when light bounces off it into the camera. Even, bright light from the front removes harsh shadows."},
 {t:"phys",q:"A magnifying glass uses which kind of lens?",a:["Convex, which bends light inward to a point","Concave, which spreads light out","Flat, which does not bend light","Colored, which filters light"],c:0,e:"A convex lens is thicker in the middle and converges light rays to make things look larger."},
-{t:"phys",q:"When white stage light passes through a prism it splits into a rainbow because",a:["different colors bend by different amounts","the prism adds color","the light slows and stops","the glass is colored"],c:0,e:"White light is a mixture of all visible colors. Violet bends most and red bends least."},
-{t:"phys",q:"A metal curling iron handle gets hot by which type of heat transfer?",a:["Conduction, through direct contact","Convection, through moving air","Radiation, through waves","Evaporation"],c:0,e:"Conduction moves heat through touching particles. Convection moves it in fluids and radiation needs no medium at all."},
+{t:"phys",f:1,q:"When white stage light passes through a prism it splits into a rainbow because",a:["different colors bend by different amounts","the prism adds color","the light slows and stops","the glass is colored"],c:0,e:"White light is a mixture of all visible colors. Violet bends most and red bends least."},
+{t:"phys",f:1,q:"A metal curling iron handle gets hot by which type of heat transfer?",a:["Conduction, through direct contact","Convection, through moving air","Radiation, through waves","Evaporation"],c:0,e:"Conduction moves heat through touching particles. Convection moves it in fluids and radiation needs no medium at all."},
 {t:"phys",q:"Heat from the sun reaches Earth by",a:["radiation","conduction","convection","friction"],c:0,e:"Radiation is the only one that works through the vacuum of space, since it needs no particles."},
 {t:"phys",q:"What is the formula for speed?",a:["distance divided by time","time divided by distance","distance times time","mass times distance"],c:0,e:"Speed equals distance over time. A runner covering 100 m in 20 s moves at 5 m/s."},
 
@@ -433,14 +439,14 @@ const BANK=[
 {t:"chem",q:"Salt dissolved in water is an example of a",a:["solution","compound","pure element","suspension"],c:0,e:"A solution is a homogeneous mixture. The salt is the solute and the water is the solvent."},
 {t:"chem",q:"Which of these is a PHYSICAL change?",a:["Ice melting into water","Wood burning","Iron rusting","Baking a cake"],c:0,e:"A physical change alters form but not identity, and is often reversible. The melted ice is still water."},
 {t:"chem",q:"Which is a sign that a CHEMICAL change has happened?",a:["A new gas bubbles up","The object is cut in half","Sugar dissolves in tea","Water is poured into a new glass"],c:0,e:"Signs include gas production, unexpected color change, temperature change, light, or a solid precipitate forming."},
-{t:"chem",q:"Baking a cake is a chemical change because",a:["new substances form and it cannot be undone","the batter changes shape","the pan gets hot","the oven uses electricity"],c:0,e:"Heat triggers reactions that make new compounds. You cannot turn a baked cake back into batter."},
+{t:"chem",f:1,q:"Baking a cake is a chemical change because",a:["new substances form and it cannot be undone","the batter changes shape","the pan gets hot","the oven uses electricity"],c:0,e:"Heat triggers reactions that make new compounds. You cannot turn a baked cake back into batter."},
 {t:"chem",q:"The pH scale runs from 0 to 14. What is neutral?",a:["7","0","14","10"],c:0,e:"Below 7 is acidic, above 7 is basic. Pure water is 7."},
 {t:"chem",q:"Lemon juice has a pH of about 2, so it is",a:["a strong acid","a base","neutral","a salt"],c:0,e:"Acids taste sour and react with metals. The lower the number, the stronger the acid."},
 {t:"chem",q:"An acid turns blue litmus paper",a:["red","blue","green","black"],c:0,e:"Acid turns blue litmus red, base turns red litmus blue. Remember that acid starts with A and so does the color change to red."},
-{t:"chem",q:"Mixing baking soda and vinegar makes a cake rise because it produces",a:["carbon dioxide gas","oxygen gas","water vapor only","hydrogen gas"],c:0,e:"The acid and base react and release CO2 bubbles, which get trapped in the batter and puff it up."},
+{t:"chem",f:1,q:"Mixing baking soda and vinegar makes a cake rise because it produces",a:["carbon dioxide gas","oxygen gas","water vapor only","hydrogen gas"],c:0,e:"The acid and base react and release CO2 bubbles, which get trapped in the batter and puff it up."},
 {t:"chem",q:"The law of conservation of mass says that in a chemical reaction,",a:["the total mass stays the same","mass is always lost","mass doubles","mass turns into energy"],c:0,e:"Atoms are rearranged, never destroyed. If a reaction seems to lose mass, a gas escaped."},
-{t:"chem",q:"In sugar water, which is the solvent?",a:["Water","Sugar","Both","Neither"],c:0,e:"The solvent does the dissolving and the solute gets dissolved. Water dissolves so many things it is called the universal solvent."},
-{t:"chem",q:"Sugar dissolves faster in hot tea than iced tea because heat",a:["makes particles move faster and collide more","adds more sugar","changes sugar into a new compound","lowers the pH"],c:0,e:"Stirring and grinding the solute smaller also speed dissolving, for the same reason."},
+{t:"chem",f:1,q:"In sugar water, which is the solvent?",a:["Water","Sugar","Both","Neither"],c:0,e:"The solvent does the dissolving and the solute gets dissolved. Water dissolves so many things it is called the universal solvent."},
+{t:"chem",f:1,q:"Sugar dissolves faster in hot tea than iced tea because heat",a:["makes particles move faster and collide more","adds more sugar","changes sugar into a new compound","lowers the pH"],c:0,e:"Stirring and grinding the solute smaller also speed dissolving, for the same reason."},
 {t:"chem",q:"Rusting requires iron plus",a:["oxygen and water","nitrogen only","heat only","salt only"],c:0,e:"Rust is iron oxide, a chemical change. Salt speeds it up, which is why cars rust faster near the ocean."},
 
 /* ---------------- LAB SKILLS & METRIC ---------------- */
@@ -453,7 +459,7 @@ const BANK=[
 {t:"lab",q:"How many centimeters are in one meter?",a:["100","10","1,000","12"],c:0,e:"Centi means one hundredth. There are also 10 millimeters in every centimeter."},
 {t:"lab",q:"How many milliliters are in one liter?",a:["1,000","100","10","500"],c:0,e:"Milli means one thousandth. A standard water bottle is about 500 mL."},
 {t:"lab",q:"One milliliter is equal to",a:["1 cubic centimeter","1 gram of any liquid","1 centimeter","10 cubic centimeters"],c:0,e:"1 mL = 1 cm3. This is the link that lets you turn a volume measurement into a density calculation."},
-{t:"lab",q:"How do you find the volume of an irregular object like a small rock?",a:["Water displacement in a graduated cylinder","Measure length times width times height","Weigh it on a balance","Use a ruler"],c:0,e:"Record the water level, drop the rock in, and the rise in milliliters equals the volume in cubic centimeters."},
+{t:"lab",f:1,q:"How do you find the volume of an irregular object like a small rock?",a:["Water displacement in a graduated cylinder","Measure length times width times height","Weigh it on a balance","Use a ruler"],c:0,e:"Record the water level, drop the rock in, and the rise in milliliters equals the volume in cubic centimeters."},
 {t:"lab",q:"When reading a graduated cylinder you should read",a:["the bottom of the curved meniscus at eye level","the top of the curve","the highest point of liquid","the rim of the cylinder"],c:0,e:"Looking from above or below gives a wrong reading. Always get your eye level with the liquid."},
 {t:"lab",q:"A triple beam balance is used to measure",a:["mass","volume","temperature","density directly"],c:0,e:"It compares an object against known masses, so it works the same anywhere, even on the moon."},
 {t:"lab",q:"In Celsius, water freezes at 0 degrees and boils at",a:["100 degrees","212 degrees","50 degrees","32 degrees"],c:0,e:"Those are 32 and 212 in Fahrenheit. Science uses Celsius and Kelvin."},
@@ -463,7 +469,50 @@ const BANK=[
 {t:"lab",q:"Which is a QUALITATIVE observation?",a:["The liquid is cloudy and blue","The liquid is 25 mL","The mass is 14 g","The temperature is 30 degrees C"],c:0,e:"Qualitative describes qualities in words. Quantitative uses numbers and units."},
 {t:"lab",q:"Which statement is an inference rather than an observation?",a:["The plant died because it did not get enough water","The plant leaves are brown","The soil is dry","The pot is 10 cm tall"],c:0,e:"An observation is what you sense directly. An inference is an explanation you reason out from it."},
 {t:"lab",q:"Variables kept the same throughout an experiment are called",a:["controlled variables or constants","independent variables","dependent variables","random variables"],c:0,e:"Holding them constant is what lets you claim your independent variable caused the change."},
-{t:"lab",q:"Four students measure a mass of 10.0 g as 9.9, 10.0, 10.1 and 10.0. These results are",a:["both accurate and precise","precise but not accurate","accurate but not precise","neither"],c:0,e:"Accurate means close to the true value and precise means close to each other. Here they are both."}
+{t:"lab",q:"Four students measure a mass of 10.0 g as 9.9, 10.0, 10.1 and 10.0. These results are",a:["both accurate and precise","precise but not accurate","accurate but not precise","neither"],c:0,e:"Accurate means close to the true value and precise means close to each other. Here they are both."},
+/* ---- stage, music, costume, camera, kitchen: real science, her wrapper ---- */
+{t:"earth",f:1,q:"A diamond in a ring scratches every other mineral because on the Mohs scale it rates",a:["10, the highest","1, the lowest","5, the middle","0"],c:0,e:"Talc is 1 and diamond is 10. A harder mineral always scratches a softer one, which is how jewelers test a stone."},
+{t:"eco",f:1,q:"Cotton is grown in fields and polyester is made from petroleum. Which is the renewable resource?",a:["Cotton, because it can be regrown each season","Polyester, because it lasts longer","Both are renewable","Neither is renewable"],c:0,e:"Renewable means it replenishes on a human timescale. Petroleum took millions of years to form, so polyester is not renewable."},
+{t:"space",f:1,q:"A long night-sky photo shows stars as short streaks rather than dots because",a:["Earth is rotating during the exposure","the stars are moving that fast","the camera lens is dirty","starlight bends in the air"],c:0,e:"The stars barely move, we do. One rotation every 24 hours is enough to smear them in an exposure of a few seconds."},
+{t:"phys",f:1,q:"Red, green and blue stage lights overlap on a white backdrop. What color appears?",a:["White","Black","Brown","Dark red"],c:0,e:"Mixing LIGHT is additive and red plus green plus blue gives white. Mixing paint or makeup is subtractive and heads toward brown, which is why the two behave opposite."},
+{t:"phys",f:1,q:"A colored gel over a spotlight makes a blue beam by",a:["absorbing the other colors and letting blue through","adding blue to the light","bending the light into blue","heating the light"],c:0,e:"Filters subtract. A blue gel blocks everything except blue, which is also why a strong gel makes the stage dimmer."},
+{t:"phys",f:1,q:"A fog machine makes light beams visible on stage because",a:["light scatters off the tiny droplets","fog makes light brighter","fog bends light into beams","fog is slightly glowing"],c:0,e:"You normally cannot see a beam from the side because nothing is reflecting it toward you. Fog gives the light something to bounce off."},
+{t:"phys",f:1,q:"A microphone held too close to its own speaker squeals because",a:["the sound loops back into the mic and is amplified over and over","the mic runs out of power","the speaker magnet reverses","the sound waves cancel"],c:0,e:"That feedback loop builds until it screeches. Pointing the mic away from the speaker breaks the loop."},
+{t:"phys",f:1,q:"At a big outdoor concert you see the drummer hit the drum slightly before you hear it because",a:["light travels much faster than sound","sound travels in a curve","the drum is out of sync","your eyes react faster than your ears"],c:0,e:"Light is about 300,000,000 m/s and sound in air is only about 343 m/s. The farther back you stand, the bigger the gap."},
+{t:"phys",f:1,q:"Loosening a drum head makes the sound",a:["lower in pitch, because the frequency drops","higher in pitch","louder but the same pitch","quieter but the same pitch"],c:0,e:"Looser and longer means slower vibration, so lower frequency and lower pitch. Tightening a string or drum head raises the pitch."},
+{t:"phys",f:1,q:"Your voice echoes in an empty gym because sound is",a:["reflecting off the hard walls","refracting through the air","being absorbed by the floor","travelling faster indoors"],c:0,e:"Hard flat surfaces bounce sound back. Add a crowd and soft seating and the echo mostly disappears, since those absorb it."},
+{t:"phys",f:1,q:"Older stage lights get very hot because most of their electrical energy becomes",a:["thermal energy instead of light","sound energy","chemical energy","magnetic energy"],c:0,e:"Incandescent bulbs waste most energy as heat. LEDs convert far more of it into light, so they run much cooler."},
+{t:"phys",f:1,q:"Dark costumes feel hotter under stage lights than white ones because dark colors",a:["absorb more light energy","reflect more light energy","are always heavier","conduct electricity"],c:0,e:"Light colors reflect most light away. Dark surfaces absorb it and convert it to thermal energy."},
+{t:"phys",f:1,q:"Sequins sparkle because of",a:["reflection of light off many small flat surfaces","refraction inside the fabric","absorption of light","chemical glow"],c:0,e:"Each sequin acts like a tiny mirror at its own angle, so as you move, different ones catch the light."},
+{t:"phys",f:1,q:"Wool keeps you warm mainly because it",a:["traps air, and air is a poor conductor of heat","generates its own heat","reflects body heat like metal","absorbs cold"],c:0,e:"Trapped air is the insulator. Nothing absorbs cold, since cold is just the absence of heat energy."},
+{t:"phys",f:1,q:"A skirt clings to your legs after you walk on carpet because",a:["electrons transferred and opposite charges attract","the fabric got warmer","the fabric absorbed water","gravity increased"],c:0,e:"Friction moves electrons between surfaces, leaving one positive and one negative. Static cling is just electrostatic attraction."},
+{t:"phys",f:1,q:"Spandex stretches and snaps back. That property is called",a:["elasticity","density","conductivity","solubility"],c:0,e:"An elastic material returns to its original shape after the force is removed. Push it too far and it deforms permanently."},
+{t:"phys",f:1,q:"Your phone gets warm while you film a long video because",a:["some electrical energy is converted to thermal energy","the battery is leaking","the screen reflects heat","filming creates friction"],c:0,e:"No energy conversion is perfectly efficient. The leftover shows up as waste heat, which is why your phone may throttle."},
+{t:"phys",f:1,q:"The front camera shows your face flipped left to right, the same as what happens with",a:["a plane mirror","a magnifying glass","a prism","a telescope"],c:0,e:"A flat mirror reverses left and right but not top and bottom. That is why text looks backwards in a mirror."},
+{t:"phys",f:1,q:"Slow motion video is filmed at a high frame rate, meaning the camera captures",a:["more frames each second, which are then played back slower","fewer frames each second","brighter frames","larger frames"],c:0,e:"Record at 240 frames per second, play back at 30, and one second of action stretches to eight."},
+{t:"phys",f:1,q:"Wifi and Bluetooth reach your phone through a wall because they are",a:["electromagnetic waves, which need no medium","sound waves","moving electrons","heat waves"],c:0,e:"Radio waves are part of the electromagnetic spectrum, like visible light but with much longer wavelengths."},
+{t:"phys",f:1,q:"A neon costume glows under a blacklight because the fabric",a:["absorbs invisible UV light and re-emits it as visible light","reflects all the UV","creates its own electricity","gets hot enough to glow"],c:0,e:"That is fluorescence. The material takes in higher-energy UV and gives back lower-energy visible light."},
+{t:"phys",f:1,q:"A dance floor is smooth and polished, which",a:["reduces friction so you can slide and turn","increases friction so you grip better","removes gravity","adds potential energy"],c:0,e:"Less friction means easier spins. Rubber-soled shoes add friction back, which is why dancers pick their shoes carefully."},
+
+{t:"chem",f:1,q:"Yeast makes bread dough rise by producing",a:["carbon dioxide gas","oxygen gas","water only","nitrogen gas"],c:0,e:"Yeast is a living fungus that feeds on sugar and releases CO2. The gluten in dough traps the bubbles."},
+{t:"chem",f:1,q:"A cut apple turns brown because of",a:["oxidation, a chemical change","evaporation, a physical change","melting","dissolving"],c:0,e:"Enzymes in the apple react with oxygen in the air. Lemon juice slows it down because its acid interferes with the enzyme."},
+{t:"chem",f:1,q:"Heating sugar until it turns golden and smells different is",a:["a chemical change, because new substances form","a physical change, because it only melts","no change at all","a change of state only"],c:0,e:"Caramelizing creates hundreds of new compounds. You cannot get the original white sugar back."},
+{t:"chem",f:1,q:"Oil floats on top of vinegar in salad dressing because oil",a:["is less dense than vinegar","is lighter in color","is a solid","dissolves in vinegar"],c:0,e:"They also do not mix, since oil is nonpolar and vinegar is mostly water. Shaking makes a temporary emulsion that separates again."},
+{t:"chem",f:1,q:"Putting food in the refrigerator keeps it fresh longer because cold",a:["slows down bacterial growth and chemical reactions","kills all bacteria instantly","removes the water","adds preservatives"],c:0,e:"Lower temperature means slower particle movement and slower reactions. Freezing pauses it further but still does not sterilize."},
+{t:"chem",f:1,q:"Sprinkling salt on an icy step works because salt",a:["lowers the freezing point of water","makes the ice warmer","reflects sunlight","is a strong acid"],c:0,e:"Salt water has to get colder than 0 degrees C before it freezes, so the ice melts at the current temperature."},
+
+{t:"phys",f:1,q:"Popcorn pops because water inside the kernel",a:["turns to steam and builds pressure until the shell bursts","freezes and expands","dissolves the shell","reacts with the oil"],c:0,e:"The hard hull acts like a tiny pressure cooker. Kernels that are too dry never pop."},
+{t:"phys",f:1,q:"Water boiling on the stove stays at 100 degrees C no matter how high you turn the heat, because the extra energy",a:["goes into changing liquid into gas","escapes as light","is destroyed","makes the pot heavier"],c:0,e:"During a change of state, added energy breaks the bonds between particles instead of raising the temperature."},
+{t:"phys",f:1,q:"A metal spoon left in hot soup becomes hot at the handle. The soup pot itself heats the soup by",a:["convection, as warm liquid rises and cool liquid sinks","conduction only","radiation only","evaporation"],c:0,e:"The spoon heats by conduction through direct contact. In the liquid itself, convection currents move the heat around."},
+
+{t:"bio",f:1,q:"Stage makeup sits on your skin without soaking in because the outer skin layer is",a:["a waterproof barrier of dead keratin cells","a thin layer of muscle","made of bone","constantly absorbing liquids"],c:0,e:"The epidermis is your body's first defense. It blocks germs and water from getting in."},
+{t:"bio",f:1,q:"You are out of breath after a hard dance number because your muscles",a:["used oxygen faster than your lungs could supply it","ran out of water","got colder","stopped using energy"],c:0,e:"When oxygen runs short, muscles switch to anaerobic respiration and build up lactic acid. That is the burn you feel."},
+{t:"bio",f:1,q:"Singing uses a sheet of muscle below your lungs called the",a:["diaphragm","cerebellum","trachea","sternum"],c:0,e:"The diaphragm pulls down to draw air in and pushes up to force it out. Breath control is diaphragm control."},
+{t:"bio",f:1,q:"Polyester costume fabric is a synthetic polymer, meaning it is",a:["many small units chemically linked into long chains","woven from plant fibers","spun from animal hair","made of metal threads"],c:0,e:"Cotton, wool and silk are natural fibers. Polyester and nylon are made from petroleum into long repeating chains."},
+
+{t:"lab",f:1,q:"You test whether cupcakes rise higher with baking soda or baking powder. The independent variable is",a:["which leavening agent you use","how tall the cupcakes rise","the oven temperature","the brand of flour"],c:0,e:"You change the leavening agent and measure the height. Oven temperature, flour and bake time must all be held constant."},
+{t:"lab",f:1,q:"A recipe calls for 250 mL of milk. In cubic centimeters that is",a:["250 cm3","25 cm3","2,500 cm3","0.25 cm3"],c:0,e:"1 mL equals exactly 1 cm3, so the number does not change. It is also one quarter of a liter."},
+{t:"lab",f:1,q:"Testing which of three ring light settings makes the sharpest video, your control group would be",a:["filming with no ring light at all","filming with all three at once","filming in the dark with no camera","not filming anything"],c:0,e:"The control gets no treatment so you have a baseline. Without it you cannot tell whether the ring light helped at all."}
 ];
 BANK.forEach(function(x,i){x.id=x.t+"-"+i;});
 
@@ -506,6 +555,7 @@ function show(id){["home","quiz","res","study"].forEach(function(s){$("#"+s).hid
 
 function refreshHome(){
   $("#fQ").textContent=BANK.length;
+  $("#fFun").textContent=BANK.filter(function(x){return x.f}).length;
   $("#fBest").innerHTML=best?("best run <b>"+best+"%</b>"):"best run &mdash;";
   $("#fSeen").innerHTML="<b>"+Math.round(seen.length/BANK.length*100)+"%</b> seen";
   var mb=$("#missedBtn");
@@ -524,7 +574,14 @@ function refreshHome(){
 
 function start(mode,topic){
   var pool;
-  if(mode==="quick")pool=shuffle(BANK).slice(0,10);
+  if(mode==="quick"){
+    pool=[];
+    Object.keys(TOPICS).forEach(function(k){
+      pool.push(shuffle(BANK.filter(function(x){return x.t===k}))[0]);
+    });
+    var rest=shuffle(BANK.filter(function(x){return pool.indexOf(x)<0}));
+    pool=shuffle(pool.concat(rest.slice(0,3)));
+  }
   else if(mode==="mock"){
     pool=[];
     Object.keys(TOPICS).forEach(function(k){
@@ -532,6 +589,7 @@ function start(mode,topic){
     });
     pool=shuffle(pool).slice(0,40);
   }
+  else if(mode==="fun")pool=shuffle(BANK.filter(function(x){return x.f}));
   else if(mode==="missed")pool=shuffle(BANK.filter(function(x){return missed.indexOf(x.id)>-1}));
   else pool=shuffle(BANK.filter(function(x){return x.t===topic}));
   if(!pool.length)return;
@@ -598,11 +656,11 @@ function finish(){
   $("#rScore").textContent=S.right+"/"+S.pool.length;
   $("#rPct").textContent=pct+"% correct  |  best streak "+S.best;
   var m;
-  if(pct===100)m="Perfect run. Go pick the next topic.";
-  else if(pct>=90)m="That is tryout-team level. Keep it up.";
-  else if(pct>=75)m="Strong. Clean up the misses and you are there.";
-  else if(pct>=50)m="Solid start. The misses below are your homework.";
-  else m="Early days. Read the cheat sheet, then run this again.";
+  if(pct===100)m="Clean sweep. Not one dropped.";
+  else if(pct>=90)m="That is make-the-team level. Encore.";
+  else if(pct>=75)m="Strong set. Clean up the misses and you are there.";
+  else if(pct>=50)m="Halfway there. The list below is tomorrow's rehearsal.";
+  else m="Rough first run, which is fine. Read the cheat sheet and go again.";
   $("#rMsg").textContent=m;
   if(S.mode!=="missed"&&(best===null||pct>best)){best=pct;store.set("best",best)}
 
