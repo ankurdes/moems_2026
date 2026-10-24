@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Daily science drills for a 6th grader going out for the Division A Science Olympiad team.">
+<meta name="color-scheme" content="light dark">
+<title>Science Olympiad Tryout Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,500&family=Hanken+Grotesk:wght@400;500;600;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single backstage-pass column — spotlight progress rail on top, card stack beneath. */
+:root{
+  --paper:#FBF7F9; --surface:#FFFFFF; --surface-2:#F5EFF7;
+  --ink:#241930; --ink-soft:#6B5A78;
+  --accent:#7B2D8E; --spark:#00A892; --hot:#E8336D;
+  --good:#1E8A5F; --good-bg:#E6F5EE; --bad:#C62B52; --bad-bg:#FCEAEF;
+  --line:#E7DCEA; --shadow:0 1px 2px rgba(36,25,48,.06),0 8px 24px rgba(36,25,48,.07);
+  --display:"Bodoni Moda",Georgia,"Times New Roman",serif;
+  --body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --mono:"DM Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#16101C; --surface:#211829; --surface-2:#2B2035;
+  --ink:#F3EAF6; --ink-soft:#A795B2;
+  --accent:#C77DD6; --spark:#3FE0C6; --hot:#FF6B9D;
+  --good:#4FD394; --good-bg:#17322A; --bad:#FF7A91; --bad-bg:#3A1C26;
+  --line:#342740; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#16101C; --surface:#211829; --surface-2:#2B2035;
+  --ink:#F3EAF6; --ink-soft:#A795B2;
+  --accent:#C77DD6; --spark:#3FE0C6; --hot:#FF6B9D;
+  --good:#4FD394; --good-bg:#17322A; --bad:#FF7A91; --bad-bg:#3A1C26;
+  --line:#342740; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;font-weight:700;letter-spacing:-.01em}
+button{font-family:inherit;font-size:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---- top rail ---- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:12}
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--surface);border-bottom:1px solid var(--line)}
+.rail-in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px}
+.brand{font-family:var(--display);font-weight:900;font-size:17px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;min-width:0}
+.brand i{width:9px;height:9px;border-radius:50%;background:var(--hot);flex:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--hot) 22%,transparent)}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail .grow{flex:1}
+.ghost{border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;color:var(--ink-soft);background:var(--surface-2)}
+.ghost:hover{color:var(--ink);border-color:var(--accent)}
+.bar{height:3px;background:var(--line)}
+.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s ease}
+
+/* ---- hero ---- */
+.hero{padding-block:34px 26px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.hero h1{font-size:clamp(34px,8.5vw,54px);line-height:1.02;margin:12px 0 0;font-weight:900}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--hot)}
+.hero p{color:var(--ink-soft);margin:14px 0 0;max-width:52ch;font-size:15.5px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.fact{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;color:var(--ink-soft)}
+.fact b{color:var(--ink);font-weight:500}
+
+/* ---- section ---- */
+.sec{padding-block:30px 6px}
+.sec h2{font-size:12px;font-family:var(--mono);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin-top:14px}
+
+/* ---- mode cards ---- */
+.mode{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:17px;display:flex;flex-direction:column;gap:5px;min-width:0;box-shadow:var(--shadow);transition:transform .14s ease,border-color .14s ease}
+.mode:hover{transform:translateY(-2px);border-color:var(--accent)}
+.mode .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.mode .t{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:-.01em}
+.mode .d{font-size:13.5px;color:var(--ink-soft);line-height:1.45}
+.mode[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* ---- topic chips ---- */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow)}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip u{text-decoration:none;font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-weight:400}
+
+/* ---- quiz ---- */
+.qmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-block:22px 0}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);border-radius:999px;padding:4px 10px;font-weight:500}
+.count{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+.streak{margin-left:auto;font-family:var(--mono);font-size:12.5px;color:var(--hot);font-weight:500}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:12px;box-shadow:var(--shadow)}
+.qtext{font-family:var(--display);font-size:clamp(20px,4.6vw,25px);line-height:1.3;font-weight:700;letter-spacing:-.01em}
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--paper);border-radius:12px;padding:13px 14px;font-size:15px;line-height:1.4;transition:border-color .12s ease,background .12s ease}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--surface-2)}
+.opt:disabled{cursor:default}
+.opt b{font-family:var(--mono);font-size:12px;font-weight:500;width:21px;height:21px;flex:none;border-radius:6px;background:var(--surface-2);color:var(--ink-soft);display:grid;place-items:center;margin-top:1px}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.right b{background:var(--good);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong b{background:var(--bad);color:#fff}
+.fb{margin-top:16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 12px 12px 0;padding:13px 15px}
+.fb .v{font-family:var(--display);font-weight:700;font-size:16px;margin-bottom:4px}
+.fb .v.y{color:var(--good)} .fb .v.n{color:var(--bad)}
+.fb p{margin:0;font-size:14.5px;color:var(--ink-soft);line-height:1.5}
+.go{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.btn{background:var(--accent);color:#fff;border-radius:999px;padding:11px 24px;font-weight:700;font-size:14.5px;letter-spacing:.01em}
+.btn:hover{filter:brightness(1.1)}
+.btn.sec{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+
+/* ---- results ---- */
+.score{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px 22px;text-align:center;margin-top:22px;box-shadow:var(--shadow)}
+.score .big{font-family:var(--display);font-size:clamp(50px,15vw,76px);font-weight:900;line-height:1;letter-spacing:-.03em}
+.score .pct{font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:6px}
+.score .msg{font-family:var(--display);font-style:italic;font-size:18px;color:var(--hot);margin-top:14px}
+.bd{margin-top:18px;display:flex;flex-direction:column;gap:9px}
+.bd .row{display:flex;align-items:center;gap:11px;font-size:13.5px}
+.bd .nm{width:124px;flex:none;color:var(--ink-soft);font-size:12.5px}
+.bd .tr{flex:1;height:7px;border-radius:999px;background:var(--line);overflow:hidden;min-width:0}
+.bd .tr>i{display:block;height:100%;border-radius:999px;background:var(--spark)}
+.bd .vv{font-family:var(--mono);font-size:12px;color:var(--ink-soft);width:42px;text-align:right;flex:none}
+.rev{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.rv{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:0 12px 12px 0;padding:14px 16px}
+.rv .q{font-weight:600;font-size:14.5px;line-height:1.4}
+.rv .ans{font-size:13.5px;margin-top:7px;color:var(--good);font-weight:600}
+.rv .ex{font-size:13.5px;margin-top:5px;color:var(--ink-soft);line-height:1.5}
+
+/* ---- study sheet ---- */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:10px;overflow:hidden;box-shadow:var(--shadow)}
+summary{padding:15px 17px;cursor:pointer;font-family:var(--display);font-weight:700;font-size:17.5px;list-style:none;display:flex;align-items:center;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:var(--mono);color:var(--accent);font-size:17px;width:17px;flex:none}
+details[open] summary::before{content:"\2212"}
+details[open] summary{border-bottom:1px solid var(--line)}
+.sbody{padding:15px 17px 18px}
+.sbody ul{margin:0;padding-left:19px;display:flex;flex-direction:column;gap:7px}
+.sbody li{font-size:14.5px;line-height:1.5}
+.sbody li b{color:var(--accent)}
+.sbody .note{margin-top:13px;font-size:13.5px;color:var(--ink-soft);border-left:2px solid var(--spark);padding-left:11px;line-height:1.5}
+.tbl{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:300px}
+th,td{text-align:left;padding:7px 11px;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+td.m{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* standalone reset (GitHub Pages) */
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+</style>
+</head>
+<body>
+
+<div class="rail">
+  <div class="rail-in">
+    <div class="brand"><i></i><span>Tryout Lab</span></div>
+    <div class="grow"></div>
+    <button class="ghost" id="homeBtn" hidden>Exit drill</button>
+    <button class="ghost" id="themeBtn" aria-label="Switch light or dark">Theme</button>
+  </div>
+  <div class="bar"><i id="barFill"></i></div>
+</div>
+
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="home">
+    <div class="hero">
+      <div class="eyebrow">Division A &middot; Grades 3&ndash;6 &middot; Team selection</div>
+      <h1>Make the <em>team.</em></h1>
+      <p>The tryout test is general science across every branch, so the trick is not being clever. It is knowing the facts cold. Drill a little every day and the questions stop being guesses.</p>
+      <div class="facts">
+        <div class="fact"><b id="fQ">0</b> questions</div>
+        <div class="fact"><b>7</b> topics</div>
+        <div class="fact" id="fBest">best run &mdash;</div>
+        <div class="fact" id="fSeen">0% seen</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Pick your drill</h2>
+      <div class="grid">
+        <button class="mode" data-mode="quick">
+          <span class="k">10 questions</span>
+          <span class="t">Warm-Up Set</span>
+          <span class="d">A fast mixed round. Good for a car ride or the 10 minutes before dinner.</span>
+        </button>
+        <button class="mode" data-mode="mock">
+          <span class="k">40 questions</span>
+          <span class="t">Full Tryout Sim</span>
+          <span class="d">Same spread as a real screening test. Sit down, no phone, see where you land.</span>
+        </button>
+        <button class="mode" data-mode="missed" id="missedBtn">
+          <span class="k">Your misses</span>
+          <span class="t">Fix My Mistakes</span>
+          <span class="d">Only the ones you got wrong before. This is the fastest way to gain points.</span>
+        </button>
+        <button class="mode" data-mode="study">
+          <span class="k">No scoring</span>
+          <span class="t">Cheat Sheet</span>
+          <span class="d">Every fact worth memorizing, sorted. Read it the night before.</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Or drill one topic</h2>
+      <div class="chips" id="topicChips"></div>
+    </div>
+
+    <div class="sec">
+      <h2>How to actually get good at this</h2>
+      <div class="grid">
+        <div class="mode" style="cursor:default">
+          <span class="k">Step 1</span>
+          <span class="t">15 minutes a day</span>
+          <span class="d">One Warm-Up Set daily beats a three hour cram the night before. Your brain files facts while you sleep.</span>
+        </div>
+        <div class="mode" style="cursor:default">
+          <span class="k">Step 2</span>
+          <span class="t">Chase the red</span>
+          <span class="d">Wrong answers are the whole point. Run Fix My Mistakes until that list is empty.</span>
+        </div>
+        <div class="mode" style="cursor:default">
+          <span class="k">Step 3</span>
+          <span class="t">Say it out loud</span>
+          <span class="d">Explain photosynthesis to a parent, a mirror, or your camera. If you can teach it, you know it.</span>
+        </div>
+        <div class="mode" style="cursor:default">
+          <span class="k">Step 4</span>
+          <span class="t">Learn the units</span>
+          <span class="d">Metric conversions and lab tools show up on every single tryout test and they are free points.</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="foot">Some questions are wrapped in baking, fabric, stage lights and camera stuff on purpose, because that is how you remember them. The science underneath is exactly what gets asked. Built for a 6th grader going for Division A.</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" hidden>
+    <div class="qmeta">
+      <span class="tag" id="qTag">Topic</span>
+      <span class="count" id="qCount">1 / 10</span>
+      <span class="streak" id="qStreak"></span>
+    </div>
+    <div class="qcard">
+      <div class="qtext" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div id="qFb" hidden></div>
+      <div class="go" id="qGo" hidden><button class="btn" id="nextBtn">Next</button></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="res" hidden>
+    <div class="score">
+      <div class="big" id="rScore">0/0</div>
+      <div class="pct mono" id="rPct"></div>
+      <div class="msg" id="rMsg"></div>
+    </div>
+    <div class="sec"><h2>By topic</h2><div class="bd" id="rBd"></div></div>
+    <div class="sec" id="rRevWrap"><h2>Worth a second look</h2><div class="rev" id="rRev"></div></div>
+    <div class="go">
+      <button class="btn" id="againBtn">Run it again</button>
+      <button class="btn sec" id="backBtn">Back to drills</button>
+    </div>
+  </section>
+
+  <!-- STUDY -->
+  <section id="study" hidden>
+    <div class="hero" style="padding-block:26px 20px">
+      <div class="eyebrow">Cheat sheet</div>
+      <h1 style="font-size:clamp(28px,7vw,42px)">Know these <em>cold.</em></h1>
+      <p>If you only have one night, read this. Everything here has shown up on elementary Science Olympiad tryout tests.</p>
+    </div>
+    <div id="studyBody"></div>
+    <div class="go"><button class="btn sec" id="backBtn2">Back to drills</button></div>
+  </section>
+
+</div>
+
+<script>
+const TOPICS={bio:"Life Science",eco:"Ecology",earth:"Earth Science",space:"Space",phys:"Physics & Matter",chem:"Chemistry",lab:"Lab Skills & Metric"};
+
+const BANK=[
+/* ---------------- LIFE SCIENCE ---------------- */
+{t:"bio",q:"Which part of a plant cell captures sunlight to make food?",a:["Chloroplast","Mitochondria","Nucleus","Ribosome"],c:0,e:"Chloroplasts hold chlorophyll, the green pigment that absorbs light. That green color is why most leaves are green."},
+{t:"bio",q:"Which organelle is called the powerhouse of the cell?",a:["Mitochondria","Vacuole","Cell wall","Golgi body"],c:0,e:"Mitochondria release energy from food through cellular respiration. Muscle cells are packed with them, which is why they can keep going through a whole dance number."},
+{t:"bio",q:"Which structure is found in plant cells but NOT in animal cells?",a:["Cell wall","Cell membrane","Nucleus","Mitochondria"],c:0,e:"Plant cells have a stiff cell wall made of cellulose outside the membrane. It is what makes celery crunch."},
+{t:"bio",q:"Where is a cell's DNA stored?",a:["Nucleus","Cytoplasm","Cell membrane","Vacuole"],c:0,e:"The nucleus is the control center and holds the chromosomes. Bacteria are the exception, since they have no nucleus."},
+{t:"bio",q:"What is the correct order from smallest to largest?",a:["Cell, tissue, organ, organ system","Tissue, cell, organ, organ system","Cell, organ, tissue, organ system","Organ, cell, tissue, organ system"],c:0,e:"Cells group into tissues, tissues into organs, organs into organ systems, and systems into an organism."},
+{t:"bio",q:"Bacteria are called prokaryotes because they have no",a:["nucleus","cell membrane","DNA","ribosomes"],c:0,e:"Prokaryote means before nucleus. Their DNA floats loose in the cytoplasm instead of being wrapped in a nuclear membrane."},
+{t:"bio",q:"Hair, fingernails and the outer layer of skin are mostly made of which protein?",a:["Keratin","Collagen","Insulin","Hemoglobin"],c:0,e:"Keratin is a tough, waterproof protein. Heat styling works by temporarily breaking and reforming bonds inside keratin."},
+{t:"bio",q:"Which body system moves oxygen and nutrients to every cell?",a:["Circulatory","Digestive","Skeletal","Nervous"],c:0,e:"The heart, blood and blood vessels make up the circulatory system. It partners with the respiratory system, which brings the oxygen in."},
+{t:"bio",q:"Your heart pounds during dance rehearsal mainly because",a:["muscles need more oxygen delivered faster","your body is getting rid of extra water","your bones are growing","your brain is using less energy"],c:0,e:"Working muscles burn through oxygen and glucose quickly, so the heart speeds up to deliver more and carry carbon dioxide away."},
+{t:"bio",q:"Most nutrients from food are absorbed in the",a:["small intestine","stomach","large intestine","esophagus"],c:0,e:"The small intestine is lined with tiny villi that create a huge surface area. The large intestine mainly absorbs water."},
+{t:"bio",q:"Which organ filters waste out of the blood to make urine?",a:["Kidneys","Liver","Lungs","Pancreas"],c:0,e:"The kidneys filter blood and send waste to the bladder. The liver detoxifies but does not make urine."},
+{t:"bio",q:"The main job of red blood cells is to",a:["carry oxygen","fight infection","clot wounds","digest fat"],c:0,e:"Hemoglobin in red blood cells binds oxygen. White blood cells fight infection and platelets clot wounds."},
+{t:"bio",q:"What is the largest organ of the human body?",a:["Skin","Liver","Lungs","Brain"],c:0,e:"Skin is an organ, and by surface area and weight it is the biggest. It blocks germs, holds in water and regulates temperature."},
+{t:"bio",q:"Which part of the brain controls balance and coordination?",a:["Cerebellum","Cerebrum","Brain stem","Spinal cord"],c:0,e:"The cerebellum fine tunes movement and balance. It is what lets you nail choreography without thinking about every step."},
+{t:"bio",q:"In classification, which group is the broadest?",a:["Kingdom","Class","Family","Species"],c:0,e:"Order goes Kingdom, Phylum, Class, Order, Family, Genus, Species. Species is the most specific."},
+{t:"bio",q:"A scientific name like Homo sapiens is made of the",a:["genus and species","family and genus","kingdom and phylum","class and order"],c:0,e:"This is binomial nomenclature. Genus is capitalized, species is lowercase, and both are italicized."},
+{t:"bio",q:"Animals with a backbone are called",a:["vertebrates","invertebrates","arthropods","mollusks"],c:0,e:"Vertebrates include fish, amphibians, reptiles, birds and mammals. Over 95 percent of animal species are invertebrates."},
+{t:"bio",q:"How many legs does an insect have?",a:["6","8","4","10"],c:0,e:"Insects have 6 legs and 3 body parts. Spiders have 8 legs and 2 body parts, so spiders are not insects."},
+{t:"bio",q:"A frog is an amphibian. Which trait fits amphibians?",a:["Moist skin and young that breathe with gills","Dry scales and shelled eggs","Feathers and hollow bones","Fur and milk for young"],c:0,e:"Amphibians start life in water with gills and develop lungs. Dry scales and shelled eggs describe reptiles."},
+{t:"bio",q:"Photosynthesis uses carbon dioxide, water and light to make",a:["glucose and oxygen","protein and nitrogen","starch and carbon dioxide","water and salt"],c:0,e:"Plants make their own sugar and release oxygen as a by-product. Every breath you take depends on it."},
+{t:"bio",q:"Which gas do living things take in during cellular respiration?",a:["Oxygen","Carbon dioxide","Nitrogen","Hydrogen"],c:0,e:"Respiration takes in oxygen and releases carbon dioxide. It is basically the reverse of photosynthesis."},
+{t:"bio",q:"Brown eyes (B) are dominant over blue (b). A child with genes Bb will have",a:["brown eyes","blue eyes","one of each color","green eyes"],c:0,e:"One dominant allele is enough to show the trait. Blue eyes only appear with bb."},
+{t:"bio",q:"Two Bb parents have a child. What is the chance of a bb child?",a:["25%","50%","75%","0%"],c:0,e:"The Punnett square gives BB, Bb, Bb, bb. That is one bb out of four, so 25 percent."},
+{t:"bio",q:"Mitosis produces",a:["two identical cells","four different cells","one larger cell","two cells with half the DNA"],c:0,e:"Mitosis is for growth and repair and makes identical copies. Meiosis is the one that halves the DNA to make sex cells."},
+
+/* ---------------- ECOLOGY ---------------- */
+{t:"eco",q:"Organisms that make their own food are called",a:["producers","consumers","decomposers","predators"],c:0,e:"Producers, also called autotrophs, sit at the base of every food chain. Plants and algae are the main ones."},
+{t:"eco",q:"An animal that eats only plants is a",a:["herbivore","carnivore","omnivore","decomposer"],c:0,e:"Herbivores eat plants, carnivores eat meat, omnivores eat both."},
+{t:"eco",q:"In a food chain, the arrows show",a:["the direction energy flows","who eats whom, pointing at the eaten","the order animals were discovered","migration routes"],c:0,e:"Arrows always point from the organism being eaten toward the one eating it, because that is the way energy travels."},
+{t:"eco",q:"What do decomposers do?",a:["Break down dead material and return nutrients to the soil","Make food from sunlight","Hunt the largest prey","Store energy for winter"],c:0,e:"Fungi and bacteria recycle nutrients. Without them dead material would pile up and the soil would run out."},
+{t:"eco",q:"Roughly how much energy passes from one level of a food chain to the next?",a:["10%","50%","90%","100%"],c:0,e:"About 90 percent is lost as heat and life processes. That is why food chains rarely have more than four or five levels."},
+{t:"eco",q:"All the deer living in one forest make up a",a:["population","community","ecosystem","biome"],c:0,e:"One species in one place is a population. Add other species and you have a community, add the nonliving parts and it is an ecosystem."},
+{t:"eco",q:"If a disease kills most of the rabbits, what happens to the foxes that eat them?",a:["Their numbers drop","Their numbers rise","Nothing changes","They become producers"],c:0,e:"Less prey means less food, so the predator population falls. Predator and prey numbers rise and fall together."},
+{t:"eco",q:"Which biome has permanently frozen ground called permafrost?",a:["Tundra","Desert","Savanna","Taiga"],c:0,e:"Tundra is cold, treeless and has a short growing season. Plants stay low to the ground to survive the wind."},
+{t:"eco",q:"Which biome has the greatest variety of species?",a:["Tropical rainforest","Desert","Tundra","Grassland"],c:0,e:"Warm temperatures, heavy rain and year-round sun support enormous biodiversity."},
+{t:"eco",q:"A thick waxy stem that stores water is an adaptation for life in the",a:["desert","rainforest","tundra","ocean"],c:0,e:"Cactus adaptations reduce water loss and store it. Many desert animals are also nocturnal to avoid daytime heat."},
+{t:"eco",q:"Camouflage helps an animal by",a:["making it hard for predators to see","making it run faster","helping it digest food","keeping it warm"],c:0,e:"Blending in is a survival adaptation. Some predators use it too, to sneak up on prey."},
+{t:"eco",q:"What is the correct order in the water cycle?",a:["Evaporation, condensation, precipitation, collection","Condensation, evaporation, collection, precipitation","Precipitation, evaporation, condensation, collection","Collection, precipitation, condensation, evaporation"],c:0,e:"The sun drives evaporation, vapor cools and condenses into clouds, it falls as precipitation, then collects in oceans and rivers."},
+{t:"eco",q:"Water released from plant leaves into the air is called",a:["transpiration","condensation","precipitation","respiration"],c:0,e:"Transpiration is a big part of the water cycle. A large tree can release hundreds of liters of water on a hot day."},
+{t:"eco",q:"A bee gets nectar while pollinating a flower. This relationship is",a:["mutualism, both benefit","parasitism, one is harmed","commensalism, one is unaffected","predation"],c:0,e:"Both sides win, so it is mutualism. In commensalism one benefits and the other is unaffected."},
+{t:"eco",q:"A tick feeding on a dog is an example of",a:["parasitism","mutualism","commensalism","competition"],c:0,e:"The tick benefits and the dog is harmed. Parasites usually do not kill the host quickly, since they need it alive."},
+{t:"eco",q:"Why are invasive species a problem?",a:["They have no natural predators and outcompete native species","They are always poisonous","They cannot reproduce","They only eat decomposers"],c:0,e:"Without natural controls they spread fast and crowd out native species, which can collapse a food web."},
+{t:"eco",q:"Which of these is a renewable resource?",a:["Wind","Coal","Oil","Natural gas"],c:0,e:"Wind, solar, hydro and geothermal replenish naturally. Fossil fuels take millions of years to form."},
+{t:"eco",q:"An organism's niche is",a:["its role or job in the ecosystem","the exact spot where it sleeps","the number of offspring it has","its scientific name"],c:0,e:"Habitat is the address, niche is the occupation. Two species competing for the same niche rarely coexist."},
+{t:"eco",q:"Why is a food web more realistic than a food chain?",a:["Most animals eat more than one kind of food","Webs only show plants","Chains include decomposers and webs do not","Webs show only one ecosystem"],c:0,e:"A web shows the many overlapping chains in a real ecosystem, which is why losing one species can ripple outward."},
+{t:"eco",q:"Burning fossil fuels adds which gas to the atmosphere, trapping heat?",a:["Carbon dioxide","Oxygen","Nitrogen","Helium"],c:0,e:"Carbon dioxide is a greenhouse gas. It lets sunlight in but slows heat from escaping back to space."},
+
+/* ---------------- EARTH SCIENCE ---------------- */
+{t:"earth",q:"What are the three main types of rock?",a:["Igneous, sedimentary, metamorphic","Granite, marble, slate","Hard, soft, medium","Volcanic, oceanic, glacial"],c:0,e:"They are grouped by how they form, and the rock cycle can turn any one into another."},
+{t:"earth",q:"Igneous rock forms when",a:["melted rock cools and hardens","layers of sediment are pressed together","heat and pressure change existing rock","shells dissolve in water"],c:0,e:"Igneous comes from the Latin for fire. Granite cooled slowly underground, basalt cooled fast on the surface."},
+{t:"earth",q:"Fossils are found most often in which rock type?",a:["Sedimentary","Igneous","Metamorphic","Volcanic"],c:0,e:"Sediment buries remains gently in layers. Igneous and metamorphic rock involve heat that destroys fossils."},
+{t:"earth",q:"Metamorphic rock is formed by",a:["heat and pressure changing existing rock","lava cooling in air","wind piling up sand","water freezing in cracks"],c:0,e:"Limestone becomes marble and shale becomes slate. The rock changes without fully melting."},
+{t:"earth",q:"What are Earth's layers from the outside in?",a:["Crust, mantle, outer core, inner core","Crust, outer core, mantle, inner core","Mantle, crust, inner core, outer core","Core, mantle, crust, atmosphere"],c:0,e:"The crust is thin, the mantle is the thickest layer, the outer core is liquid and the inner core is solid iron and nickel."},
+{t:"earth",q:"Which layer of Earth is liquid?",a:["Outer core","Inner core","Crust","Lithosphere"],c:0,e:"The inner core stays solid because of enormous pressure. Movement in the liquid outer core generates Earth's magnetic field."},
+{t:"earth",q:"When two plates push together and crumple upward, they form",a:["mountains","mid-ocean ridges","deep sea trenches only","rift valleys"],c:0,e:"That is a convergent boundary. The Himalayas are still rising as India pushes into Asia."},
+{t:"earth",q:"At a divergent boundary, plates",a:["move apart and new crust forms","slide past each other","crash and form volcanoes","stop moving"],c:0,e:"Magma rises into the gap. The Mid-Atlantic Ridge is the classic example."},
+{t:"earth",q:"The San Andreas Fault in California is which kind of boundary?",a:["Transform, plates slide past each other","Convergent","Divergent","Subduction"],c:0,e:"Plates grind sideways past one another. The stress builds and releases as earthquakes."},
+{t:"earth",q:"What instrument records earthquake waves?",a:["Seismograph","Barometer","Anemometer","Hygrometer"],c:0,e:"A seismograph draws a seismogram. Magnitude scales rate how much energy was released."},
+{t:"earth",q:"The point on Earth's surface directly above where an earthquake starts is the",a:["epicenter","focus","fault line","magnitude"],c:0,e:"The focus is the underground starting point, the epicenter is directly above it. Shaking is usually strongest at the epicenter."},
+{t:"earth",q:"What is the difference between weathering and erosion?",a:["Weathering breaks rock apart, erosion moves the pieces","Erosion breaks rock apart, weathering moves it","They mean the same thing","Weathering only happens underwater"],c:0,e:"Freezing water cracking a rock is weathering. A river carrying the pieces downstream is erosion."},
+{t:"earth",q:"The Mohs scale measures a mineral's",a:["hardness","color","weight","age"],c:0,e:"It runs from talc at 1 to diamond at 10. A harder mineral can scratch a softer one."},
+{t:"earth",q:"What is the difference between weather and climate?",a:["Weather is short term, climate is the long term average","Climate is short term, weather is long term","They are the same","Weather only means rain"],c:0,e:"Weather is what you wear today. Climate is what is in your closet."},
+{t:"earth",q:"Which instrument measures air pressure?",a:["Barometer","Thermometer","Anemometer","Rain gauge"],c:0,e:"Falling pressure often means a storm is coming. Rising pressure usually means fair weather."},
+{t:"earth",q:"Which instrument measures wind speed?",a:["Anemometer","Barometer","Hygrometer","Seismograph"],c:0,e:"Anemometers usually have spinning cups. A hygrometer measures humidity."},
+{t:"earth",q:"Tall, towering clouds that bring thunderstorms are",a:["cumulonimbus","cirrus","stratus","fog"],c:0,e:"Cirrus are thin and high, stratus are flat gray sheets, cumulonimbus are the anvil-shaped storm clouds."},
+{t:"earth",q:"A cold front happens when",a:["cold air pushes under warm air and lifts it quickly","warm air slowly slides over cold air","two warm air masses meet","air pressure stops changing"],c:0,e:"The fast lift builds tall clouds, so cold fronts often bring short heavy storms then cooler clear air."},
+{t:"earth",q:"A fossil that forms when a shell dissolves and leaves a hollow shape is a",a:["mold","cast","trace fossil","petrified fossil"],c:0,e:"If minerals later fill that hollow, the solid copy that forms is a cast."},
+{t:"earth",q:"Index fossils are useful because they",a:["help date the rock layer they are found in","are the largest fossils","are always made of bone","only form in igneous rock"],c:0,e:"A good index fossil is from a species that was widespread but existed for only a short span of time."},
+{t:"earth",q:"The law of superposition says that in undisturbed rock layers,",a:["the oldest layers are on the bottom","the oldest layers are on top","all layers are the same age","layers form from the middle out"],c:0,e:"New sediment piles on top of old, so depth usually means age."},
+{t:"earth",q:"What provides the energy that drives the water cycle?",a:["The sun","Earth's core","The moon","Wind alone"],c:0,e:"Solar energy evaporates water and also drives the winds that move water vapor around."},
+{t:"earth",q:"The dark, nutrient-rich part of soil made from decayed material is called",a:["humus","bedrock","sediment","magma"],c:0,e:"Humus holds water and nutrients, which is why topsoil is the layer plants need most."},
+
+/* ---------------- SPACE ---------------- */
+{t:"space",q:"What is the correct order of planets from the sun?",a:["Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune","Mercury, Earth, Venus, Mars, Saturn, Jupiter, Neptune, Uranus","Venus, Mercury, Earth, Mars, Jupiter, Saturn, Neptune, Uranus","Mercury, Venus, Mars, Earth, Jupiter, Saturn, Uranus, Neptune"],c:0,e:"The first four are small and rocky, the last four are gas and ice giants."},
+{t:"space",q:"Which is the largest planet in our solar system?",a:["Jupiter","Saturn","Neptune","Earth"],c:0,e:"Over 1,300 Earths would fit inside Jupiter. Its Great Red Spot is a storm larger than Earth."},
+{t:"space",q:"Which planet is the hottest?",a:["Venus","Mercury","Mars","Jupiter"],c:0,e:"Mercury is closer to the sun, but Venus has a thick carbon dioxide atmosphere that traps heat. Surface temperature is around 465 degrees Celsius."},
+{t:"space",q:"What causes day and night on Earth?",a:["Earth rotating on its axis","Earth orbiting the sun","The moon blocking the sun","Earth's tilt"],c:0,e:"One rotation takes about 24 hours. One orbit around the sun takes a year."},
+{t:"space",q:"What causes the seasons?",a:["Earth's axis is tilted about 23.5 degrees","Earth gets closer to the sun in summer","The moon blocks sunlight","The sun gets hotter"],c:0,e:"The tilt changes how directly sunlight hits each hemisphere. Earth is actually slightly closer to the sun in January."},
+{t:"space",q:"Moon phases happen because",a:["we see different amounts of the moon's lit half as it orbits","Earth's shadow falls on the moon each night","the moon makes its own light","clouds cover part of the moon"],c:0,e:"Half the moon is always lit by the sun. The phase is just how much of that lit half faces us."},
+{t:"space",q:"During a solar eclipse,",a:["the moon passes between the sun and Earth","Earth passes between the sun and moon","the sun passes behind Jupiter","the moon enters Earth's shadow"],c:0,e:"A lunar eclipse is the other way around, with Earth between the sun and moon."},
+{t:"space",q:"What mainly causes ocean tides?",a:["The moon's gravity pulling on Earth's oceans","Wind blowing across the sea","Earth's rotation alone","Underwater volcanoes"],c:0,e:"The sun contributes too. When sun and moon line up you get the largest spring tides."},
+{t:"space",q:"The asteroid belt lies between which two planets?",a:["Mars and Jupiter","Earth and Mars","Jupiter and Saturn","Venus and Earth"],c:0,e:"Jupiter's gravity kept that material from ever forming into a planet."},
+{t:"space",q:"A comet's tail always points",a:["away from the sun","toward the sun","in the direction it is traveling","straight down"],c:0,e:"Solar wind and radiation blow the tail outward, so after a comet rounds the sun the tail leads the way."},
+{t:"space",q:"A light year is a unit of",a:["distance","time","brightness","mass"],c:0,e:"It is how far light travels in one year, about 9.5 trillion kilometers. The name is a classic trick question."},
+{t:"space",q:"Our solar system is part of which galaxy?",a:["The Milky Way","Andromeda","The Big Dipper","Orion"],c:0,e:"The Milky Way is a barred spiral galaxy. The Big Dipper and Orion are constellations inside it."},
+{t:"space",q:"The inner planets are described as",a:["small and rocky","large and gaseous","made of ice","without moons"],c:0,e:"Mercury, Venus, Earth and Mars are terrestrial. The outer four are gas and ice giants."},
+{t:"space",q:"A space rock that survives and lands on Earth's surface is called a",a:["meteorite","meteor","meteoroid","comet"],c:0,e:"Meteoroid in space, meteor while it burns in the atmosphere as a shooting star, meteorite once it lands."},
+{t:"space",q:"The sun is best described as",a:["a medium-sized star","a planet","a large moon","a galaxy"],c:0,e:"It is a yellow dwarf star fusing hydrogen into helium. It holds over 99 percent of the solar system's mass."},
+{t:"space",q:"Why do astronaut footprints stay on the moon for so long?",a:["The moon has essentially no atmosphere, so no wind or rain","The dust is sticky","The moon is frozen solid","Astronauts sealed them"],c:0,e:"No air means no weather to erode them. Only a micrometeorite strike would erase them."},
+{t:"space",q:"One complete revolution of Earth around the sun equals one",a:["year","day","month","season"],c:0,e:"Rotation gives a day, revolution gives a year. Mixing those two up is a very common test mistake."},
+{t:"space",q:"Which planet is famous for its bright, easily visible rings?",a:["Saturn","Mars","Venus","Mercury"],c:0,e:"All four gas giants have rings, but Saturn's are by far the brightest. They are mostly ice and rock."},
+{t:"space",q:"Mars looks red because its surface contains a lot of",a:["iron oxide, which is rust","red algae","lava","copper"],c:0,e:"Iron in the soil reacted with oxygen long ago. It is the same chemistry as a rusty nail."},
+{t:"space",q:"A group of stars that forms a pattern in the sky is called a",a:["constellation","galaxy","nebula","solar system"],c:0,e:"Stars in a constellation often are not near each other in space. They only look grouped from Earth."},
+
+/* ---------------- PHYSICS & MATTER ---------------- */
+{t:"phys",q:"What are the three most common states of matter?",a:["Solid, liquid, gas","Solid, liquid, plasma","Hot, cold, frozen","Hard, soft, liquid"],c:0,e:"Plasma is the fourth state and is actually the most common in the universe, since stars are made of it."},
+{t:"phys",q:"Changing from a liquid to a gas is called",a:["evaporation","condensation","melting","sublimation"],c:0,e:"Gas back to liquid is condensation. Solid straight to gas, like dry ice, is sublimation."},
+{t:"phys",q:"Water droplets forming on a cold glass of lemonade is",a:["condensation","evaporation","sublimation","precipitation"],c:0,e:"Water vapor in the warm air cools when it touches the glass and turns back to liquid. The water came from the air, not through the glass."},
+{t:"phys",q:"What is the formula for density?",a:["mass divided by volume","volume divided by mass","mass times volume","mass plus volume"],c:0,e:"Density equals mass over volume, usually in g/cm3. It does not change when you cut an object in half."},
+{t:"phys",q:"An object will float in water if its density is",a:["less than 1 g/cm3","more than 1 g/cm3","exactly 2 g/cm3","equal to its mass"],c:0,e:"Water is 1 g/cm3. Anything less dense floats, which is why oil sits on top of water."},
+{t:"phys",q:"What is the difference between mass and weight?",a:["Mass is the amount of matter, weight is the force of gravity on it","They are identical","Mass is measured in newtons","Weight never changes"],c:0,e:"Your mass is the same on the moon but your weight is about one sixth, because lunar gravity is weaker."},
+{t:"phys",q:"Newton's first law says an object at rest stays at rest unless",a:["an unbalanced force acts on it","it gets heavier","time passes","it is on a slope"],c:0,e:"This is inertia. It is also why you lurch forward when a car brakes suddenly."},
+{t:"phys",q:"Newton's second law is written as",a:["Force = mass x acceleration","Force = mass / acceleration","Force = mass + acceleration","Force = velocity x time"],c:0,e:"F = ma. More mass needs more force to get the same acceleration."},
+{t:"phys",q:"Newton's third law states that for every action there is",a:["an equal and opposite reaction","a slower reaction","no reaction","a doubled reaction"],c:0,e:"When you push off the floor to jump, the floor pushes back on you with equal force."},
+{t:"phys",q:"Which force makes it harder to slide a box across carpet than across tile?",a:["Friction","Gravity","Magnetism","Buoyancy"],c:0,e:"Friction opposes motion between surfaces. Rougher surfaces create more of it, which is also why dance floors are smooth."},
+{t:"phys",q:"Which of these is NOT one of the six simple machines?",a:["Spring","Lever","Pulley","Wedge"],c:0,e:"The six are lever, wheel and axle, pulley, inclined plane, wedge and screw."},
+{t:"phys",q:"A ramp used to roll a heavy box into a truck is which simple machine?",a:["Inclined plane","Lever","Pulley","Screw"],c:0,e:"A ramp lets you use less force over a longer distance. The total work stays about the same."},
+{t:"phys",q:"Scissors combine which two simple machines?",a:["Lever and wedge","Pulley and screw","Wheel and axle and lever","Screw and inclined plane"],c:0,e:"The handles act as levers and the sharp blades act as wedges."},
+{t:"phys",q:"Simple machines make work easier but they cannot",a:["create extra energy","change the direction of a force","reduce the force needed","be combined together"],c:0,e:"They trade force for distance. Energy is always conserved, so nothing is created for free."},
+{t:"phys",q:"A ball held at the top of a staircase has mostly which kind of energy?",a:["Potential energy","Kinetic energy","Thermal energy","Sound energy"],c:0,e:"Stored energy due to position is gravitational potential energy. As it falls, that converts to kinetic energy."},
+{t:"phys",q:"The law of conservation of energy says energy",a:["cannot be created or destroyed, only changed in form","disappears when used","is created by machines","only exists as heat"],c:0,e:"Energy transforms. A phone battery turns chemical energy into electrical, then into light and sound."},
+{t:"phys",q:"Which material is the best electrical conductor?",a:["Copper","Rubber","Glass","Plastic"],c:0,e:"Metals conduct because their electrons move freely. Rubber, glass and plastic are insulators, which is why wires are coated."},
+{t:"phys",q:"In a series circuit with three bulbs, one bulb burns out. What happens?",a:["All the bulbs go out","Only that bulb goes out","The others get brighter","Nothing changes"],c:0,e:"A series circuit is one single path, so a break stops everything. In a parallel circuit the others stay lit."},
+{t:"phys",q:"Two magnets pushed together north pole to north pole will",a:["repel each other","attract each other","stick together","lose their magnetism"],c:0,e:"Like poles repel, opposite poles attract."},
+{t:"phys",q:"How do you make a simple electromagnet?",a:["Wrap a coil of wire around an iron nail and run current through it","Rub two magnets together","Heat a copper wire","Place a battery near iron"],c:0,e:"The current creates a magnetic field and the iron core concentrates it. Turn the current off and the magnetism stops."},
+{t:"phys",q:"Sound travels fastest through",a:["a solid","a liquid","a gas","a vacuum"],c:0,e:"Tightly packed particles pass vibrations along faster. Sound cannot travel through a vacuum at all, so space is silent."},
+{t:"phys",q:"Singing a higher note means the sound wave has a higher",a:["frequency","amplitude","volume","speed"],c:0,e:"Frequency controls pitch and amplitude controls loudness. Shorter, faster waves sound higher."},
+{t:"phys",q:"Turning up the volume on a speaker increases the wave's",a:["amplitude","frequency","pitch","speed"],c:0,e:"Taller waves carry more energy, which your ear reads as louder. The pitch stays the same."},
+{t:"phys",q:"Light bending as it passes from air into water is called",a:["refraction","reflection","absorption","diffraction"],c:0,e:"Refraction is why a straw looks broken in a glass of water. Reflection is light bouncing off a surface."},
+{t:"phys",q:"A ring light works mainly because of",a:["reflection of light off your face toward the camera","refraction inside the lens","sound waves","magnetism"],c:0,e:"You only see an object when light bounces off it into the camera. Even, bright light from the front removes harsh shadows."},
+{t:"phys",q:"A magnifying glass uses which kind of lens?",a:["Convex, which bends light inward to a point","Concave, which spreads light out","Flat, which does not bend light","Colored, which filters light"],c:0,e:"A convex lens is thicker in the middle and converges light rays to make things look larger."},
+{t:"phys",q:"When white stage light passes through a prism it splits into a rainbow because",a:["different colors bend by different amounts","the prism adds color","the light slows and stops","the glass is colored"],c:0,e:"White light is a mixture of all visible colors. Violet bends most and red bends least."},
+{t:"phys",q:"A metal curling iron handle gets hot by which type of heat transfer?",a:["Conduction, through direct contact","Convection, through moving air","Radiation, through waves","Evaporation"],c:0,e:"Conduction moves heat through touching particles. Convection moves it in fluids and radiation needs no medium at all."},
+{t:"phys",q:"Heat from the sun reaches Earth by",a:["radiation","conduction","convection","friction"],c:0,e:"Radiation is the only one that works through the vacuum of space, since it needs no particles."},
+{t:"phys",q:"What is the formula for speed?",a:["distance divided by time","time divided by distance","distance times time","mass times distance"],c:0,e:"Speed equals distance over time. A runner covering 100 m in 20 s moves at 5 m/s."},
+
+/* ---------------- CHEMISTRY ---------------- */
+{t:"chem",q:"What charge does a proton carry?",a:["Positive","Negative","Neutral","It changes"],c:0,e:"Protons are positive, electrons are negative and neutrons have no charge."},
+{t:"chem",q:"Which particles are found in the nucleus of an atom?",a:["Protons and neutrons","Electrons only","Protons and electrons","Neutrons only"],c:0,e:"Electrons move around the nucleus in shells. Almost all the atom's mass is in the nucleus."},
+{t:"chem",q:"The atomic number of an element tells you the number of",a:["protons","neutrons","electrons plus neutrons","total particles"],c:0,e:"Protons define the element. Change the proton count and you have a completely different element."},
+{t:"chem",q:"What is the chemical symbol for sodium?",a:["Na","So","Sd","S"],c:0,e:"It comes from the Latin natrium. Others worth knowing are Fe for iron, K for potassium, Au for gold and Ag for silver."},
+{t:"chem",q:"On the periodic table, the vertical columns are called",a:["groups or families","periods","rows","series"],c:0,e:"Elements in the same group have similar properties because they have the same number of outer electrons."},
+{t:"chem",q:"Which group of elements almost never reacts with anything?",a:["Noble gases","Alkali metals","Halogens","Transition metals"],c:0,e:"Noble gases have full outer electron shells, so they are stable. That is why helium is safe in balloons."},
+{t:"chem",q:"The formula H2O means a water molecule has",a:["2 hydrogen atoms and 1 oxygen atom","1 hydrogen atom and 2 oxygen atoms","2 of each atom","20 hydrogen atoms"],c:0,e:"The small number after a symbol counts the atoms of that element."},
+{t:"chem",q:"What is the difference between a compound and a mixture?",a:["A compound is chemically bonded, a mixture can be separated physically","A mixture is bonded and a compound is not","They are the same","Compounds only contain metals"],c:0,e:"Salt is a compound. Trail mix is a mixture, since you can pick out the pieces."},
+{t:"chem",q:"Salt dissolved in water is an example of a",a:["solution","compound","pure element","suspension"],c:0,e:"A solution is a homogeneous mixture. The salt is the solute and the water is the solvent."},
+{t:"chem",q:"Which of these is a PHYSICAL change?",a:["Ice melting into water","Wood burning","Iron rusting","Baking a cake"],c:0,e:"A physical change alters form but not identity, and is often reversible. The melted ice is still water."},
+{t:"chem",q:"Which is a sign that a CHEMICAL change has happened?",a:["A new gas bubbles up","The object is cut in half","Sugar dissolves in tea","Water is poured into a new glass"],c:0,e:"Signs include gas production, unexpected color change, temperature change, light, or a solid precipitate forming."},
+{t:"chem",q:"Baking a cake is a chemical change because",a:["new substances form and it cannot be undone","the batter changes shape","the pan gets hot","the oven uses electricity"],c:0,e:"Heat triggers reactions that make new compounds. You cannot turn a baked cake back into batter."},
+{t:"chem",q:"The pH scale runs from 0 to 14. What is neutral?",a:["7","0","14","10"],c:0,e:"Below 7 is acidic, above 7 is basic. Pure water is 7."},
+{t:"chem",q:"Lemon juice has a pH of about 2, so it is",a:["a strong acid","a base","neutral","a salt"],c:0,e:"Acids taste sour and react with metals. The lower the number, the stronger the acid."},
+{t:"chem",q:"An acid turns blue litmus paper",a:["red","blue","green","black"],c:0,e:"Acid turns blue litmus red, base turns red litmus blue. Remember that acid starts with A and so does the color change to red."},
+{t:"chem",q:"Mixing baking soda and vinegar makes a cake rise because it produces",a:["carbon dioxide gas","oxygen gas","water vapor only","hydrogen gas"],c:0,e:"The acid and base react and release CO2 bubbles, which get trapped in the batter and puff it up."},
+{t:"chem",q:"The law of conservation of mass says that in a chemical reaction,",a:["the total mass stays the same","mass is always lost","mass doubles","mass turns into energy"],c:0,e:"Atoms are rearranged, never destroyed. If a reaction seems to lose mass, a gas escaped."},
+{t:"chem",q:"In sugar water, which is the solvent?",a:["Water","Sugar","Both","Neither"],c:0,e:"The solvent does the dissolving and the solute gets dissolved. Water dissolves so many things it is called the universal solvent."},
+{t:"chem",q:"Sugar dissolves faster in hot tea than iced tea because heat",a:["makes particles move faster and collide more","adds more sugar","changes sugar into a new compound","lowers the pH"],c:0,e:"Stirring and grinding the solute smaller also speed dissolving, for the same reason."},
+{t:"chem",q:"Rusting requires iron plus",a:["oxygen and water","nitrogen only","heat only","salt only"],c:0,e:"Rust is iron oxide, a chemical change. Salt speeds it up, which is why cars rust faster near the ocean."},
+
+/* ---------------- LAB SKILLS & METRIC ---------------- */
+{t:"lab",q:"What is the correct order of the scientific method?",a:["Question, hypothesis, experiment, data, conclusion","Conclusion, experiment, question, hypothesis","Hypothesis, conclusion, question, experiment","Experiment, question, data, hypothesis"],c:0,e:"Observe and question first, then predict, then test. A conclusion only comes after data."},
+{t:"lab",q:"In an experiment, the independent variable is",a:["the one thing you deliberately change","the thing you measure","everything kept the same","the final result"],c:0,e:"You change the independent variable and measure the dependent variable. Everything else is held constant."},
+{t:"lab",q:"You test how fertilizer amount affects plant height. The dependent variable is",a:["plant height","amount of fertilizer","type of soil","hours of sunlight"],c:0,e:"Height is what you measure, so it depends on the fertilizer. Soil and sunlight are controlled variables."},
+{t:"lab",q:"Why does an experiment need a control group?",a:["To give a comparison with no treatment applied","To make the experiment longer","To double the results","To prove the hypothesis right"],c:0,e:"Without a baseline you cannot tell whether the change came from your variable or from something else."},
+{t:"lab",q:"A good hypothesis must be",a:["testable","long","proven true already","written as a question"],c:0,e:"It is usually an if-then statement that an experiment can support or disprove."},
+{t:"lab",q:"How many meters are in one kilometer?",a:["1,000","100","10","10,000"],c:0,e:"Kilo always means 1,000. So 1 kg is 1,000 g and 1 kL is 1,000 L."},
+{t:"lab",q:"How many centimeters are in one meter?",a:["100","10","1,000","12"],c:0,e:"Centi means one hundredth. There are also 10 millimeters in every centimeter."},
+{t:"lab",q:"How many milliliters are in one liter?",a:["1,000","100","10","500"],c:0,e:"Milli means one thousandth. A standard water bottle is about 500 mL."},
+{t:"lab",q:"One milliliter is equal to",a:["1 cubic centimeter","1 gram of any liquid","1 centimeter","10 cubic centimeters"],c:0,e:"1 mL = 1 cm3. This is the link that lets you turn a volume measurement into a density calculation."},
+{t:"lab",q:"How do you find the volume of an irregular object like a small rock?",a:["Water displacement in a graduated cylinder","Measure length times width times height","Weigh it on a balance","Use a ruler"],c:0,e:"Record the water level, drop the rock in, and the rise in milliliters equals the volume in cubic centimeters."},
+{t:"lab",q:"When reading a graduated cylinder you should read",a:["the bottom of the curved meniscus at eye level","the top of the curve","the highest point of liquid","the rim of the cylinder"],c:0,e:"Looking from above or below gives a wrong reading. Always get your eye level with the liquid."},
+{t:"lab",q:"A triple beam balance is used to measure",a:["mass","volume","temperature","density directly"],c:0,e:"It compares an object against known masses, so it works the same anywhere, even on the moon."},
+{t:"lab",q:"In Celsius, water freezes at 0 degrees and boils at",a:["100 degrees","212 degrees","50 degrees","32 degrees"],c:0,e:"Those are 32 and 212 in Fahrenheit. Science uses Celsius and Kelvin."},
+{t:"lab",q:"Which graph is best for showing how temperature changed over a week?",a:["Line graph","Pie chart","Bar graph of categories","Venn diagram"],c:0,e:"Line graphs show continuous change over time. Bar graphs compare separate categories."},
+{t:"lab",q:"On a graph, the independent variable goes on the",a:["x-axis, the horizontal one","y-axis, the vertical one","either axis","legend"],c:0,e:"DRY MIX helps: Dependent, Responding, Y-axis and Independent, Manipulated, X-axis."},
+{t:"lab",q:"What should you do first if a chemical splashes in your eye?",a:["Flush with water at the eyewash for about 15 minutes and tell the teacher","Rub your eye","Wait to see if it stings","Cover it with a cloth"],c:0,e:"Rinse immediately, then report it. Knowing where the eyewash and shower are before you start is part of lab safety."},
+{t:"lab",q:"Which is a QUALITATIVE observation?",a:["The liquid is cloudy and blue","The liquid is 25 mL","The mass is 14 g","The temperature is 30 degrees C"],c:0,e:"Qualitative describes qualities in words. Quantitative uses numbers and units."},
+{t:"lab",q:"Which statement is an inference rather than an observation?",a:["The plant died because it did not get enough water","The plant leaves are brown","The soil is dry","The pot is 10 cm tall"],c:0,e:"An observation is what you sense directly. An inference is an explanation you reason out from it."},
+{t:"lab",q:"Variables kept the same throughout an experiment are called",a:["controlled variables or constants","independent variables","dependent variables","random variables"],c:0,e:"Holding them constant is what lets you claim your independent variable caused the change."},
+{t:"lab",q:"Four students measure a mass of 10.0 g as 9.9, 10.0, 10.1 and 10.0. These results are",a:["both accurate and precise","precise but not accurate","accurate but not precise","neither"],c:0,e:"Accurate means close to the true value and precise means close to each other. Here they are both."}
+];
+BANK.forEach(function(x,i){x.id=x.t+"-"+i;});
+
+const SHEET=[
+{h:"Metric conversions (free points, memorize first)",rows:[["1 kilometer","1,000 meters"],["1 meter","100 centimeters"],["1 centimeter","10 millimeters"],["1 kilogram","1,000 grams"],["1 liter","1,000 milliliters"],["1 milliliter","1 cubic centimeter (cm3)"],["Water freezes","0 degrees C"],["Water boils","100 degrees C"],["Density of water","1 g/cm3"]],
+note:"Prefixes: kilo = 1,000 &middot; centi = 1/100 &middot; milli = 1/1,000. If you learn nothing else, learn this box. It shows up every year."},
+
+{h:"Lab tools and what they measure",rows:[["Triple beam balance","Mass"],["Graduated cylinder","Volume of liquid"],["Thermometer","Temperature"],["Barometer","Air pressure"],["Anemometer","Wind speed"],["Hygrometer","Humidity"],["Seismograph","Earthquake waves"],["Spring scale","Force or weight, in newtons"]],
+note:"Read a graduated cylinder at the BOTTOM of the meniscus, with your eye level with the liquid."},
+
+{h:"Experiment vocabulary",items:["<b>Independent variable</b> is the one thing you change.","<b>Dependent variable</b> is what you measure, it depends on the change.","<b>Controlled variables</b> are everything kept the same.","<b>Control group</b> gets no treatment and gives you something to compare against.","<b>Hypothesis</b> is a testable if-then prediction, not a guess.","<b>Qualitative</b> = words and descriptions. <b>Quantitative</b> = numbers and units.","<b>Observation</b> = what you sense. <b>Inference</b> = what you conclude from it.","Memory trick: <b>DRY MIX</b>. Dependent-Responding-Y axis, Independent-Manipulated-X axis."]},
+
+{h:"Cells and the human body",items:["Order of organization: cell, tissue, organ, organ system, organism.","<b>Nucleus</b> holds DNA. <b>Mitochondria</b> release energy. <b>Chloroplasts</b> do photosynthesis.","Plant cells only: <b>cell wall</b>, <b>chloroplasts</b>, one large <b>vacuole</b>.","Bacteria are <b>prokaryotes</b>, meaning no nucleus.","Photosynthesis: carbon dioxide + water + light makes glucose + oxygen.","Respiration: glucose + oxygen makes energy + carbon dioxide + water. It is the reverse.","Systems: circulatory moves blood, respiratory brings oxygen, digestive breaks down food, excretory removes waste, nervous sends signals, skeletal supports, muscular moves.","Small intestine absorbs nutrients. Kidneys filter blood. Skin is the largest organ.","Classification, broad to specific: <b>K</b>ingdom, <b>P</b>hylum, <b>C</b>lass, <b>O</b>rder, <b>F</b>amily, <b>G</b>enus, <b>S</b>pecies."]},
+
+{h:"Ecology",items:["<b>Producers</b> make food, <b>consumers</b> eat, <b>decomposers</b> recycle nutrients.","Food chain arrows point toward the eater, showing energy flow.","Only about <b>10%</b> of energy passes to the next level.","Population = one species. Community = many species. Ecosystem = community + nonliving parts. Biome = large region.","<b>Habitat</b> is where it lives, <b>niche</b> is its job.","Symbiosis: <b>mutualism</b> both win, <b>commensalism</b> one wins one unaffected, <b>parasitism</b> one wins one harmed.","Water cycle: evaporation, condensation, precipitation, collection. <b>Transpiration</b> is water leaving plant leaves.","Renewable: sun, wind, water, geothermal. Nonrenewable: coal, oil, natural gas."]},
+
+{h:"Earth science",items:["Rock types: <b>igneous</b> from cooled magma, <b>sedimentary</b> from pressed layers (holds fossils), <b>metamorphic</b> from heat and pressure.","Earth layers outside in: crust, mantle, outer core (liquid), inner core (solid).","Boundaries: <b>convergent</b> collide, <b>divergent</b> spread apart, <b>transform</b> slide past. The San Andreas is transform.","<b>Focus</b> is underground where the quake starts, <b>epicenter</b> is directly above on the surface.","<b>Weathering</b> breaks rock down, <b>erosion</b> carries the pieces away, <b>deposition</b> drops them.","<b>Mohs scale</b> measures hardness, talc 1 to diamond 10.","Law of superposition: in undisturbed layers, oldest is on the bottom.","Weather is right now, climate is the long-term average.","Clouds: cirrus thin and high, stratus flat gray, cumulus puffy, cumulonimbus means thunderstorm."]},
+
+{h:"Space",items:["Planet order: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.","Inner four are rocky, outer four are gas and ice giants.","<b>Rotation</b> on the axis gives day and night. <b>Revolution</b> around the sun gives the year.","Seasons come from Earth's <b>23.5 degree tilt</b>, NOT from distance to the sun. This is the most missed question on these tests.","Moon phases come from how much of the lit half faces us.","<b>Solar eclipse</b>: moon between sun and Earth. <b>Lunar eclipse</b>: Earth between sun and moon.","Tides are caused mainly by the moon's gravity.","Venus is hottest because of its thick CO2 atmosphere. Jupiter is largest. Mars is red from iron oxide.","A <b>light year</b> measures distance, not time.","Meteoroid in space, meteor burning in the sky, meteorite on the ground."]},
+
+{h:"Physics and matter",items:["<b>Density = mass / volume</b>. Floats if less than 1 g/cm3.","<b>Mass</b> is amount of matter and never changes. <b>Weight</b> is gravity pulling on mass and does change.","Newton 1: objects keep doing what they are doing (inertia). Newton 2: <b>F = ma</b>. Newton 3: equal and opposite.","Six simple machines: lever, wheel and axle, pulley, inclined plane, wedge, screw.","<b>Potential</b> energy is stored, <b>kinetic</b> is moving. Energy is never created or destroyed.","Heat transfer: <b>conduction</b> by touching, <b>convection</b> through moving fluids, <b>radiation</b> through waves and no medium needed.","Sound needs a medium and travels fastest in solids. It cannot travel in space.","<b>Frequency</b> controls pitch, <b>amplitude</b> controls volume.","<b>Reflection</b> bounces, <b>refraction</b> bends. Convex lenses magnify.","<b>Speed = distance / time</b>.","Series circuit = one path, one break stops all. Parallel = separate paths."]},
+
+{h:"Chemistry",items:["Proton positive, electron negative, neutron neutral. Protons and neutrons sit in the nucleus.","<b>Atomic number = number of protons</b>, and that is what defines the element.","Periodic table: rows are <b>periods</b>, columns are <b>groups</b> or families.","Group 18 <b>noble gases</b> are unreactive. Group 1 <b>alkali metals</b> are very reactive.","Symbols to know: O oxygen, C carbon, H hydrogen, N nitrogen, Na sodium, K potassium, Fe iron, Cu copper, Au gold, Ag silver, Pb lead, He helium.","<b>Compound</b> is chemically bonded, <b>mixture</b> can be separated physically.","<b>Physical change</b> keeps the same substance (melting, cutting, dissolving). <b>Chemical change</b> makes a new one (burning, rusting, baking).","Chemical change signs: gas bubbles, color change, temperature change, light, precipitate.","<b>pH</b>: below 7 acid, 7 neutral, above 7 base. Acid turns blue litmus red.","<b>Conservation of mass</b>: mass before = mass after.","Solute dissolves into solvent to make a solution. Heat and stirring speed it up."]}
+];
+
+/* ---------------- app ---------------- */
+var $=function(s){return document.querySelector(s)};
+var store={
+  get:function(k,d){try{var v=localStorage.getItem("scioly_"+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set:function(k,v){try{localStorage.setItem("scioly_"+k,JSON.stringify(v))}catch(e){}}
+};
+var missed=store.get("missed",[]);
+var best=store.get("best",null);
+var seen=store.get("seen",[]);
+var S=null;
+
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function show(id){["home","quiz","res","study"].forEach(function(s){$("#"+s).hidden=(s!==id)});
+  $("#homeBtn").hidden=(id==="home");window.scrollTo({top:0,behavior:"instant"})}
+
+function refreshHome(){
+  $("#fQ").textContent=BANK.length;
+  $("#fBest").innerHTML=best?("best run <b>"+best+"%</b>"):"best run &mdash;";
+  $("#fSeen").innerHTML="<b>"+Math.round(seen.length/BANK.length*100)+"%</b> seen";
+  var mb=$("#missedBtn");
+  mb.disabled=missed.length===0;
+  mb.querySelector(".k").textContent=missed.length?(missed.length+" to fix"):"nothing yet";
+  mb.querySelector(".d").textContent=missed.length?"Only the ones you got wrong before. This is the fastest way to gain points.":"Once you miss a question it lands here. Run a drill first.";
+  var c=$("#topicChips");c.innerHTML="";
+  Object.keys(TOPICS).forEach(function(k){
+    var n=BANK.filter(function(x){return x.t===k}).length;
+    var b=document.createElement("button");
+    b.className="chip";b.innerHTML=TOPICS[k]+" <u>"+n+"</u>";
+    b.onclick=function(){start("topic",k)};
+    c.appendChild(b);
+  });
+}
+
+function start(mode,topic){
+  var pool;
+  if(mode==="quick")pool=shuffle(BANK).slice(0,10);
+  else if(mode==="mock"){
+    pool=[];
+    Object.keys(TOPICS).forEach(function(k){
+      pool=pool.concat(shuffle(BANK.filter(function(x){return x.t===k})).slice(0,6));
+    });
+    pool=shuffle(pool).slice(0,40);
+  }
+  else if(mode==="missed")pool=shuffle(BANK.filter(function(x){return missed.indexOf(x.id)>-1}));
+  else pool=shuffle(BANK.filter(function(x){return x.t===topic}));
+  if(!pool.length)return;
+  S={pool:pool,i:0,right:0,streak:0,best:0,wrong:[],mode:mode,topic:topic};
+  show("quiz");render();
+}
+
+function render(){
+  var q=S.pool[S.i];
+  $("#qTag").textContent=TOPICS[q.t];
+  $("#qCount").textContent=(S.i+1)+" / "+S.pool.length;
+  $("#qStreak").textContent=S.streak>=3?(S.streak+" in a row"):"";
+  $("#qText").textContent=q.q;
+  $("#barFill").style.width=(S.i/S.pool.length*100)+"%";
+  var o=$("#qOpts");o.innerHTML="";
+  var order=shuffle([0,1,2,3]);
+  order.forEach(function(idx,pos){
+    var b=document.createElement("button");
+    b.className="opt";
+    b.innerHTML="<b>"+"ABCD"[pos]+"</b><span></span>";
+    b.querySelector("span").textContent=q.a[idx];
+    b.onclick=function(){answer(idx,b)};
+    o.appendChild(b);
+  });
+  $("#qFb").hidden=true;$("#qGo").hidden=true;
+}
+
+function answer(idx,btn){
+  var q=S.pool[S.i];
+  var ok=idx===q.c;
+  Array.prototype.forEach.call($("#qOpts").children,function(b){b.disabled=true});
+  btn.classList.add(ok?"right":"wrong");
+  if(!ok){
+    Array.prototype.forEach.call($("#qOpts").children,function(b){
+      if(b.querySelector("span").textContent===q.a[q.c])b.classList.add("right");
+    });
+  }
+  if(seen.indexOf(q.id)<0){seen.push(q.id);store.set("seen",seen)}
+  if(ok){
+    S.right++;S.streak++;if(S.streak>S.best)S.best=S.streak;
+    var k=missed.indexOf(q.id);if(k>-1){missed.splice(k,1);store.set("missed",missed)}
+  }else{
+    S.streak=0;S.wrong.push(q);
+    if(missed.indexOf(q.id)<0){missed.push(q.id);store.set("missed",missed)}
+  }
+  var fb=$("#qFb");
+  fb.className="fb";
+  fb.innerHTML='<div class="v '+(ok?"y":"n")+'">'+(ok?"Correct.":"Not quite.")+'</div><p></p>';
+  fb.querySelector("p").textContent=(ok?"":"Answer: "+q.a[q.c]+". ")+q.e;
+  fb.hidden=false;
+  $("#qGo").hidden=false;
+  $("#nextBtn").textContent=(S.i===S.pool.length-1)?"See results":"Next";
+  $("#nextBtn").focus();
+}
+
+$("#nextBtn").onclick=function(){
+  S.i++;
+  if(S.i>=S.pool.length)finish();else render();
+};
+
+function finish(){
+  var pct=Math.round(S.right/S.pool.length*100);
+  $("#barFill").style.width="100%";
+  $("#rScore").textContent=S.right+"/"+S.pool.length;
+  $("#rPct").textContent=pct+"% correct  |  best streak "+S.best;
+  var m;
+  if(pct===100)m="Perfect run. Go pick the next topic.";
+  else if(pct>=90)m="That is tryout-team level. Keep it up.";
+  else if(pct>=75)m="Strong. Clean up the misses and you are there.";
+  else if(pct>=50)m="Solid start. The misses below are your homework.";
+  else m="Early days. Read the cheat sheet, then run this again.";
+  $("#rMsg").textContent=m;
+  if(S.mode!=="missed"&&(best===null||pct>best)){best=pct;store.set("best",best)}
+
+  var bd=$("#rBd");bd.innerHTML="";
+  Object.keys(TOPICS).forEach(function(k){
+    var tot=S.pool.filter(function(x){return x.t===k}).length;
+    if(!tot)return;
+    var bad=S.wrong.filter(function(x){return x.t===k}).length;
+    var good=tot-bad,p=Math.round(good/tot*100);
+    var r=document.createElement("div");r.className="row";
+    r.innerHTML='<span class="nm">'+TOPICS[k]+'</span><span class="tr"><i style="width:'+p+'%"></i></span><span class="vv">'+good+"/"+tot+"</span>";
+    bd.appendChild(r);
+  });
+
+  var rv=$("#rRev");rv.innerHTML="";
+  $("#rRevWrap").hidden=S.wrong.length===0;
+  S.wrong.forEach(function(q){
+    var d=document.createElement("div");d.className="rv";
+    d.innerHTML='<div class="q"></div><div class="ans"></div><div class="ex"></div>';
+    d.querySelector(".q").textContent=q.q;
+    d.querySelector(".ans").textContent="Answer: "+q.a[q.c];
+    d.querySelector(".ex").textContent=q.e;
+    rv.appendChild(d);
+  });
+  show("res");
+}
+
+function buildStudy(){
+  var w=$("#studyBody");
+  SHEET.forEach(function(s,i){
+    var d=document.createElement("details");
+    if(i===0)d.open=true;
+    var inner='<summary>'+s.h+'</summary><div class="sbody">';
+    if(s.items)inner+="<ul><li>"+s.items.join("</li><li>")+"</li></ul>";
+    if(s.rows){
+      inner+='<div class="tbl"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>';
+      s.rows.forEach(function(r){inner+="<tr><td>"+r[0]+'</td><td class="m">'+r[1]+"</td></tr>"});
+      inner+="</tbody></table></div>";
+    }
+    if(s.note)inner+='<div class="note">'+s.note+"</div>";
+    d.innerHTML=inner+"</div>";
+    w.appendChild(d);
+  });
+}
+
+Array.prototype.forEach.call(document.querySelectorAll(".mode[data-mode]"),function(b){
+  b.onclick=function(){
+    var m=b.dataset.mode;
+    if(m==="study"){show("study");$("#barFill").style.width="0%"}
+    else start(m);
+  };
+});
+$("#homeBtn").onclick=function(){refreshHome();show("home");$("#barFill").style.width="0%"};
+$("#backBtn").onclick=$("#homeBtn").onclick;
+$("#backBtn2").onclick=$("#homeBtn").onclick;
+$("#againBtn").onclick=function(){start(S.mode,S.topic)};
+$("#themeBtn").onclick=function(){
+  var cur=document.documentElement.getAttribute("data-theme");
+  var dark=cur?cur==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme",dark?"light":"dark");
+};
+buildStudy();refreshHome();
+</script>
+
+</body>
+</html>
