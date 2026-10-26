@@ -29,13 +29,7 @@
   .bar{height:10px;background:#e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:14px}#tfill{height:100%;width:100%;background:var(--info);transition:width .25s linear}
   .cols{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;align-items:start}
   @media(max-width:760px){.cols{grid-template-columns:1fr}.hud{grid-template-columns:1fr 1fr 1fr}.stat .val{font-size:1.4em}}
-  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
-  .tier{padding:16px 8px;border-radius:14px;border:3px solid;font-size:1.05em;line-height:1.3;color:var(--ink);background:#fff}
-  .tier small{display:block;font-weight:600;color:var(--muted);margin-top:4px}
-  .tier.t0{border-color:#86efac}.tier.t1{border-color:#fcd34d}.tier.t2{border-color:#fca5a5}
-  .tier:hover:not(:disabled){color:#fff}.tier:hover:not(:disabled) small{color:#fff}
-  .tier.t0:hover:not(:disabled){background:#16a34a;border-color:#16a34a}.tier.t1:hover:not(:disabled){background:#d97706;border-color:#d97706}.tier.t2:hover:not(:disabled){background:#dc2626;border-color:#dc2626}
-  .hint{color:var(--muted);font-size:.9em;margin-top:10px;text-align:center}
+  .hint{color:var(--muted);font-size:.9em}
   #qtext{font-size:1.5em;line-height:1.45;margin:4px 0 14px;min-height:2.6em}
   .tag{display:inline-block;border-radius:20px;padding:2px 12px;font-size:.78em;font-weight:800;margin-bottom:6px}
   .tag.t0{background:#dcfce7;color:#166534}.tag.t1{background:#fef3c7;color:#92400e}.tag.t2{background:#fee2e2;color:#991b1b}
@@ -59,7 +53,7 @@
     <input id="team" type="text" maxlength="20" autocomplete="off">
     <ul class="rules">
       <li>You have <b id="mins">20</b> minutes. Type <b>just the number</b> for each answer and press Enter.</li>
-      <li>Before each question, pick <b>Easy, Medium or Hard</b>. Harder questions pay much more.</li>
+      <li>Questions get <b>harder as you do well</b>: get 3 right in a row to move up from Easy to Medium to Hard. A wrong answer drops you one level. Harder levels pay a lot more.</li>
       <li>Spend your cash on <b>upgrades</b> to earn more with every answer. Streaks pay extra.</li>
       <li>Random power-ups can appear after a right answer: treasure, double money, a shield, or a sale.</li>
       <li>A wrong answer only resets your streak. Stuck? Press Skip.</li>
@@ -77,14 +71,8 @@
     <div class="cols">
       <div class="card" id="qcard">
         <div id="ev" class="ev" hidden></div>
-        <div id="picker"><h2>Pick your question</h2>
-          <div class="tiers">
-            <button class="tier t0" data-t="0"></button><button class="tier t1" data-t="1"></button><button class="tier t2" data-t="2"></button>
-          </div>
-          <div class="hint">Tip: press 1, 2 or 3 on your keyboard</div>
-        </div>
-        <div id="qbox" hidden>
-          <span class="tag" id="tag"></span>
+        <div id="qbox">
+          <span class="tag" id="tag"></span><span class="hint" id="lvl" style="margin-left:8px"></span>
           <div id="qtext"></div>
           <div class="row"><input id="ans" type="text" inputmode="numeric" autocomplete="off" autocapitalize="off" placeholder="Your answer"><button id="submit" class="big" style="margin-top:0">Go</button></div>
           <div id="fb"></div>
@@ -155,7 +143,7 @@ var S=null,cur=null,locked=false,recent=[],clk=null;
 function fmt(n){return Math.round(n).toLocaleString('en-US');}
 function fmtS(n){n=Math.round(n);if(n>=1e9)return (n/1e9).toFixed(2).replace(/\.?0+$/,'')+'B';if(n>=1e6)return (n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';return n.toLocaleString('en-US');}
 function norm(s){s=String(s).trim().toLowerCase().replace(/[\s,$%]/g,'');if(s!==''&&!isNaN(Number(s)))s=String(Number(s));return s;}
-function fresh(){return {name:'',team:'',money:0,streak:0,best:0,correct:0,answered:0,lv:[0,0,0],shield:false,dbl:0,sale:false,end:0,over:false,lastGen:[-1,-1,-1]};}
+function fresh(){return {level:0,up:0,name:'',team:'',money:0,streak:0,best:0,correct:0,answered:0,lv:[0,0,0],shield:false,dbl:0,sale:false,end:0,over:false,lastGen:[-1,-1,-1]};}
 function base(){return (MPQ[S.lv[0]]+S.streak*SB[S.lv[1]])*MU[S.lv[2]];}
 function reward(t){return Math.round(base()*TM[t]*(S.dbl>0?2:1));}
 function genQ(t){var tries=0;for(;;){var g=Math.floor(Math.random()*GENS[t].length);if(g===S.lastGen[t]&&tries<6){tries++;continue;}var q=GENS[t][g]();if(recent.indexOf(q.q)<0||tries>25){S.lastGen[t]=g;recent.push(q.q);if(recent.length>14)recent.shift();q.tier=t;return q;}tries++;}}
@@ -169,10 +157,9 @@ function renderShop(){var h='';for(var k=0;k<3;k++){var lv=S.lv[k],max=lv>=UPS[k
  (max?'<button disabled>MAXED OUT</button>':'<button data-k="'+k+'"'+(S.money<cost(k)?' disabled':'')+'>Buy for $'+fmtS(cost(k))+(S.sale?' (30% off!)':'')+'</button>')+'</div>';}
  $('ups').innerHTML=h;}
 function hud(){$('money').textContent='$'+fmtS(S.money);$('streak').textContent=S.streak;}
-function showPicker(){cur=null;locked=false;$('qbox').hidden=true;$('picker').hidden=false;
- var bs=document.querySelectorAll('.tier');for(var t=0;t<3;t++){bs[t].innerHTML=TE[t]+' '+TN[t]+'<small>$'+fmtS(reward(t))+' for a right answer</small>';}}
-function pickTier(t){if(S.over||$('picker').hidden)return;cur=genQ(t);locked=false;$('picker').hidden=true;$('qbox').hidden=false;
- $('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · $'+fmtS(reward(t));$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';$('ans').focus();}
+function updTag(){if(!cur||S.over)return;$('tag').className='tag t'+cur.tier;$('tag').textContent=TE[cur.tier]+' '+TN[cur.tier]+' · $'+fmtS(reward(cur.tier))+' per right answer';
+ $('lvl').textContent=S.level>=2?'Top level! Keep it going.':(3-S.up)+' more right in a row to level up';}
+function nextQ(){if(S.over)return;cur=genQ(S.level);locked=false;$('qbox').hidden=false;updTag();$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';$('ans').focus();}
 function fb(c,t){$('fb').className=c;$('fb').textContent=t;}
 function showEv(t){var e=$('ev');e.textContent=t;e.hidden=false;clearTimeout(showEv.t);showEv.t=setTimeout(function(){e.hidden=true;},4500);}
 function maybeEvent(r){if(Math.random()>=0.12)return;var k=R(0,3);
@@ -182,24 +169,21 @@ function maybeEvent(r){if(Math.random()>=0.12)return;var k=R(0,3);
  else{S.sale=true;showEv('🏷️ Sale! Your next upgrade is 30% off.');}}
 function submit(){if(locked||S.over||!cur)return;var v=$('ans').value;if(v.trim()==='')return;locked=true;$('ans').disabled=true;$('submit').disabled=true;S.answered++;
  var ok=norm(v)===String(cur.a);
- if(ok){var r=reward(cur.tier);S.money+=r;S.streak++;if(S.streak>S.best)S.best=S.streak;S.correct++;if(S.dbl>0)S.dbl--;fb('ok','✅ Correct! +$'+fmtS(r));maybeEvent(r);}
- else{if(S.shield){S.shield=false;fb('no','❌ The answer was '+cur.a+'. 🛡️ Your shield saved your streak!');}else{S.streak=0;fb('no','❌ Not quite. The answer was '+cur.a+'.');}}
- hud();renderShop();setTimeout(function(){if(!S.over)showPicker();},ok?450:1800);}
-function skip(){if(locked||S.over||!cur)return;S.streak=0;hud();showPicker();}
+ if(ok){var r=reward(cur.tier);S.money+=r;S.streak++;if(S.streak>S.best)S.best=S.streak;S.correct++;if(S.dbl>0)S.dbl--;S.up++;var lu=(S.up>=3&&S.level<2);if(lu){S.level++;S.up=0;showEv('⬆️ Level up! Now '+TN[S.level]+' questions, they pay more');}fb('ok','✅ Correct! +$'+fmtS(r));maybeEvent(r);}
+ else{if(S.shield){S.shield=false;fb('no','❌ The answer was '+cur.a+'. 🛡️ Your shield saved your streak!');}else{S.streak=0;S.up=0;var dn=S.level>0;if(dn)S.level--;fb('no','❌ Not quite. The answer was '+cur.a+'.'+(dn?' ⬇️ Back to '+TN[S.level]+'.':''));}}
+ hud();renderShop();setTimeout(function(){if(!S.over)nextQ();},ok?600:1800);}
+function skip(){if(locked||S.over||!cur)return;S.streak=0;S.up=0;hud();nextQ();}
 function tick(){var left=Math.max(0,S.end-Date.now());var s=Math.ceil(left/1000),m=Math.floor(s/60);$('clock').textContent=m+':'+('0'+(s%60)).slice(-2);$('tfill').style.width=(left/(MIN*60000)*100)+'%';if(left<=0)finish();}
 function clean(s){return s.replace(/[|]/g,'').trim().slice(0,20);}
 function begin(){S=fresh();S.name=clean($('name').value)||'Player';S.team=clean($('team').value);recent=[];S.end=Date.now()+MIN*60000;
- $('start').hidden=true;$('end').hidden=true;$('game').hidden=false;$('codebox').hidden=true;hud();renderShop();showPicker();tick();clearInterval(clk);clk=setInterval(tick,200);}
+ $('start').hidden=true;$('end').hidden=true;$('game').hidden=false;$('codebox').hidden=true;hud();renderShop();nextQ();tick();clearInterval(clk);clk=setInterval(tick,200);}
 function finish(){if(S.over)return;S.over=true;clearInterval(clk);$('game').hidden=true;$('end').hidden=false;
  $('fmoney').textContent='$'+fmt(S.money);$('fcor').textContent='✅ '+S.correct+' of '+S.answered+' right';$('facc').textContent='🎯 '+(S.answered?Math.round(100*S.correct/S.answered):0)+'% accuracy';$('fbest').textContent='🔥 Best streak '+S.best;$('fcode').value=makeCode();}
 $('mins').textContent=(MIN%1===0)?MIN:MIN.toFixed(1);$('clock').textContent=Math.floor(MIN)+':'+('0'+Math.round((MIN%1)*60)).slice(-2);
 $('go').onclick=begin;$('submit').onclick=submit;$('skip').onclick=skip;
 $('ans').addEventListener('keydown',function(e){if(e.key==='Enter')submit();});
 $('name').addEventListener('keydown',function(e){if(e.key==='Enter')begin();});
-document.querySelectorAll('.tier').forEach(function(b){b.onclick=function(){pickTier(+b.getAttribute('data-t'));};});
-document.addEventListener('keydown',function(e){if(!S||S.over||$('game').hidden||$('picker').hidden)return;if(e.key==='1'||e.key==='2'||e.key==='3')pickTier(+e.key-1);});
-$('ups').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b||S.over)return;var k=+b.getAttribute('data-k');if(S.lv[k]>=UPS[k].c.length)return;var c=cost(k);if(S.money<c)return;S.money-=c;S.lv[k]++;S.sale=false;hud();renderShop();showPicker2();});
-function showPicker2(){if(!$('picker').hidden){var bs=document.querySelectorAll('.tier');for(var t=0;t<3;t++){bs[t].innerHTML=TE[t]+' '+TN[t]+'<small>$'+fmtS(reward(t))+' for a right answer</small>';}}}
+$('ups').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b||S.over)return;var k=+b.getAttribute('data-k');if(S.lv[k]>=UPS[k].c.length)return;var c=cost(k);if(S.money<c)return;S.money-=c;S.lv[k]++;S.sale=false;hud();renderShop();updTag();});
 $('mycode').onclick=function(){$('codebox').value=makeCode();$('codebox').hidden=false;$('codebox').select();};
 $('again').onclick=function(){$('end').hidden=true;$('start').hidden=false;};
 $('copy').onclick=function(){var t=$('fcode');t.select();try{document.execCommand('copy');$('copy').textContent='✅ Copied!';}catch(e){$('copy').textContent='Select the code and copy it';}};
