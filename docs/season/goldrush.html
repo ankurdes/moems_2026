@@ -112,9 +112,9 @@
 <script>
 var CSALT="8530c3c926b9";
 var params=new URLSearchParams(location.search);var MIN=parseFloat(params.get('min'))||20;if(MIN<0.05)MIN=0.05;if(MIN>60)MIN=60;
-var MPQ=[1,5,25,100,500,2500,10000,50000,250000,1000000],MC=[10,100,1000,10000,100000,1000000,10000000,100000000,1000000000];
-var SB=[0,1,5,20,100,500,2500,12000],SCST=[25,250,2500,25000,250000,2500000,25000000];
-var MU=[1,1.5,2,3,5,8,12],UC=[100,1000,10000,100000,1000000,10000000];
+var MPQ=[1,5,25,100,500,2500,10000,50000,250000,1000000],MC=[5,50,500,5000,50000,400000,3000000,25000000,200000000];
+var SB=[0,1,5,20,100,500,2500,12000],SCST=[10,120,1200,12000,120000,1000000,9000000];
+var MU=[1,1.5,2,3,5,8,12],UC=[50,600,6000,60000,600000,6000000];
 var TM=[1,4,12],TN=['Easy','Medium','Hard'],TE=['🟢','🟡','🔴'];
 function cyrb53(str,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
  h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
@@ -122,7 +122,7 @@ function R(a,b){return a+Math.floor(Math.random()*(b-a+1));}
 function P(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function isPrime(n){if(n<2)return false;for(var d=2;d*d<=n;d++)if(n%d===0)return false;return true;}
 function divs(n){var c=0,s=0;for(var d=1;d<=n;d++)if(n%d===0){c++;s+=d;}return [c,s];}
-var PR_ODD=[];for(var _n=51;_n<400;_n+=2)if(isPrime(_n-2))PR_ODD.push(_n);
+var PR_ODD=[];for(var _n=51;_n<150;_n+=2)if(isPrime(_n-2))PR_ODD.push(_n);
 var BOX=[[1,2,4,5],[1,3,3,5],[1,4,12,13],[1,5,8,10],[1,6,24,25],[2,2,3,5],[2,3,12,13],[2,4,8,10]];
 function e1(){var a=R(11,19),b=R(3,9);return{q:a+' × '+b+' = ?',a:a*b};}
 function e2(){var p=P([10,20,25,50,75]),n=20*R(1,20);return{q:'What is '+p+'% of '+n+'?',a:p*n/100};}
@@ -140,13 +140,13 @@ function m6(){var p=25*R(2,12);return{q:'A jacket costs $'+p+'. The price goes u
 function m7(){var t=P([[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29]]),k=R(1,3);return{q:'A right triangle has legs '+(t[0]*k)+' and '+(t[1]*k)+'. How long is the hypotenuse?',a:t[2]*k};}
 function m8(){var y=R(5,40),d=R(2,20);return{q:'Two numbers add up to '+(2*y+d)+' and differ by '+d+'. What is the larger number?',a:y+d};}
 function m9(){var n=R(7,20);return{q:'How many diagonals does a polygon with '+n+' sides have?',a:n*(n-3)/2};}
-function h1(){var n=5*R(5,30),z=0,f=5;while(f<=n){z+=Math.floor(n/f);f*=5;}return{q:'How many zeros are at the end of '+n+'! (that is, '+n+' × '+(n-1)+' × ... × 2 × 1)?',a:z};}
-function h2(){var n=P([12,18,20,28,30,36,45,48,60,72,84,100]);return{q:'What is the <b>sum</b> of all positive divisors of '+n+'?',a:divs(n)[1]};}
-function h3(){var ab=P([[3,5],[3,7],[4,5],[4,6],[6,10]]),N=R(60,200),c=0;for(var i=1;i<=N;i++)if(i%ab[0]===0||i%ab[1]===0)c++;return{q:'How many integers from 1 to '+N+' are multiples of '+ab[0]+' <b>or</b> '+ab[1]+' (or both)?',a:c};}
-function h4(){var k=2*R(10,30);return{q:'Find the value of '+k+'<sup>2</sup> − '+(k-1)+'<sup>2</sup> + '+(k-2)+'<sup>2</sup> − '+(k-3)+'<sup>2</sup> + ... + 2<sup>2</sup> − 1<sup>2</sup>.',a:k*(k+1)/2};}
+function h1(){var n=5*R(5,20),z=0,f=5;while(f<=n){z+=Math.floor(n/f);f*=5;}return{q:'How many zeros are at the end of '+n+'! (that is, '+n+' × '+(n-1)+' × ... × 2 × 1)?',a:z};}
+function h2(){var n=P([12,18,20,24,28,30,36,45,48]);return{q:'What is the <b>sum</b> of all positive divisors of '+n+'?',a:divs(n)[1]};}
+function h3(){var ab=P([[3,5],[3,7],[4,5],[4,6]]),N=R(40,120),c=0;for(var i=1;i<=N;i++)if(i%ab[0]===0||i%ab[1]===0)c++;return{q:'How many integers from 1 to '+N+' are multiples of '+ab[0]+' <b>or</b> '+ab[1]+' (or both)?',a:c};}
+function h4(){var k=2*R(5,15);return{q:'Find the value of '+k+'<sup>2</sup> − '+(k-1)+'<sup>2</sup> + '+(k-2)+'<sup>2</sup> − '+(k-3)+'<sup>2</sup> + ... + 2<sup>2</sup> − 1<sup>2</sup>.',a:k*(k+1)/2};}
 function h5(){var N=P(PR_ODD);return{q:'Two prime numbers add up to '+N+'. What is their <b>product</b>?',a:2*(N-2)};}
-function h6(){var m=R(10,40);return{q:'What is the <b>smallest</b> number of integers you must choose from 1, 2, 3, ..., '+(2*m)+' to be <b>sure</b> that two of them add up to '+(2*m+1)+'?',a:m+1};}
-function h7(){var a=P([2,3]),T=P([12,16,18,24,30,36]),c=T-a*a,n=0;for(var x=1;x<=a+T;x++){if(x===a)continue;if(T%(x-a)!==0)continue;var y=a+T/(x-a);if(y>0)n++;}return{q:'How many ordered pairs of positive integers (<i>x</i>, <i>y</i>) satisfy <i>xy</i> − '+a+'<i>x</i> − '+a+'<i>y</i> = '+c+'?',a:n};}
+function h6(){var m=R(8,20);return{q:'What is the <b>smallest</b> number of integers you must choose from 1, 2, 3, ..., '+(2*m)+' to be <b>sure</b> that two of them add up to '+(2*m+1)+'?',a:m+1};}
+function h7(){var a=P([2,3]),T=P([12,16,18,24]),c=T-a*a,n=0;for(var x=1;x<=a+T;x++){if(x===a)continue;if(T%(x-a)!==0)continue;var y=a+T/(x-a);if(y>0)n++;}return{q:'How many ordered pairs of positive integers (<i>x</i>, <i>y</i>) satisfy <i>xy</i> − '+a+'<i>x</i> − '+a+'<i>y</i> = '+c+'?',a:n};}
 function h8(){var b=P(BOX);return{q:'A closed box measures '+b[0]+' by '+b[1]+' by '+b[2]+'. An ant walks along the <b>outside surface</b> from one corner to the opposite corner. What is the length of the shortest path?',a:b[3]};}
 function h9(){var d=R(1,9);if(Math.random()<0.5)return{q:'How many 4-digit numbers (1000 to 9999) contain at least one digit '+d+'?',a:9000-8*729};return{q:'How many 3-digit numbers (100 to 999) contain at least one digit '+d+'?',a:900-8*81};}
 var GENS=[[e1,e2,e3,e4,e5,e6,e7],[m1,m2,m3,m4,m5,m6,m7,m8,m9],[h1,h2,h3,h4,h5,h6,h7,h8,h9]];
