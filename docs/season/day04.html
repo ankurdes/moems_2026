@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen MOEMs 2027 - Session 4</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 26px 22px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.1em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+  .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
+
+  .container { max-width: 1500px; margin: 0 auto; padding: 24px; }
+  .section {
+    background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
+  }
+  .section.warm  { border-top-color: var(--accent); }
+  .section.diag  { border-top-color: var(--info); }
+  .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
+  .section.warm h2 { color: var(--accent); }
+  .section.diag h2 { color: var(--info); }
+  .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f8fafc; }
+  td.t { white-space: nowrap; font-weight: 700; color: var(--primary); }
+
+  .prob {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+    background: #f8fafc;
+  }
+  .prob-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .qnum {
+    background: var(--info); color: white; border-radius: 50%; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+  .warm .qnum { background: var(--accent); }
+  .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
+
+  button {
+    background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 14px; font-weight: 600; cursor: pointer; font-size: 0.88em;
+  }
+  button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
+  button.big:hover { background: #6d28d9; }
+
+  .diag-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .diag-grid .prob { margin-bottom: 0; display: flex; flex-direction: column; padding: 12px 14px; }
+  .diag-grid .qtext { font-size: 1.05em; flex: 1; }
+  .diag-grid button { align-self: flex-start; }
+  @media (max-width: 1300px) { .diag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .diag-grid { grid-template-columns: 1fr; } }
+  .diag .solution { display: none !important; }
+  #modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+  #modal.show { display: flex; }
+  #modal .box { background: white; border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 28px; font-size: 1.1em; }
+  #modal .box ol { padding-left: 22px; } #modal .box li { margin: 8px 0; }
+  #modal .qt { background: #f8fafc; border-left: 4px solid var(--info); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px; }
+  #modal .close { float: right; }
+  .solution {
+    display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
+    border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
+  }
+  .solution.show { display: block; }
+  .solution .ans { font-weight: 800; color: var(--good); font-size: 1.05em; }
+
+  .timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  #clock { font-size: 2em; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--info); min-width: 100px; }
+
+  .note { background: #fef9e7; border: 2px solid var(--accent); border-radius: 12px; padding: 12px 16px; font-size: 0.93em; }
+  .note ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+  footer { text-align: center; padding: 26px 20px; color: var(--muted); font-size: 0.85em; }
+  @media print { button, .timer-row { display: none !important; } .solution { display: block !important; } }
+
+  .trick { background:#fef3c7; border-left:4px solid #f59e0b; border-radius:6px; padding:8px 12px; margin-top:12px; }
+  .noai { background:#fee2e2; border:2px solid #dc2626; border-radius:12px; padding:10px 16px; margin:0 0 14px; font-size:1.05em; color:#7f1d1d; }
+  .section.game { border-top-color: var(--pink); }
+  .section.game h2 { color: var(--pink); }
+  .gbtn { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; font-weight:800; padding:12px 22px; border-radius:12px; margin:6px 10px 0 0; }
+  .gbtn.alt { background:var(--accent); }
+  .gbtn:hover { filter:brightness(1.1); }
+  .qimg { display:block; max-width:100%; height:auto; margin:6px 0 10px; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  #modal .qt img { width:100%; max-width:380px; }
+  button:disabled { opacity:.55; cursor:not-allowed; background:#f1f5f9 !important; color:var(--ink) !important; border-color:#cbd5e1 !important; }
+  .coachbar { background:#fef3c7; border-bottom:2px solid #f59e0b; text-align:center; padding:6px; font-weight:700; color:#92400e; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚀 Session 4 · Wed, Nov 4, 2026</h1>
+  <div class="subtitle">Tournament practice: one team brain teaser, then a 10-question individual event</div>
+  <a class="back" href="../moems_hub_2027.html">← Back to 2027 hub</a>
+</header>
+
+<div class="container">
+
+  <div class="section warm">
+    <h2>🧩 Team brain teaser (10 min)</h2>
+    <p class="lede">Work on it together as a team.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Martian truth days</span></div>
+      <img class="qimg" src="img/s4_q01.png" alt="Question image" width="981" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+  </div>
+
+  <div class="section diag">
+    <h2>📝 Individual event (30 min)</h2>
+    <p class="lede">These are written in the same style as the county tournament's individual event: 10 problems, 30 minutes, no calculators. Every right answer is worth 1 point. If you're stuck for more than 3 minutes, skip and come back.</p>
+
+    <div class="noai">🚫🤖 <b>Please do NOT use AI, a calculator, or a search engine to solve these.</b> This test is for you. A wrong answer helps us find what to teach next, and a copied answer helps no one.</div>
+
+    <div class="timer-row">
+      <div id="clock">30:00</div>
+      <button class="big" onclick="startTimer()">▶ Start</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="diag-grid">
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Decimals</span></div>
+      <img class="qimg" src="img/s4_q02.png" alt="Question image" width="241" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Patterns</span></div>
+      <img class="qimg" src="img/s4_q03.png" alt="Question image" width="238" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Inequalities</span></div>
+      <img class="qimg" src="img/s4_q04.png" alt="Question image" width="245" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Factors</span></div>
+      <img class="qimg" src="img/s4_q05.png" alt="Question image" width="227" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Percent</span></div>
+      <img class="qimg" src="img/s4_q06.png" alt="Question image" width="241" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">6</span><span class="topic">Probability</span></div>
+      <img class="qimg" src="img/s4_q07.png" alt="Question image" width="241" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">7</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s4_q08.png" alt="Question image" width="232" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">8</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s4_q09.png" alt="Question image" width="243" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">9</span><span class="topic">Rates</span></div>
+      <img class="qimg" src="img/s4_q10.png" alt="Question image" width="242" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">10</span><span class="topic">Cryptarithm</span></div>
+      <img class="qimg" src="img/s4_q11.png" alt="Question image" width="233" draggable="false">
+      <button disabled>🔒 Answer locked</button>
+    </div>
+    </div>
+  </div>
+
+  <div class="section game">
+    <h2>🎮 Game: Math Sprint (10 min)</h2>
+    <p class="lede">Pick Easy, Medium or Hard for each question and spend your points on the Multiplier and Brain bonus. Play again any time to practice.</p>
+    <a class="gbtn" href="mathsprint_a15275.html" target="_blank">▶ Play Math Sprint</a>
+  </div>
+
+</div>
+
+<footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
+
+<script>
+var total = 30 * 60, left = total, timer = null;
+function paint() {
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function startTimer() {
+  if (timer) return;
+  timer = setInterval(function () {
+    left--; paint();
+    if (left <= 0) { clearInterval(timer); timer = null; document.getElementById('clock').textContent = "Time!"; }
+  }, 1000);
+}
+function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+</script>
+
+</body>
+</html>

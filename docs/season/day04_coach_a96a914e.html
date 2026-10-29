@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach copy - Session 4</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 26px 22px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.1em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+  .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
+
+  .container { max-width: 1500px; margin: 0 auto; padding: 24px; }
+  .section {
+    background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
+  }
+  .section.warm  { border-top-color: var(--accent); }
+  .section.diag  { border-top-color: var(--info); }
+  .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
+  .section.warm h2 { color: var(--accent); }
+  .section.diag h2 { color: var(--info); }
+  .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f8fafc; }
+  td.t { white-space: nowrap; font-weight: 700; color: var(--primary); }
+
+  .prob {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+    background: #f8fafc;
+  }
+  .prob-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .qnum {
+    background: var(--info); color: white; border-radius: 50%; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+  .warm .qnum { background: var(--accent); }
+  .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
+
+  button {
+    background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 14px; font-weight: 600; cursor: pointer; font-size: 0.88em;
+  }
+  button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
+  button.big:hover { background: #6d28d9; }
+
+  .diag-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .diag-grid .prob { margin-bottom: 0; display: flex; flex-direction: column; padding: 12px 14px; }
+  .diag-grid .qtext { font-size: 1.05em; flex: 1; }
+  .diag-grid button { align-self: flex-start; }
+  @media (max-width: 1300px) { .diag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .diag-grid { grid-template-columns: 1fr; } }
+  .diag .solution { display: none !important; }
+  #modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+  #modal.show { display: flex; }
+  #modal .box { background: white; border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 28px; font-size: 1.1em; }
+  #modal .box ol { padding-left: 22px; } #modal .box li { margin: 8px 0; }
+  #modal .qt { background: #f8fafc; border-left: 4px solid var(--info); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px; }
+  #modal .close { float: right; }
+  .solution {
+    display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
+    border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
+  }
+  .solution.show { display: block; }
+  .solution .ans { font-weight: 800; color: var(--good); font-size: 1.05em; }
+
+  .timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  #clock { font-size: 2em; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--info); min-width: 100px; }
+
+  .note { background: #fef9e7; border: 2px solid var(--accent); border-radius: 12px; padding: 12px 16px; font-size: 0.93em; }
+  .note ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+  footer { text-align: center; padding: 26px 20px; color: var(--muted); font-size: 0.85em; }
+  @media print { button, .timer-row { display: none !important; } .solution { display: block !important; } }
+
+  .trick { background:#fef3c7; border-left:4px solid #f59e0b; border-radius:6px; padding:8px 12px; margin-top:12px; }
+  .noai { background:#fee2e2; border:2px solid #dc2626; border-radius:12px; padding:10px 16px; margin:0 0 14px; font-size:1.05em; color:#7f1d1d; }
+  .section.game { border-top-color: var(--pink); }
+  .section.game h2 { color: var(--pink); }
+  .gbtn { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; font-weight:800; padding:12px 22px; border-radius:12px; margin:6px 10px 0 0; }
+  .gbtn.alt { background:var(--accent); }
+  .gbtn:hover { filter:brightness(1.1); }
+  .qimg { display:block; max-width:100%; height:auto; margin:6px 0 10px; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  #modal .qt img { width:100%; max-width:380px; }
+  button:disabled { opacity:.55; cursor:not-allowed; background:#f1f5f9 !important; color:var(--ink) !important; border-color:#cbd5e1 !important; }
+  .coachbar { background:#fef3c7; border-bottom:2px solid #f59e0b; text-align:center; padding:6px; font-weight:700; color:#92400e; }
+</style>
+</head>
+<body>
+<div class="coachbar">COACH COPY · answers enabled · do not share the link</div>
+
+<header>
+  <h1>🚀 Session 4 · Wed, Nov 4, 2026</h1>
+  <div class="subtitle">Tournament practice: one team brain teaser, then a 10-question individual event</div>
+  
+</header>
+
+<div class="container">
+
+  <div class="section warm">
+    <h2>🧩 Team brain teaser (10 min)</h2>
+    <p class="lede">Work on it together as a team.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Martian truth days</span></div>
+      <img class="qimg" src="img/s4_q01.png" alt="Question image" width="981" draggable="false">
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: Every day except Saturday</span><ol>
+<li>Check each day. On a <b>truth day</b> the statement must be true, so tomorrow must be a lie day. On a <b>lie day</b> the statement must be false, so tomorrow must be a truth day.</li>
+<li>Monday (truth): Tuesday is a lie day ✓. Wednesday: Thursday is a lie day ✓. Friday: Saturday is a lie day ✓.</li>
+<li>Tuesday (lie): Wednesday is a truth day ✓. Thursday: Friday is a truth day ✓. Sunday: Monday is a truth day ✓.</li>
+<li>Saturday (lie): Sunday is also a lie day, so the statement would be true, and a liar can't say something true ✗.</li>
+<li>So the answer is <b>every day except Saturday</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> For truth and lie puzzles, make a small table and test every case. Don't try to reason it all in your head.</div></div>
+    </div>
+  </div>
+
+  <div class="section diag">
+    <h2>📝 Individual event (30 min)</h2>
+    <p class="lede">These are written in the same style as the county tournament's individual event: 10 problems, 30 minutes, no calculators. Every right answer is worth 1 point. If you're stuck for more than 3 minutes, skip and come back.</p>
+
+    <div class="noai">🚫🤖 <b>Please do NOT use AI, a calculator, or a search engine to solve these.</b> This test is for you. A wrong answer helps us find what to teach next, and a copied answer helps no one.</div>
+
+    <div class="timer-row">
+      <div id="clock">30:00</div>
+      <button class="big" onclick="startTimer()">▶ Start</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="diag-grid">
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Decimals</span></div>
+      <img class="qimg" src="img/s4_q02.png" alt="Question image" width="241" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 0.8</span><ol>
+<li>1/4 = 0.25 and 0.6 × 0.4 = 0.24.</li>
+<li>0.25 + 0.24 + 0.15 = 0.64.</li>
+<li>√0.64 = <b>0.8</b>, because 0.8 × 0.8 = 0.64.</li></ol><div class="trick"><b>⚡ Trick:</b> Turn every fraction into a decimal (or every decimal into a fraction) first, so all the parts match.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Patterns</span></div>
+      <img class="qimg" src="img/s4_q03.png" alt="Question image" width="238" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 1014</span><ol>
+<li>Group the terms in pairs: (2027 − 2026) + (2025 − 2024) + ... + (3 − 2), and then the final + 1 is left over.</li>
+<li>Each pair equals 1.</li>
+<li>The pairs use the numbers 2027 down to 2, which is 2026 numbers, so there are 2026 ÷ 2 = 1013 pairs.</li>
+<li>Total = 1013 + 1 = <b>1014</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Long alternating sums: pair the terms, count the pairs, and watch for a leftover term at the end.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Inequalities</span></div>
+      <img class="qimg" src="img/s4_q04.png" alt="Question image" width="245" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 14</span><ol>
+<li><i>n</i><sup>2</sup> must be more than 3, so <i>n</i> can't be −1, 0 or 1.</li>
+<li><i>n</i><sup>2</sup> must be less than 70. 8<sup>2</sup> = 64 works and 9<sup>2</sup> = 81 doesn't.</li>
+<li>So <i>n</i> = 2, 3, ..., 8 (7 numbers) and <i>n</i> = −2, −3, ..., −8 (7 more).</li>
+<li>Total: <b>14</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Don't forget the negative numbers. A square is positive whether <i>n</i> is positive or negative.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Factors</span></div>
+      <img class="qimg" src="img/s4_q05.png" alt="Question image" width="227" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 6</span><ol>
+<li>Every factor has the form 3<sup>a</sup> × 5<sup>b</sup> with <i>a</i> from 0 to 4 and <i>b</i> from 0 to 2. That gives 5 × 3 = 15 factors in total.</li>
+<li>List them in a small grid. Powers of 3 are 1, 3, 9, 27, 81. Times 5 gives 5, 15, 45, 135, 405. Times 25 gives 25, 75, 225, 675, 2025.</li>
+<li>The two-digit ones are 27, 81, 15, 45, 25 and 75.</li>
+<li>That's <b>6</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Use the prime factorization to build every factor in an organized grid, rows by one prime and columns by the other. Then nothing gets missed.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Percent</span></div>
+      <img class="qimg" src="img/s4_q06.png" alt="Question image" width="241" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 40</span><ol>
+<li>7.5% = 7.5/100 = 75/1000 = <b>3/40</b> in lowest terms.</li>
+<li>The number of chess students is 3/40 of the school, which has to be a whole number.</li>
+<li>So the school size must be a multiple of 40. The least is <b>40</b> (with 3 chess students).</li></ol><div class="trick"><b>⚡ Trick:</b> "Exactly p%" problems: write the percent as a fraction in <b>lowest terms</b>. The denominator is the smallest possible group size.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">6</span><span class="topic">Probability</span></div>
+      <img class="qimg" src="img/s4_q07.png" alt="Question image" width="241" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 40</span><ol>
+<li>There are 5 × 4 = 20 equally likely pairs.</li>
+<li>The product is a multiple of 3 only if one of the numbers is. From the first set that's only 3, and from the second set only 6.</li>
+<li>Pairs with 3 from the first set: 4. Pairs with 6 from the second set: 5. The pair (3, 6) was counted twice, so 4 + 5 − 1 = 8.</li>
+<li>8 out of 20 = 40%, so <i>K</i> = <b>40</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> For "multiple of 3" in a product, only the factors that are multiples of 3 matter. Count them, and subtract any pair you counted twice.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">7</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s4_q08.png" alt="Question image" width="232" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 216</span><ol>
+<li>Let each small rectangle be <i>w</i> wide and <i>h</i> tall. Its perimeter: 2(<i>w</i> + <i>h</i>) = 30, so <i>w</i> + <i>h</i> = 15.</li>
+<li>MATH is 4<i>w</i> wide and <i>h</i> tall: 2(4<i>w</i> + <i>h</i>) = 66, so 4<i>w</i> + <i>h</i> = 33.</li>
+<li>Subtract the first equation from the second: 3<i>w</i> = 18, so <i>w</i> = 6 and <i>h</i> = 9.</li>
+<li>MATH is 24 by 9, so the area is <b>216</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Name the small sides with letters, write one equation for each perimeter you're given, then subtract the equations to get rid of one letter.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">8</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s4_q09.png" alt="Question image" width="243" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 54</span><ol>
+<li>The top triangle and the bottom triangle both have the rectangle's width as their base. Their heights add up to the rectangle's full height.</li>
+<li>So top + bottom = ½ × width × height = <b>half the rectangle</b>, no matter where P is.</li>
+<li>The same is true for left + right. So top + bottom = left + right.</li>
+<li>47 + 36 = 29 + <i>N</i>, so 83 = 29 + <i>N</i> and <i>N</i> = <b>54</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> For any point inside a rectangle, the two triangles on <b>opposite sides</b> always add up to half the rectangle. You don't need to know where the point is.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">9</span><span class="topic">Rates</span></div>
+      <img class="qimg" src="img/s4_q10.png" alt="Question image" width="242" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 52</span><ol>
+<li>With the tailwind the plane's speed is 300 + 50 = 350 mph. With the headwind it's 300 − 50 = 250 mph.</li>
+<li>Going: 700 ÷ 350 = 2 hours. Coming back: 700 ÷ 250 = 2.8 hours.</li>
+<li>Total: 4.8 hours = 4 hours and 0.8 × 60 = 48 minutes.</li>
+<li><i>H</i> + <i>M</i> = 4 + 48 = <b>52</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Wind problems: add the wind speed going with it and subtract going against it. Then time = distance ÷ speed for each leg. Never average the two speeds.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">10</span><span class="topic">Cryptarithm</span></div>
+      <img class="qimg" src="img/s4_q11.png" alt="Question image" width="233" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 8</span><ol>
+<li>AB means 10A + B, and BA means 10B + A.</li>
+<li>Add them: 11A + 11B = <b>11(A + B)</b>.</li>
+<li>For 11(A + B) to be a perfect square, A + B must contain another 11, so A + B = 11 (A + B is at most 18).</li>
+<li>Then AB + BA = 121 = 11². The digits that add to 11 give 29, 38, 47, 56, 65, 74, 83, 92.</li>
+<li>That's <b>8</b> numbers.</li></ol><div class="trick"><b>⚡ Trick:</b> Write digit numbers as 10A + B. Adding or subtracting reversed numbers always gives a multiple of 11 (sum) or of 9 (difference).</div></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="section game">
+    <h2>🎮 Game: Math Sprint (10 min)</h2>
+    <p class="lede">Pick Easy, Medium or Hard for each question and spend your points on the Multiplier and Brain bonus. Play again any time to practice.</p>
+    <a class="gbtn" href="mathsprint_a15275.html" target="_blank">▶ Play Math Sprint</a>
+  </div>
+
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
+
+<footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
+
+<script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qimg').outerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
+var total = 30 * 60, left = total, timer = null;
+function paint() {
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function startTimer() {
+  if (timer) return;
+  timer = setInterval(function () {
+    left--; paint();
+    if (left <= 0) { clearInterval(timer); timer = null; document.getElementById('clock').textContent = "Time!"; }
+  }, 1000);
+}
+function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+</script>
+
+</body>
+</html>
