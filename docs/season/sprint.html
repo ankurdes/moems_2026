@@ -30,6 +30,14 @@
   .tag{display:inline-block;border-radius:20px;padding:3px 14px;font-size:.85em;font-weight:800}
   .tag.t0{background:#dcfce7;color:#166534}.tag.t1{background:#fef3c7;color:#92400e}.tag.t2{background:#fee2e2;color:#991b1b}
   .coach{color:var(--muted);font-size:.92em;margin:6px 0 2px}
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+  .tier{padding:16px 8px;border-radius:14px;border:3px solid;font-size:1.15em;line-height:1.3;background:#fff;color:var(--ink)}
+  .tier small{display:block;font-weight:600;color:var(--muted);margin-top:4px;font-size:.78em}
+  .tier.t0{border-color:#86efac}.tier.t1{border-color:#fcd34d}.tier.t2{border-color:#fca5a5}
+  .tier:hover:not(:disabled) small{color:#fff}
+  .tier.t0:hover:not(:disabled){background:#16a34a;border-color:#16a34a}.tier.t1:hover:not(:disabled){background:#d97706;border-color:#d97706}.tier.t2:hover:not(:disabled){background:#dc2626;border-color:#dc2626}
+  .keys{color:var(--muted);font-size:.85em;text-align:center;margin-top:8px}
+  @media(max-width:600px){.tiers{grid-template-columns:1fr}}
   .dots{font-size:1.1em;letter-spacing:3px;color:var(--primary);margin-left:6px}
   #qtext{font-size:1.65em;line-height:1.45;margin:10px 0 16px;min-height:2.6em}
   .row{display:flex;gap:10px}.row input{flex:1;font-size:1.5em;text-align:center}
@@ -48,9 +56,9 @@
     <input id="name" type="text" maxlength="20" autocomplete="off" autocapitalize="words">
     <ul class="rules">
       <li>You have <b id="mins">10</b> minutes. Type <b>just the number</b> and press Enter.</li>
-      <li>You start on <b>Easy</b>. These are quick, so go fast: <b>speed earns bonus points</b>.</li>
-      <li>Get <b>3 right in a row</b> to move up to <b>Medium</b>, then <b>Hard</b>. Medium and Hard take a little more thinking and are worth a lot more.</li>
-      <li>A wrong answer moves you down one level and shows the right answer. Stuck? Press <b>Skip</b> for a new question.</li>
+      <li>Before each question, pick <b>Easy</b> (10 pts), <b>Medium</b> (30 pts) or <b>Hard</b> (60 pts). Answering fast adds up to 10 bonus points.</li>
+      <li>Easy is quick mental math. Medium takes a couple of steps. Hard is contest level. Pick what you think you can get right!</li>
+      <li>A wrong answer scores 0 and shows you the right answer. <b>Skipping costs 5 points</b>, so choose carefully.</li>
       <li>When time is up you get a code. Paste it in the class chat.</li>
     </ul>
     <div class="noai">🚫🤖 <b>Please don't use AI or a calculator.</b> Do the math yourself. It's the only way to get better.</div>
@@ -65,12 +73,23 @@
     <div class="bar"><div id="tfill"></div></div>
     <div class="card" id="qcard">
       <div id="ev" class="ev" hidden></div>
-      <span class="tag" id="tag"></span><span class="dots" id="dots"></span>
+      <div id="picker"><h2>Pick your next question</h2>
+        <div class="tiers">
+          <button class="tier t0" data-t="0">⚡ Easy<small>10 to 20 pts · quick mental math, go fast</small></button>
+          <button class="tier t1" data-t="1">🤔 Medium<small>30 to 40 pts · a couple of steps</small></button>
+          <button class="tier t2" data-t="2">🧠 Hard<small>60 to 70 pts · contest level</small></button>
+        </div>
+        <div class="keys">Tip: press 1, 2 or 3 on your keyboard</div>
+        <div id="fb0" style="margin-top:10px;font-weight:800"></div>
+      </div>
+      <div id="qbox" hidden>
+      <span class="tag" id="tag"></span>
       <div class="coach" id="coach"></div>
       <div id="qtext"></div>
       <div class="row"><input id="ans" type="text" inputmode="numeric" autocomplete="off" autocapitalize="off" placeholder="Your answer"><button id="submit" class="big" style="margin-top:0">Go</button></div>
       <div id="fb"></div>
-      <button id="skip" style="margin-top:6px">Skip (new question)</button>
+      <button id="skip" style="margin-top:6px">Skip (−5 points)</button>
+      </div>
       <button id="mycode" style="margin-top:6px">📋 Get my code so far</button>
       <textarea id="codebox" rows="3" readonly hidden style="margin-top:8px"></textarea>
     </div>
@@ -89,8 +108,8 @@
 <script>
 var CSALT="553ab135c7b7";
 var params=new URLSearchParams(location.search);var MIN=parseFloat(params.get('min'))||10;if(MIN<0.05)MIN=0.05;if(MIN>60)MIN=60;
-var BASE=[10,30,60],BMAX=[10,10,10],TARGET=[8,25,60],TN=['Easy','Medium','Hard'],TE=['⚡','🤔','🧠'];
-var COACH=['Quick! Answer fast for a speed bonus.','A little thinking: take it step by step.','Take your time. These are worth the most.'];
+var BASE=[10,30,60],BMAX=[10,10,10],TARGET=[15,40,90],TN=['Easy','Medium','Hard'],TE=['⚡','🤔','🧠'];
+var COACH=['Quick! Look for a shortcut. Speed earns a bonus.','Two steps: think it through.','Contest level. Take your time, these are worth the most.'];
 function cyrb53(str,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
  h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
 function R(a,b){return a+Math.floor(Math.random()*(b-a+1));}
@@ -98,73 +117,83 @@ function P(a){return a[Math.floor(Math.random()*a.length)];}
 function gcd(a,b){return b?gcd(b,a%b):a;}
 function lcm(a,b){return a/gcd(a,b)*b;}
 function divs(n){var c=0,s=0;for(var d=1;d<=n;d++)if(n%d===0){c++;s+=d;}return [c,s];}
+var BOX=[[1,2,4,5],[1,3,3,5],[1,4,12,13],[1,5,8,10],[1,6,24,25],[2,2,3,5],[2,3,12,13],[2,4,8,10]];
+var KDIV=[[6,12],[8,24],[9,36],[10,48],[12,60],[16,120],[18,180]];
+function isPrime(n){if(n<2)return false;for(var d=2;d*d<=n;d++)if(n%d===0)return false;return true;}
+var PR_ODD=[];for(var _n=51;_n<400;_n+=2)if(isPrime(_n-2))PR_ODD.push(_n);
 var GEN=[[
- function(){var a=R(11,19),b=R(2,9);return{q:a+' × '+b+' = ?',a:a*b};},
- function(){var a=R(25,79),b=R(15,68);return{q:a+' + '+b+' = ?',a:a+b};},
- function(){var a=R(60,200),b=R(11,a-10);return{q:a+' − '+b+' = ?',a:a-b};},
- function(){if(Math.random()<0.5){var n=2*R(12,60);return{q:'What is half of '+n+'?',a:n/2};}var m=R(26,75);return{q:'What is double '+m+'?',a:m*2};},
- function(){var p=P([10,25,50]),n=p===25?4*R(3,30):(p===10?10*R(3,40):2*R(8,60));return{q:'What is '+p+'% of '+n+'?',a:p*n/100};},
- function(){var c=R(12,48),x=R(11,60);return{q:'<i>x</i> + '+c+' = '+(x+c)+'. What is <i>x</i>?',a:x};},
- function(){var a=R(6,9),b=R(6,9);return{q:a+' × '+b+' = ?',a:a*b};},
- function(){var n=R(11,15);return{q:'What is '+n+'<sup>2</sup>?',a:n*n};},
- function(){var w=R(5,25),h=R(5,25);return{q:'A rectangle is '+w+' by '+h+'. What is its perimeter?',a:2*(w+h)};}
+ function(){var k=R(3,25);return{q:'25 × '+(4*k)+' = ?',a:100*k};},
+ function(){var n=R(12,60);return{q:'99 × '+n+' = ?',a:99*n};},
+ function(){var n=R(12,89);return{q:'11 × '+n+' = ?',a:11*n};},
+ function(){var n=P([15,25,35,45,55,65,75,85,95]);return{q:'What is '+n+'<sup>2</sup>?',a:n*n};},
+ function(){var b=R(20,60),d=R(2,9),a=b+d;return{q:a+'<sup>2</sup> − '+b+'<sup>2</sup> = ?',a:(a-b)*(a+b)};},
+ function(){var n=R(10,40);return{q:'What is 1 + 2 + 3 + ... + '+n+'?',a:n*(n+1)/2};},
+ function(){var n=R(5,12);return{q:'What is the sum of the interior angles of a polygon with '+n+' sides, in degrees?',a:(n-2)*180};},
+ function(){var t=P([['15%',20,3],['12.5%',8,1],['75%',4,3],['35%',20,7],['40%',5,2]]),k=R(3,20),n=t[1]*k;return{q:'What is '+t[0]+' of '+n+'?',a:t[2]*k};},
+ function(){for(;;){var g=R(4,15),x=R(2,9),y=R(2,9);if(x!==y&&gcd(x,y)===1)return{q:'What is the greatest common factor of '+(g*x)+' and '+(g*y)+'?',a:g};}},
+ function(){var x=R(2,15),a=R(5,9),c=R(2,a-1),b=R(1,(a-c)*x-1),d=(a-c)*x-b;return{q:'Solve for <i>x</i>: '+a+'<i>x</i> − '+b+' = '+c+'<i>x</i> + '+d,a:x};}
 ],[
  function(){for(;;){var m=R(10,30),a=R(5,40),b=R(5,40),c=R(5,40),d=4*m-a-b-c;if(d>=1&&d<=60&&d!==a&&d!==b&&d!==c)return{q:'The average of four numbers is '+m+'. Three of them are '+a+', '+b+' and '+c+'. What is the fourth number?',a:d};}},
- function(){var s=R(10,60);return{q:'The sum of 5 consecutive whole numbers is '+(5*s+10)+'. What is the largest of the 5 numbers?',a:s+4};},
- function(){var p=25*R(2,12);return{q:'A jacket costs $'+p+'. The price goes up 20%, and then the new price goes down 20%. What is the final price in dollars?',a:p*96/100};},
+ function(){var s=R(10,60);return{q:'The sum of 6 consecutive whole numbers is '+(6*s+15)+'. What is the largest of the 6 numbers?',a:s+5};},
  function(){var a=P([2,3,4,7,8,9]),n=R(20,2030),u=1;for(var i=0;i<n;i++)u=(u*a)%10;return{q:'What is the units digit of '+a+'<sup>'+n+'</sup>?',a:u};},
- function(){var n=R(6,16);return{q:n+' people are at a party and every two people shake hands exactly once. How many handshakes happen?',a:n*(n-1)/2};},
  function(){var t=P([[6,8],[12,18],[10,15],[8,12],[9,12],[15,20],[12,20],[14,21]]);return{q:'Two buses leave the station together. One returns every '+t[0]+' minutes and the other every '+t[1]+' minutes. After how many minutes will they leave together again?',a:lcm(t[0],t[1])};},
  function(){var t=P([[3,5],[2,3],[4,5],[1,4],[3,7]]),k=R(3,9);return{q:'The ratio of boys to girls in a club is '+t[0]+' : '+t[1]+'. There are '+(t[0]+t[1])*k+' students in all. How many girls are there?',a:t[1]*k};},
  function(){var w=R(3,15),h=R(w+1,20);return{q:'A rectangle has perimeter '+2*(w+h)+' and one side of length '+w+'. What is its area?',a:w*h};},
- function(){var n=P([12,18,20,24,28,30,36,40,42,45,48]);return{q:'How many positive divisors does '+n+' have?',a:divs(n)[0]};},
- function(){var a=R(6,13),N=R(100,200);return{q:'How many multiples of '+a+' are there from 1 to '+N+'?',a:Math.floor(N/a)};},
- function(){for(;;){var n1=R(2,5),p1=R(3,9),n2=R(2,5),p2=R(1,6),bill=P([50,100]),tot=n1*p1+n2*p2;if(tot<bill-4)return{q:'Ben buys '+n1+' notebooks at $'+p1+' each and '+n2+' pens at $'+p2+' each. He pays with a $'+bill+' bill. How many dollars of change does he get?',a:bill-tot};}}
-],[
+ function(){var n=P([24,36,40,48,60,72,80,84,90,96,100]);return{q:'How many positive divisors does '+n+' have?',a:divs(n)[0]};},
  function(){var t=P([[12,6],[10,15],[20,30],[6,3],[12,4],[30,60],[24,8],[18,9],[36,18],[20,5],[60,20]]);return{q:'Ann can paint a fence alone in '+t[0]+' hours. Ben can paint it alone in '+t[1]+' hours. How many hours will it take them to paint it together?',a:t[0]*t[1]/(t[0]+t[1])};},
  function(){var t=P([[40,60],[30,60],[20,30],[60,90],[10,15],[24,40],[30,45],[45,90],[12,20],[15,30],[20,60]]);return{q:'Mia drives to a town at '+t[0]+' mph and drives back the same way at '+t[1]+' mph. What is her average speed for the whole round trip, in mph?',a:2*t[0]*t[1]/(t[0]+t[1])};},
- function(){var d=R(1,9),k=P([2,3,4]);var lo=k===2?10:(k===3?100:1000),hi=lo*10-1,c=0;for(var n=lo;n<=hi;n++)if(String(n).indexOf(String(d))>=0)c++;return{q:'How many '+k+'-digit numbers contain at least one digit '+d+'?',a:c};},
  function(){var x=R(3,9),oa=R(5,15),ob=R(4,14),c=R(2,8);return{q:'In a class of '+(oa+ob+x+c)+' students, '+(oa+x)+' play soccer, '+(ob+x)+' play chess, and '+c+' play neither. How many students play both?',a:x};},
- function(){var t=P([[5,12,13],[3,4,5],[8,15,17],[7,24,25],[6,8,10],[10,24,26]]),k=Math.random()<0.5?0:1;return{q:'A right triangle has a hypotenuse of '+t[2]+' and one leg of '+t[k]+'. What is its area?',a:t[0]*t[1]/2};},
+ function(){var t=P([[5,12,13],[3,4,5],[8,15,17],[7,24,25],[6,8,10],[10,24,26],[9,12,15]]),k=Math.random()<0.5?0:1;return{q:'A right triangle has a hypotenuse of '+t[2]+' and one leg of '+t[k]+'. What is its area?',a:t[0]*t[1]/2};},
  function(){var n=R(8,20);return{q:'How many diagonals does a polygon with '+n+' sides have?',a:n*(n-3)/2};},
- function(){var t=P([[3,4,5],[2,3,4],[4,5,6],[3,4,6],[5,6,10],[6,8,12],[3,5,6],[4,6,9]]);var L=lcm(lcm(t[0],t[1]),t[2]);return{q:'What is the smallest positive integer that leaves a remainder of '+(t[0]-1)+' when divided by '+t[0]+', a remainder of '+(t[1]-1)+' when divided by '+t[1]+', and a remainder of '+(t[2]-1)+' when divided by '+t[2]+'?',a:L-1};},
- function(){var ab=P([[3,5],[3,7],[4,5],[4,6]]),N=R(40,120),c=0;for(var i=1;i<=N;i++)if(i%ab[0]===0||i%ab[1]===0)c++;return{q:'How many integers from 1 to '+N+' are multiples of '+ab[0]+' <b>or</b> '+ab[1]+' (or both)?',a:c};},
- function(){var a=R(2,7),d=R(3,5),n=R(10,20),l=a+(n-1)*d;return{q:'Find the sum: '+a+' + '+(a+d)+' + '+(a+2*d)+' + ... + '+l+'.',a:n*(a+l)/2};},
- function(){var p=20*R(3,15);return{q:'A coat originally costs $'+p+'. It is marked down 20%, and then the sale price is marked down another 25%. What is the final price in dollars?',a:p*3/5};},
- function(){var n=P([12,18,20,24,28,30,36,45,48]);return{q:'What is the <b>sum</b> of all positive divisors of '+n+'?',a:divs(n)[1]};}
+ function(){var p=20*R(3,15);return{q:'A coat costs $'+p+'. It is marked down 20%, and then the sale price is marked down another 25%. What is the final price in dollars?',a:p*3/5};}
+],[
+ function(){var n=5*R(10,30),z=0,f=5;while(f<=n){z+=Math.floor(n/f);f*=5;}return{q:'How many zeros are at the end of '+n+'! (that is, '+n+' × '+(n-1)+' × ... × 2 × 1)?',a:z};},
+ function(){var n=P([24,36,48,60,72,84,90,96,100]);return{q:'What is the <b>sum</b> of all positive divisors of '+n+'?',a:divs(n)[1]};},
+ function(){var ab=P([[3,5],[4,6],[6,10],[3,7],[4,10]]),N=R(100,300),c=0;for(var i=1;i<=N;i++)if(i%ab[0]===0||i%ab[1]===0)c++;return{q:'How many integers from 1 to '+N+' are multiples of '+ab[0]+' <b>or</b> '+ab[1]+' (or both)?',a:c};},
+ function(){var k=2*R(10,30);return{q:'Find the value of '+k+'<sup>2</sup> − '+(k-1)+'<sup>2</sup> + '+(k-2)+'<sup>2</sup> − '+(k-3)+'<sup>2</sup> + ... + 2<sup>2</sup> − 1<sup>2</sup>.',a:k*(k+1)/2};},
+ function(){var N=P(PR_ODD);return{q:'Two prime numbers add up to '+N+'. What is their <b>product</b>?',a:2*(N-2)};},
+ function(){var m=R(10,40);return{q:'What is the <b>smallest</b> number of integers you must choose from 1, 2, 3, ..., '+(2*m)+' to be <b>sure</b> that two of them add up to '+(2*m+1)+'?',a:m+1};},
+ function(){var a=P([2,3]),T=P([12,16,18,24,30,36]),c=T-a*a,n=0;for(var x=1;x<=a+T;x++){if(x===a)continue;if(T%(x-a)!==0)continue;var y=a+T/(x-a);if(y>0)n++;}return{q:'How many ordered pairs of positive integers (<i>x</i>, <i>y</i>) satisfy <i>xy</i> − '+a+'<i>x</i> − '+a+'<i>y</i> = '+c+'?',a:n};},
+ function(){var b=P(BOX);return{q:'A closed box measures '+b[0]+' by '+b[1]+' by '+b[2]+'. An ant walks along the <b>outside surface</b> from one corner to the opposite corner. What is the length of the shortest path?',a:b[3]};},
+ function(){var d=R(1,9),k=P([3,4]),lo=k===3?100:1000,hi=lo*10-1,c=0;for(var n=lo;n<=hi;n++)if(String(n).indexOf(String(d))>=0)c++;return{q:'How many '+k+'-digit numbers contain at least one digit '+d+'?',a:c};},
+ function(){var t=P(KDIV);return{q:'What is the <b>smallest</b> positive integer that has exactly '+t[0]+' positive divisors?',a:t[1]};},
+ function(){var t=P([[2,7],[3,7],[2,5],[3,5],[2,9],[4,7]]),n=R(20,200),r=1;for(var i=0;i<n;i++)r=(r*t[0])%t[1];return{q:'What is the remainder when '+t[0]+'<sup>'+n+'</sup> is divided by '+t[1]+'?',a:r};},
+ function(){var t=P([[3,4,5],[2,3,4],[4,5,6],[3,4,6],[5,6,10],[6,8,12],[3,5,6],[4,6,9]]);var L=lcm(lcm(t[0],t[1]),t[2]);return{q:'What is the smallest positive integer that leaves a remainder of '+(t[0]-1)+' when divided by '+t[0]+', '+(t[1]-1)+' when divided by '+t[1]+', and '+(t[2]-1)+' when divided by '+t[2]+'?',a:L-1};},
+ function(){var a=R(2,9),d=R(3,7),n=R(15,30),l=a+(n-1)*d;return{q:'Find the sum: '+a+' + '+(a+d)+' + '+(a+2*d)+' + ... + '+l+'.',a:n*(a+l)/2};}
 ]];
 var $=function(id){return document.getElementById(id);};
 var S=null,cur=null,locked=false,recent=[],clk=null,t0=0;
 function norm(s){s=String(s).trim().toLowerCase().replace(/[\s,$%]/g,'');if(s!==''&&!isNaN(Number(s)))s=String(Number(s));return s;}
-function fresh(){return {name:'',score:0,correct:0,answered:0,lc:[0,0,0],level:0,up:0,maxLevel:0,end:0,over:false,lastGen:[-1,-1,-1]};}
+function fresh(){return {skips:0,name:'',score:0,correct:0,answered:0,lc:[0,0,0],level:0,up:0,maxLevel:0,end:0,over:false,lastGen:[-1,-1,-1]};}
 function genQ(t){var tries=0;for(;;){var g=Math.floor(Math.random()*GEN[t].length);if(g===S.lastGen[t]&&tries<8){tries++;continue;}var q=GEN[t][g]();if(recent.indexOf(q.q)<0||tries>25){S.lastGen[t]=g;recent.push(q.q);if(recent.length>14)recent.shift();q.tier=t;return q;}tries++;}}
 function b64(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function makeCode(){var p=[S.name,S.score,S.correct,S.answered,S.lc[0],S.lc[1],S.lc[2]].join('|');var chk=cyrb53(p+'|'+CSALT).toString(36).slice(-5);return b64(p+'|'+chk);}
 function hud(){$('score').textContent=S.score;$('right').textContent=S.correct;}
-function dots(){var s='';for(var i=0;i<3;i++)s+=(S.level>=2||i<S.up)?'●':'○';return s;}
-function updTag(){if(!cur||S.over)return;var t=cur.tier;$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+BASE[t]+' to '+(BASE[t]+BMAX[t])+' pts';
- $('dots').textContent=S.level>=2?'':dots();$('dots').title='Right in a row to level up';$('coach').textContent=COACH[t]+(S.level>=2?'':'  (3 right in a row = level up)');}
-function nextQ(){if(S.over)return;cur=genQ(S.level);locked=false;updTag();$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';t0=performance.now();$('ans').focus();}
+function updTag(){if(!cur||S.over)return;var t=cur.tier;$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+BASE[t]+' to '+(BASE[t]+BMAX[t])+' pts';$('coach').textContent=COACH[t];}
+function showPicker(msg,cls){cur=null;locked=false;$('qbox').hidden=true;$('picker').hidden=false;$('fb0').className=cls||'';$('fb0').style.color=cls==='ok'?'#16a34a':(cls==='no'?'#dc2626':'');$('fb0').textContent=msg||'';}
+function pickTier(t){if(S.over||$('picker').hidden)return;cur=genQ(t);locked=false;$('picker').hidden=true;$('qbox').hidden=false;updTag();$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';t0=performance.now();$('ans').focus();}
+function nextQ(){showPicker();}
 function fb(c,t){$('fb').className=c;$('fb').textContent=t;}
 function showEv(t){var e=$('ev');e.textContent=t;e.hidden=false;clearTimeout(showEv.t);showEv.t=setTimeout(function(){e.hidden=true;},3500);}
 function submit(){if(locked||S.over||!cur)return;var v=$('ans').value;if(v.trim()==='')return;locked=true;$('ans').disabled=true;$('submit').disabled=true;S.answered++;
- var secs=(performance.now()-t0)/1000,t=cur.tier,ok=norm(v)===String(cur.a);
- if(ok){var bonus=Math.round(BMAX[t]*Math.max(0,1-secs/TARGET[t])),pts=BASE[t]+bonus;S.score+=pts;S.correct++;S.lc[t]++;S.up++;
-  var lu=(S.up>=3&&S.level<2);if(lu){S.level++;S.up=0;if(S.level>S.maxLevel)S.maxLevel=S.level;showEv('⬆️ Level up! Now '+TN[S.level]+'. These are worth more.');}
-  fb('ok','✅ Correct! +'+pts+(bonus?' ('+BASE[t]+' + '+bonus+' speed bonus)':''));}
- else{S.up=0;var dn=S.level>0;if(dn)S.level--;fb('no','❌ Not quite. The answer was '+cur.a+'.'+(dn?' ⬇️ Back to '+TN[S.level]+'.':''));}
- hud();setTimeout(function(){if(!S.over)nextQ();},ok?500:1800);}
-function skip(){if(locked||S.over||!cur)return;S.up=0;nextQ();}
+ var secs=(performance.now()-t0)/1000,t=cur.tier,ok=norm(v)===String(cur.a),msg;
+ if(ok){var bonus=Math.round(BMAX[t]*Math.max(0,1-secs/TARGET[t])),pts=BASE[t]+bonus;S.score+=pts;S.correct++;S.lc[t]++;
+  msg='✅ Correct! +'+pts+(bonus?' ('+BASE[t]+' + '+bonus+' speed bonus)':'');}
+ else{msg='❌ Not quite. The answer was '+cur.a+'.';}
+ fb(ok?'ok':'no',msg);hud();setTimeout(function(){if(!S.over)showPicker(msg,ok?'ok':'no');},ok?500:1800);}
+function skip(){if(locked||S.over||!cur)return;S.skips++;S.score=Math.max(0,S.score-5);hud();showPicker('⏭ Skipped: −5 points','no');}
 function tick(){var left=Math.max(0,S.end-Date.now());var s=Math.ceil(left/1000),m=Math.floor(s/60);$('clock').textContent=m+':'+('0'+(s%60)).slice(-2);$('tfill').style.width=(left/(MIN*60000)*100)+'%';if(left<=0)finish();}
 function clean(s){return s.replace(/[|]/g,'').trim().slice(0,20);}
 function begin(){S=fresh();S.name=clean($('name').value)||'Player';recent=[];S.end=Date.now()+MIN*60000;
  $('start').hidden=true;$('end').hidden=true;$('game').hidden=false;$('codebox').hidden=true;hud();nextQ();tick();clearInterval(clk);clk=setInterval(tick,200);}
 function finish(){if(S.over)return;S.over=true;clearInterval(clk);$('game').hidden=true;$('end').hidden=false;
- $('fscore').textContent=S.score;$('fcor').textContent='✅ '+S.correct+' of '+S.answered+' right';$('facc').textContent='🎯 '+(S.answered?Math.round(100*S.correct/S.answered):0)+'% accuracy';$('flv').textContent='🏔 Reached '+TN[S.maxLevel];$('fcode').value=makeCode();}
+ $('fscore').textContent=S.score;$('fcor').textContent='✅ '+S.correct+' of '+S.answered+' right';$('facc').textContent='🎯 '+(S.answered?Math.round(100*S.correct/S.answered):0)+'% accuracy';$('flv').textContent='⚡ '+S.lc[0]+' · 🤔 '+S.lc[1]+' · 🧠 '+S.lc[2]+' right';$('fcode').value=makeCode();}
 $('mins').textContent=(MIN%1===0)?MIN:MIN.toFixed(1);$('clock').textContent=Math.floor(MIN)+':'+('0'+Math.round((MIN%1)*60)).slice(-2);
 $('go').onclick=begin;$('submit').onclick=submit;$('skip').onclick=skip;
 $('ans').addEventListener('keydown',function(e){if(e.key==='Enter')submit();});
 $('name').addEventListener('keydown',function(e){if(e.key==='Enter')begin();});
+document.querySelectorAll('.tier').forEach(function(b){b.onclick=function(){pickTier(+b.getAttribute('data-t'));};});
+document.addEventListener('keydown',function(e){if(!S||S.over||$('game').hidden||$('picker').hidden)return;if(e.key==='1'||e.key==='2'||e.key==='3')pickTier(+e.key-1);});
 $('mycode').onclick=function(){$('codebox').value=makeCode();$('codebox').hidden=false;$('codebox').select();};
 $('again').onclick=function(){$('end').hidden=true;$('start').hidden=false;};
 $('copy').onclick=function(){var t=$('fcode');t.select();try{document.execCommand('copy');$('copy').textContent='✅ Copied!';}catch(e){$('copy').textContent='Select the code and copy it';}};
