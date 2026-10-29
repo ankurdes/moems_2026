@@ -130,7 +130,13 @@
     <div class="prob">
       <div class="prob-head"><span class="qnum">1</span><span class="topic">The domino puzzle</span></div>
       <img class="qimg" src="img/s3_q01.png" alt="Question image" width="985" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: No, it can't be done</span><ol>
+<li><b>Try it.</b> Draw the grid and try a few ways. You always get stuck with two squares left that aren't next to each other.</li>
+<li><b>Color it</b> like a checkerboard. Every domino covers <b>one dark and one light</b> square.</li>
+<li>Opposite corners are the <b>same color</b>. Cross both out and you have 6 of one color and 8 of the other.</li>
+<li>7 dominoes always cover 7 dark and 7 light squares, so 6 and 8 can't work. (A computer search agrees.)</li>
+<li><b>Bonus:</b> the same reason works for a full 8 × 8 chessboard with opposite corners removed.</li></ol><div class="trick"><b>⚡ Trick:</b> When a puzzle asks <i>can it be done?</i>, look for something that never changes, like a checkerboard coloring. It turns a puzzle into a simple count.</div></div>
     </div>
   </div>
 
@@ -150,62 +156,152 @@
     <div class="prob">
       <div class="prob-head"><span class="qnum">1</span><span class="topic">Rates</span></div>
       <img class="qimg" src="img/s3_q02.png" alt="Question image" width="233" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 6 hours</span><ol>
+<li>Think in rates, which means the fraction of the fence painted each hour. Ann paints 1/12 per hour. Ben paints 1/6 per hour.</li>
+<li>Together they paint 1/12 + 2/12 = 3/12 = 1/4 of the fence each hour.</li>
+<li>In 2 hours they paint 2 × 1/4 = 1/2 of the fence. Half the fence is left.</li>
+<li>Ann paints 1/12 per hour, so she needs (1/2) ÷ (1/12) = <b>6</b> hours.</li>
+<li>Check: Ann alone would take 12 hours for the whole fence, so half the fence takes 6 hours. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> For work problems, write each person's rate as a fraction of the job per hour. Rates add when people work together. Then time = amount left ÷ rate.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">2</span><span class="topic">Sets</span></div>
       <img class="qimg" src="img/s3_q03.png" alt="Question image" width="247" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 16</span><ol>
+<li>9 students take neither, so 40 − 9 = 31 students take at least one of the two.</li>
+<li>If we add 25 + 22 = 47, the students who take both get counted twice.</li>
+<li>The double count is 47 − 31 = 16, so <b>16</b> students take both.</li>
+<li>Check: art only is 25 − 16 = 9, music only is 22 − 16 = 6, both is 16, neither is 9. Total 9 + 6 + 16 + 9 = 40. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Use the formula <i>at least one = A + B − both</i>. Rearrange it to get <i>both = A + B − (at least one)</i>. A quick Venn diagram with two circles keeps it clear.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">3</span><span class="topic">Percent</span></div>
       <img class="qimg" src="img/s3_q04.png" alt="Question image" width="245" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 8%</span><ol>
+<li>A 20% increase means multiply by 1.2. A 25% decrease means multiply by 0.75.</li>
+<li>The radius is squared in the formula, so its effect is 1.2<sup>2</sup> = 1.44.</li>
+<li>The volume is multiplied by 1.44 × 0.75 = 1.08.</li>
+<li>A multiplier of 1.08 means <b>8%</b> more.</li>
+<li>Check with real numbers: <i>r</i> = 10 and <i>h</i> = 4 gives 400π. The new can has <i>r</i> = 12 and <i>h</i> = 3, which gives 432π. And 432 ÷ 400 = 1.08. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Never add or subtract percents. Turn each percent into a multiplier and multiply them. If a quantity is squared in the formula, square its multiplier too.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">4</span><span class="topic">Primes</span></div>
       <img class="qimg" src="img/s3_q05.png" alt="Question image" width="229" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 4054</span><ol>
+<li>All primes except 2 are odd.</li>
+<li>Odd + odd = even, but 2029 is odd. So the two primes can't both be odd.</li>
+<li>That means one of them must be 2, so the other is 2029 − 2 = 2027.</li>
+<li>Is 2027 prime? Since 45 × 45 = 2025, we only need to test primes up to 43, and none of them divides 2027. So yes.</li>
+<li>The product is 2 × 2027 = <b>4054</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> When you see primes with an odd total, think of 2, the only even prime. Odd and even answers many problems in one line, with no searching.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">5</span><span class="topic">Geometry</span></div>
       <img class="qimg" src="img/s3_q06.png" alt="Question image" width="237" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 24</span><ol>
+<li>Sketch it. M is the midpoint of BC, so BM = 6.</li>
+<li>AD and BM are parallel (opposite sides of a square). So triangles PAD and PMB are similar, and the ratio of their sides is AD : MB = 12 : 6 = 2 : 1.</li>
+<li>That means DP : PB = 2 : 1, so PB is exactly 1/3 of the diagonal DB.</li>
+<li>Triangles ABD and ABP share the corner A, and their bases DB and PB sit on the same line. So their areas are in the same ratio as the bases.</li>
+<li>Triangle ABD is half of the square, which is 144 ÷ 2 = 72. So triangle ABP is 1/3 of 72 = <b>24</b>.</li>
+<li>Check with coordinates: A = (0, 0), B = (12, 0), M = (12, 6). Line AM meets BD at P = (8, 4). The area is ½ × 12 × 4 = 24. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Parallel lines give similar triangles, and similar triangles give a ratio. Also, triangles that share a corner and have bases on the same line have areas in the same ratio as their bases.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">6</span><span class="topic">Counting</span></div>
       <img class="qimg" src="img/s3_q07.png" alt="Question image" width="241" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 100</span><ol>
+<li>Counting teams with 1 girl, 2 girls or 3 girls separately works, but it takes three cases. Count the <b>opposite</b> instead: teams with <b>no</b> girls.</li>
+<li>All possible teams of 3 from 10 people: (10 × 9 × 8) ÷ (3 × 2 × 1) = 120. We divide by 3 × 2 × 1 because the order you pick people in doesn't matter.</li>
+<li>Teams with no girls (all boys) from the 6 boys: (6 × 5 × 4) ÷ (3 × 2 × 1) = 20.</li>
+<li>At least one girl = 120 − 20 = <b>100</b>.</li>
+<li>Check with the three cases: 1 girl: 4 × 15 = 60. 2 girls: 6 × 6 = 36. 3 girls: 4. Total 60 + 36 + 4 = 100. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Whenever a problem says <i>at least one</i>, count the opposite (<i>none</i>) and subtract from the total. It turns several cases into one.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">7</span><span class="topic">Algebra</span></div>
       <img class="qimg" src="img/s3_q08.png" alt="Question image" width="247" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 5</span><ol>
+<li>Trying numbers would take forever. The idea is to make the left side <b>factor</b>. Add 9 to both sides: <i>xy</i> − 3<i>x</i> − 3<i>y</i> + 9 = 16.</li>
+<li>The left side is now a product: (<i>x</i> − 3)(<i>y</i> − 3) = 16. Check by multiplying it out: <i>xy</i> − 3<i>x</i> − 3<i>y</i> + 9. ✓</li>
+<li>So <i>x</i> − 3 and <i>y</i> − 3 are whole numbers whose product is 16. The positive pairs are 1 × 16, 2 × 8, 4 × 4, 8 × 2 and 16 × 1.</li>
+<li>Add 3 back to each: (<i>x</i>, <i>y</i>) = (4, 19), (5, 11), (7, 7), (11, 5), (19, 4).</li>
+<li>What about negative pairs, like (−1) × (−16)? That gives <i>y</i> = −13, which isn't positive. The other negative pairs fail the same way.</li>
+<li>So there are <b>5</b> pairs.</li></ol><div class="trick"><b>⚡ Trick:</b> This is called Simon's Favorite Factoring Trick. When an equation has <i>xy</i> plus <i>x</i> and <i>y</i> terms, add a number to both sides so it factors into (<i>x</i> − a)(<i>y</i> − b) = a number. For <i>xy</i> − 3<i>x</i> − 3<i>y</i>, add 3 × 3 = 9. Then list the factor pairs.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">8</span><span class="topic">Geometry</span></div>
       <img class="qimg" src="img/s3_q09.png" alt="Question image" width="243" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 13 cm</span><ol>
+<li>The ant can't walk through the box, so imagine <b>unfolding</b> the box flat. A shortest path on the surface becomes a straight line on the flat picture.</li>
+<li>To reach the opposite corner, the ant crosses two neighboring faces. Unfold those two faces into one rectangle and the path is its diagonal.</li>
+<li>There are 3 ways to choose the faces. For a box <i>a</i> × <i>b</i> × <i>c</i>, the flat rectangle is (<i>a</i> + <i>b</i>) by <i>c</i>, so the path is √((<i>a</i> + <i>b</i>)<sup>2</sup> + <i>c</i><sup>2</sup>). Try all three:
+  <br>(2 + 3) by 12: √(25 + 144) = √169 = <b>13</b>
+  <br>(2 + 12) by 3: √(196 + 9) = √205, about 14.3
+  <br>(3 + 12) by 2: √(225 + 4) = √229, about 15.1</li>
+<li>The shortest is <b>13 cm</b>.</li>
+<li>Sanity check: the straight line through the inside of the box is √(4 + 9 + 144) = √157, about 12.5. The surface path has to be a bit longer than that, and 13 is. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> For a shortest path on the outside of a solid, <b>unfold it</b>, then use the Pythagorean theorem. Try each way of unfolding and take the smallest. The smallest answer comes when the <b>longest</b> edge is the one that is not added to another edge.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">9</span><span class="topic">Arithmetic</span></div>
       <img class="qimg" src="img/s3_q10.png" alt="Question image" width="231" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 5050</span><ol>
+<li>Don't square every number. Group the terms in pairs: (100<sup>2</sup> − 99<sup>2</sup>) + (98<sup>2</sup> − 97<sup>2</sup>) + ... + (2<sup>2</sup> − 1<sup>2</sup>).</li>
+<li>Use <i>a</i><sup>2</sup> − <i>b</i><sup>2</sup> = (<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>). For the first pair, that is (100 − 99)(100 + 99) = 1 × 199 = 199, which is 100 + 99.</li>
+<li>Every pair is made of neighbors, so <i>a</i> − <i>b</i> = 1 each time. So each pair just equals the two numbers added together. For example 98<sup>2</sup> − 97<sup>2</sup> = 98 + 97.</li>
+<li>So the whole thing equals 100 + 99 + 98 + 97 + ... + 2 + 1.</li>
+<li>That is 1 + 2 + ... + 100 = 100 × 101 ÷ 2 = <b>5050</b>.</li>
+<li>Check a small version: 4<sup>2</sup> − 3<sup>2</sup> + 2<sup>2</sup> − 1<sup>2</sup> = 16 − 9 + 4 − 1 = 10, and 1 + 2 + 3 + 4 = 10. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> <i>a</i><sup>2</sup> − <i>b</i><sup>2</sup> = (<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>). When <i>a</i> and <i>b</i> are neighbors, <i>a</i> − <i>b</i> = 1, so the whole thing is just <i>a</i> + <i>b</i>. Whenever you see squares being subtracted, look for pairs. Big numbers are often there to tempt you into long arithmetic.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">10</span><span class="topic">Logic</span></div>
       <img class="qimg" src="img/s3_q11.png" alt="Question image" width="244" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 16</span><ol>
+<li>Make "boxes" by pairing up numbers that add to 31: (1, 30), (2, 29), (3, 28), ..., (15, 16). That is 15 pairs, and together they use all 30 numbers.</li>
+<li>Can you choose 15 numbers and still avoid a sum of 31? Yes. Take one number from each pair, for example 1 through 15. The biggest possible sum is 15 + 14 = 29. So 15 is <b>not</b> enough.</li>
+<li>Now choose 16 numbers. There are only 15 pairs, so two of your numbers must come from the <b>same pair</b>, and those two add to 31.</li>
+<li>So the answer is <b>16</b>.</li>
+<li>Check a small version: from {1, ..., 6}, pairs that add to 7 are (1, 6), (2, 5), (3, 4). Picking 1, 2, 3 is safe, but any 4 numbers force a pair. 3 pairs, so the answer is 4. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> This is the pigeonhole principle: if you put more than <i>n</i> objects into <i>n</i> boxes, some box gets two. The hard part is choosing the boxes. Ask yourself what the <b>worst case</b> is (the most you can pick and still be safe), then add 1.</div></div>
     </div>
     </div>
   </div>
 
+  <div class="section game">
+    <h2>🎮 Game: Math Sprint (10 min)</h2>
+    <p class="lede">Pick Easy, Medium or Hard for each question and spend your points on the Multiplier and Brain bonus. Play again any time to practice.</p>
+    <a class="gbtn" href="mathsprint_a15275.html" target="_blank">▶ Play Math Sprint</a>
+  </div>
 
 </div>
+
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
 
 <footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
 
 <script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qimg').outerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
 var total = 30 * 60, left = total, timer = null;
 function paint() {
   var m = Math.floor(left / 60), s = left % 60;
