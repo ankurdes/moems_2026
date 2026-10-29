@@ -1,0 +1,25 @@
+docs/season/day03.html
+  s_7f3d1ac77af38c::t_3a5bba83bcbd73 1-230
+docs/season/day03_coach_6de880df.html
+  s_7f3d1ac77af38c::t_f50d4f65b657a1 1-323
+docs/season/sprint.html
+  s_7f3d1ac77af38c::t_2f0af1e5ba058b 1-171
+docs/season/sprint_board_fe879471.html
+  s_7f3d1ac77af38c::t_27d372000a70df 1-73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "48ebca6745af7201bafafdcc9a4e920d5b8fc2a1",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
