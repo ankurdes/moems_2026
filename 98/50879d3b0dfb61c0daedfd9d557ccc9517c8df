@@ -1,0 +1,19 @@
+docs/season/mathsprint_a15275.html
+  s_7f3d1ac77af38c::t_b04be1ce7a1aa4 69,100,205-207,218,220
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9850879d3b0dfb61c0daedfd9d557ccc9517c8df",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
