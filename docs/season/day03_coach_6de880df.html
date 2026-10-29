@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach copy - Session 3</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 26px 22px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.1em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+  .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
+
+  .container { max-width: 1500px; margin: 0 auto; padding: 24px; }
+  .section {
+    background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
+  }
+  .section.warm  { border-top-color: var(--accent); }
+  .section.diag  { border-top-color: var(--info); }
+  .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
+  .section.warm h2 { color: var(--accent); }
+  .section.diag h2 { color: var(--info); }
+  .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f8fafc; }
+  td.t { white-space: nowrap; font-weight: 700; color: var(--primary); }
+
+  .prob {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+    background: #f8fafc;
+  }
+  .prob-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .qnum {
+    background: var(--info); color: white; border-radius: 50%; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+  .warm .qnum { background: var(--accent); }
+  .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
+
+  button {
+    background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 14px; font-weight: 600; cursor: pointer; font-size: 0.88em;
+  }
+  button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
+  button.big:hover { background: #6d28d9; }
+
+  .diag-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .diag-grid .prob { margin-bottom: 0; display: flex; flex-direction: column; padding: 12px 14px; }
+  .diag-grid .qtext { font-size: 1.05em; flex: 1; }
+  .diag-grid button { align-self: flex-start; }
+  @media (max-width: 1300px) { .diag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .diag-grid { grid-template-columns: 1fr; } }
+  .diag .solution { display: none !important; }
+  #modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+  #modal.show { display: flex; }
+  #modal .box { background: white; border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 28px; font-size: 1.1em; }
+  #modal .box ol { padding-left: 22px; } #modal .box li { margin: 8px 0; }
+  #modal .qt { background: #f8fafc; border-left: 4px solid var(--info); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px; }
+  #modal .close { float: right; }
+  .solution {
+    display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
+    border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
+  }
+  .solution.show { display: block; }
+  .solution .ans { font-weight: 800; color: var(--good); font-size: 1.05em; }
+
+  .timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  #clock { font-size: 2em; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--info); min-width: 100px; }
+
+  .note { background: #fef9e7; border: 2px solid var(--accent); border-radius: 12px; padding: 12px 16px; font-size: 0.93em; }
+  .note ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+  footer { text-align: center; padding: 26px 20px; color: var(--muted); font-size: 0.85em; }
+  @media print { button, .timer-row { display: none !important; } .solution { display: block !important; } }
+
+  .trick { background:#fef3c7; border-left:4px solid #f59e0b; border-radius:6px; padding:8px 12px; margin-top:12px; }
+  .noai { background:#fee2e2; border:2px solid #dc2626; border-radius:12px; padding:10px 16px; margin:0 0 14px; font-size:1.05em; color:#7f1d1d; }
+  .section.game { border-top-color: var(--pink); }
+  .section.game h2 { color: var(--pink); }
+  .gbtn { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; font-weight:800; padding:12px 22px; border-radius:12px; margin:6px 10px 0 0; }
+  .gbtn.alt { background:var(--accent); }
+  .gbtn:hover { filter:brightness(1.1); }
+  .qimg { display:block; max-width:100%; height:auto; margin:6px 0 10px; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  #modal .qt img { width:100%; max-width:380px; }
+  button:disabled { opacity:.55; cursor:not-allowed; background:#f1f5f9 !important; color:var(--ink) !important; border-color:#cbd5e1 !important; }
+  .coachbar { background:#fef3c7; border-bottom:2px solid #f59e0b; text-align:center; padding:6px; font-weight:700; color:#92400e; }
+</style>
+</head>
+<body>
+<div class="coachbar">COACH COPY · answers enabled · do not share the link</div>
+
+<header>
+  <h1>🚀 Session 3 · Wed, Oct 28, 2026</h1>
+  <div class="subtitle">One team brain teaser, then a 10-question individual test</div>
+  
+</header>
+
+<div class="container">
+
+  <div class="section warm">
+    <h2>🧩 Team brain teaser (10 min)</h2>
+    <p class="lede">Work on it together as one team. Try to find a way to do it, and if you think it's impossible, find a convincing reason why.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The chessboard puzzle</span></div>
+      <img class="qimg" src="img/s3_q01.png" alt="Question image" width="1005" draggable="false">
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: No, it can't be done</span><ol>
+<li><b>Count first.</b> 64 − 2 = 62 squares, and 31 dominoes cover 31 × 2 = 62 squares. So the counting works out, and that alone doesn't settle it. We need another idea.</li>
+<li><b>Color the board</b> like a checkerboard, with 32 black and 32 white squares. Squares that share a side always have different colors.</li>
+<li>So every domino covers <b>one black and one white</b> square, no matter how you place it. Then 31 dominoes cover exactly 31 black and 31 white squares.</li>
+<li>Opposite corners of the board are the <b>same color</b>. Say both are white. Removing them leaves 30 white and 32 black squares.</li>
+<li>30 white and 32 black can't be covered by 31 black-and-white pairs. So it's impossible. (A computer search for a tiling agrees.)</li>
+<li>If you removed two corners on the <b>same side</b> instead, they'd be different colors, leaving 31 and 31, and then it can be done.</li></ol><div class="trick"><b>⚡ Trick:</b> When a problem asks <i>can it be done?</i>, look for something that never changes, like odd or even, or a black and white coloring. Coloring the board is the key move. It turns a messy tiling problem into a simple count.</div></div>
+    </div>
+  </div>
+
+  <div class="section diag">
+    <h2>📝 Individual test (30 min)</h2>
+    <p class="lede">10 problems, no calculators. Work alone and show your work. If you're stuck for more than 3 minutes, skip and come back. Some problems have a shortcut, so look for it before you start a long calculation.</p>
+
+    <div class="noai">🚫🤖 <b>Please do NOT use AI, a calculator, or a search engine to solve these.</b> This test is for you. A wrong answer helps us find what to teach next, and a copied answer helps no one.</div>
+
+    <div class="timer-row">
+      <div id="clock">30:00</div>
+      <button class="big" onclick="startTimer()">▶ Start</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="diag-grid">
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Rates</span></div>
+      <img class="qimg" src="img/s3_q02.png" alt="Question image" width="233" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 6 hours</span><ol>
+<li>Think in rates, which means the fraction of the fence painted each hour. Ann paints 1/12 per hour. Ben paints 1/6 per hour.</li>
+<li>Together they paint 1/12 + 2/12 = 3/12 = 1/4 of the fence each hour.</li>
+<li>In 2 hours they paint 2 × 1/4 = 1/2 of the fence. Half the fence is left.</li>
+<li>Ann paints 1/12 per hour, so she needs (1/2) ÷ (1/12) = <b>6</b> hours.</li>
+<li>Check: Ann alone would take 12 hours for the whole fence, so half the fence takes 6 hours. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> For work problems, write each person's rate as a fraction of the job per hour. Rates add when people work together. Then time = amount left ÷ rate.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Sets</span></div>
+      <img class="qimg" src="img/s3_q03.png" alt="Question image" width="247" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 16</span><ol>
+<li>9 students take neither, so 40 − 9 = 31 students take at least one of the two.</li>
+<li>If we add 25 + 22 = 47, the students who take both get counted twice.</li>
+<li>The double count is 47 − 31 = 16, so <b>16</b> students take both.</li>
+<li>Check: art only is 25 − 16 = 9, music only is 22 − 16 = 6, both is 16, neither is 9. Total 9 + 6 + 16 + 9 = 40. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Use the formula <i>at least one = A + B − both</i>. Rearrange it to get <i>both = A + B − (at least one)</i>. A quick Venn diagram with two circles keeps it clear.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Percent</span></div>
+      <img class="qimg" src="img/s3_q04.png" alt="Question image" width="245" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 8%</span><ol>
+<li>A 20% increase means multiply by 1.2. A 25% decrease means multiply by 0.75.</li>
+<li>The radius is squared in the formula, so its effect is 1.2<sup>2</sup> = 1.44.</li>
+<li>The volume is multiplied by 1.44 × 0.75 = 1.08.</li>
+<li>A multiplier of 1.08 means <b>8%</b> more.</li>
+<li>Check with real numbers: <i>r</i> = 10 and <i>h</i> = 4 gives 400π. The new can has <i>r</i> = 12 and <i>h</i> = 3, which gives 432π. And 432 ÷ 400 = 1.08. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Never add or subtract percents. Turn each percent into a multiplier and multiply them. If a quantity is squared in the formula, square its multiplier too.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Primes</span></div>
+      <img class="qimg" src="img/s3_q05.png" alt="Question image" width="229" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 4054</span><ol>
+<li>All primes except 2 are odd.</li>
+<li>Odd + odd = even, but 2029 is odd. So the two primes can't both be odd.</li>
+<li>That means one of them must be 2, so the other is 2029 − 2 = 2027.</li>
+<li>Is 2027 prime? Since 45 × 45 = 2025, we only need to test primes up to 43, and none of them divides 2027. So yes.</li>
+<li>The product is 2 × 2027 = <b>4054</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> When you see primes with an odd total, think of 2, the only even prime. Odd and even answers many problems in one line, with no searching.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s3_q06.png" alt="Question image" width="237" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 24</span><ol>
+<li>Sketch it. M is the midpoint of BC, so BM = 6.</li>
+<li>AD and BM are parallel (opposite sides of a square). So triangles PAD and PMB are similar, and the ratio of their sides is AD : MB = 12 : 6 = 2 : 1.</li>
+<li>That means DP : PB = 2 : 1, so PB is exactly 1/3 of the diagonal DB.</li>
+<li>Triangles ABD and ABP share the corner A, and their bases DB and PB sit on the same line. So their areas are in the same ratio as the bases.</li>
+<li>Triangle ABD is half of the square, which is 144 ÷ 2 = 72. So triangle ABP is 1/3 of 72 = <b>24</b>.</li>
+<li>Check with coordinates: A = (0, 0), B = (12, 0), M = (12, 6). Line AM meets BD at P = (8, 4). The area is ½ × 12 × 4 = 24. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Parallel lines give similar triangles, and similar triangles give a ratio. Also, triangles that share a corner and have bases on the same line have areas in the same ratio as their bases.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">6</span><span class="topic">Counting</span></div>
+      <img class="qimg" src="img/s3_q07.png" alt="Question image" width="238" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 3168</span><ol>
+<li>Counting numbers with at least one 7 directly is messy, because a number might have one 7, two 7s, three, or four. Count the <b>opposite</b> instead: numbers with <b>no</b> 7 at all.</li>
+<li>There are 9000 four-digit numbers in total (1000 to 9999).</li>
+<li>With no 7: the first digit can be 1 to 9 except 7, which is 8 choices. Each of the other three digits can be 0 to 9 except 7, which is 9 choices each.</li>
+<li>No 7 at all: 8 × 9 × 9 × 9 = 5832.</li>
+<li>At least one 7 = 9000 − 5832 = <b>3168</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Whenever a problem says <i>at least one</i>, count the opposite (<i>none</i>) and subtract from the total. It turns many cases into one.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">7</span><span class="topic">Algebra</span></div>
+      <img class="qimg" src="img/s3_q08.png" alt="Question image" width="247" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 5</span><ol>
+<li>Trying numbers would take forever. The idea is to make the left side <b>factor</b>. Add 9 to both sides: <i>xy</i> − 3<i>x</i> − 3<i>y</i> + 9 = 16.</li>
+<li>The left side is now a product: (<i>x</i> − 3)(<i>y</i> − 3) = 16. Check by multiplying it out: <i>xy</i> − 3<i>x</i> − 3<i>y</i> + 9. ✓</li>
+<li>So <i>x</i> − 3 and <i>y</i> − 3 are whole numbers whose product is 16. The positive pairs are 1 × 16, 2 × 8, 4 × 4, 8 × 2 and 16 × 1.</li>
+<li>Add 3 back to each: (<i>x</i>, <i>y</i>) = (4, 19), (5, 11), (7, 7), (11, 5), (19, 4).</li>
+<li>What about negative pairs, like (−1) × (−16)? That gives <i>y</i> = −13, which isn't positive. The other negative pairs fail the same way.</li>
+<li>So there are <b>5</b> pairs.</li></ol><div class="trick"><b>⚡ Trick:</b> This is called Simon's Favorite Factoring Trick. When an equation has <i>xy</i> plus <i>x</i> and <i>y</i> terms, add a number to both sides so it factors into (<i>x</i> − a)(<i>y</i> − b) = a number. For <i>xy</i> − 3<i>x</i> − 3<i>y</i>, add 3 × 3 = 9. Then list the factor pairs.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">8</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s3_q09.png" alt="Question image" width="243" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 13 cm</span><ol>
+<li>The ant can't walk through the box, so imagine <b>unfolding</b> the box flat. A shortest path on the surface becomes a straight line on the flat picture.</li>
+<li>To reach the opposite corner, the ant crosses two neighboring faces. Unfold those two faces into one rectangle and the path is its diagonal.</li>
+<li>There are 3 ways to choose the faces. For a box <i>a</i> × <i>b</i> × <i>c</i>, the flat rectangle is (<i>a</i> + <i>b</i>) by <i>c</i>, so the path is √((<i>a</i> + <i>b</i>)<sup>2</sup> + <i>c</i><sup>2</sup>). Try all three:
+  <br>(2 + 3) by 12: √(25 + 144) = √169 = <b>13</b>
+  <br>(2 + 12) by 3: √(196 + 9) = √205, about 14.3
+  <br>(3 + 12) by 2: √(225 + 4) = √229, about 15.1</li>
+<li>The shortest is <b>13 cm</b>.</li>
+<li>Sanity check: the straight line through the inside of the box is √(4 + 9 + 144) = √157, about 12.5. The surface path has to be a bit longer than that, and 13 is. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> For a shortest path on the outside of a solid, <b>unfold it</b>, then use the Pythagorean theorem. Try each way of unfolding and take the smallest. The smallest answer comes when the <b>longest</b> edge is the one that is not added to another edge.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">9</span><span class="topic">Arithmetic</span></div>
+      <img class="qimg" src="img/s3_q10.png" alt="Question image" width="231" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 5050</span><ol>
+<li>Don't square every number. Group the terms in pairs: (100<sup>2</sup> − 99<sup>2</sup>) + (98<sup>2</sup> − 97<sup>2</sup>) + ... + (2<sup>2</sup> − 1<sup>2</sup>).</li>
+<li>Use <i>a</i><sup>2</sup> − <i>b</i><sup>2</sup> = (<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>). For the first pair, that is (100 − 99)(100 + 99) = 1 × 199 = 199, which is 100 + 99.</li>
+<li>Every pair is made of neighbors, so <i>a</i> − <i>b</i> = 1 each time. So each pair just equals the two numbers added together. For example 98<sup>2</sup> − 97<sup>2</sup> = 98 + 97.</li>
+<li>So the whole thing equals 100 + 99 + 98 + 97 + ... + 2 + 1.</li>
+<li>That is 1 + 2 + ... + 100 = 100 × 101 ÷ 2 = <b>5050</b>.</li>
+<li>Check a small version: 4<sup>2</sup> − 3<sup>2</sup> + 2<sup>2</sup> − 1<sup>2</sup> = 16 − 9 + 4 − 1 = 10, and 1 + 2 + 3 + 4 = 10. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> <i>a</i><sup>2</sup> − <i>b</i><sup>2</sup> = (<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>). When <i>a</i> and <i>b</i> are neighbors, <i>a</i> − <i>b</i> = 1, so the whole thing is just <i>a</i> + <i>b</i>. Whenever you see squares being subtracted, look for pairs. Big numbers are often there to tempt you into long arithmetic.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">10</span><span class="topic">Logic</span></div>
+      <img class="qimg" src="img/s3_q11.png" alt="Question image" width="244" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 16</span><ol>
+<li>Make "boxes" by pairing up numbers that add to 31: (1, 30), (2, 29), (3, 28), ..., (15, 16). That is 15 pairs, and together they use all 30 numbers.</li>
+<li>Can you choose 15 numbers and still avoid a sum of 31? Yes. Take one number from each pair, for example 1 through 15. The biggest possible sum is 15 + 14 = 29. So 15 is <b>not</b> enough.</li>
+<li>Now choose 16 numbers. There are only 15 pairs, so two of your numbers must come from the <b>same pair</b>, and those two add to 31.</li>
+<li>So the answer is <b>16</b>.</li>
+<li>Check a small version: from {1, ..., 6}, pairs that add to 7 are (1, 6), (2, 5), (3, 4). Picking 1, 2, 3 is safe, but any 4 numbers force a pair. 3 pairs, so the answer is 4. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> This is the pigeonhole principle: if you put more than <i>n</i> objects into <i>n</i> boxes, some box gets two. The hard part is choosing the boxes. Ask yourself what the <b>worst case</b> is (the most you can pick and still be safe), then add 1.</div></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="section game">
+    <h2>🎮 Game time: Math Sprint (10 min)</h2>
+    <p class="lede">Answer as many as you can in 10 minutes. Everyone starts on Easy, so go fast for speed points. Get 3 right in a row to move up to Medium, then Hard, which are worth more. At the end, paste your code in the chat.</p>
+    <a class="gbtn" href="sprint.html" target="_blank">▶ Play Math Sprint</a>
+  </div>
+
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
+
+<footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
+
+<script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qimg').outerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
+var total = 30 * 60, left = total, timer = null;
+function paint() {
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function startTimer() {
+  if (timer) return;
+  timer = setInterval(function () {
+    left--; paint();
+    if (left <= 0) { clearInterval(timer); timer = null; document.getElementById('clock').textContent = "Time!"; }
+  }, 1000);
+}
+function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+</script>
+
+</body>
+</html>

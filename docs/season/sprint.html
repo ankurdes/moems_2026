@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hansen Math Sprint</title>
+<style>
+  :root{--primary:#7c3aed;--accent:#f59e0b;--ink:#1e1b4b;--muted:#64748b;--good:#16a34a;--bad:#dc2626;--info:#3b82f6;--pink:#ec4899}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#fdf4ff 0%,#fef3c7 50%,#dbeafe 100%);background-attachment:fixed;color:var(--ink);line-height:1.5;min-height:100vh}
+  header{background:linear-gradient(135deg,#3b82f6 0%,#7c3aed 55%,#ec4899 100%);color:#fff;padding:18px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+  h1{margin:0;font-size:2em;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+  .subtitle{opacity:.95;margin-top:2px;font-size:.95em}
+  .container{max-width:760px;margin:0 auto;padding:16px}
+  .card{background:#fff;border-radius:16px;padding:18px 22px;margin-bottom:16px;box-shadow:0 4px 14px rgba(0,0,0,.08);border-top:6px solid var(--primary)}
+  h2{margin:0 0 8px;color:var(--primary);font-size:1.25em}
+  label{display:block;font-weight:700;margin:12px 0 4px}
+  input[type=text]{width:100%;padding:12px 14px;font-size:1.1em;border:2px solid #cbd5e1;border-radius:10px;color:var(--ink)}
+  input[type=text]:focus{outline:none;border-color:var(--primary)}
+  button{background:#f1f5f9;color:var(--ink);border:1px solid #cbd5e1;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;font-size:1em;font-family:inherit}
+  button:hover:not(:disabled){background:var(--primary);color:#fff;border-color:var(--primary)}
+  button.big{background:var(--primary);color:#fff;border:none;padding:13px 26px;font-size:1.15em;margin-top:14px}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  ul.rules{margin:10px 0 0;padding-left:20px;color:var(--muted)}
+  [hidden]{display:none!important}
+
+  .hud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px}
+  .stat{background:#fff;border-radius:14px;padding:8px 14px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center}
+  .stat .lbl{display:block;font-size:.72em;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+  .stat .val{font-size:1.9em;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.15}
+  .stat.score .val{color:var(--good)}.stat.time .val{color:var(--info)}
+  .bar{height:10px;background:#e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:14px}#tfill{height:100%;width:100%;background:var(--info);transition:width .25s linear}
+  .tag{display:inline-block;border-radius:20px;padding:3px 14px;font-size:.85em;font-weight:800}
+  .tag.t0{background:#dcfce7;color:#166534}.tag.t1{background:#fef3c7;color:#92400e}.tag.t2{background:#fee2e2;color:#991b1b}
+  .coach{color:var(--muted);font-size:.92em;margin:6px 0 2px}
+  .dots{font-size:1.1em;letter-spacing:3px;color:var(--primary);margin-left:6px}
+  #qtext{font-size:1.65em;line-height:1.45;margin:10px 0 16px;min-height:2.6em}
+  .row{display:flex;gap:10px}.row input{flex:1;font-size:1.5em;text-align:center}
+  #fb{min-height:2.2em;margin-top:12px;font-weight:800;font-size:1.1em}#fb.ok{color:var(--good)}#fb.no{color:var(--bad)}
+  .ev{background:#fef3c7;border:2px solid var(--accent);border-radius:12px;padding:8px 12px;margin-bottom:12px;font-weight:800;color:#92400e}
+  .big-score{font-size:3.4em;font-weight:900;color:var(--good);text-align:center;line-height:1.1}
+  .stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px 0 14px}.pill{background:#f1f5f9;border-radius:20px;padding:4px 14px;font-weight:800}
+  textarea{width:100%;font-family:ui-monospace,Menlo,monospace;font-size:.95em;padding:10px;border:2px dashed var(--primary);border-radius:10px;background:#faf5ff;color:var(--ink);resize:none}
+  .noai{background:#fee2e2;border:2px solid #dc2626;border-radius:12px;padding:8px 14px;margin-top:12px;color:#7f1d1d}
+</style></head><body>
+<header><h1>⚡ Math Sprint</h1><div class="subtitle">Answer as many as you can before time runs out. Harder questions are worth more.</div></header>
+<div class="container">
+  <div id="start" class="card">
+    <h2>Ready to sprint?</h2>
+    <label for="name">Your name (first name and last initial)</label>
+    <input id="name" type="text" maxlength="20" autocomplete="off" autocapitalize="words">
+    <ul class="rules">
+      <li>You have <b id="mins">10</b> minutes. Type <b>just the number</b> and press Enter.</li>
+      <li>You start on <b>Easy</b>. These are quick, so go fast: <b>speed earns bonus points</b>.</li>
+      <li>Get <b>3 right in a row</b> to move up to <b>Medium</b>, then <b>Hard</b>. Medium and Hard take a little more thinking and are worth a lot more.</li>
+      <li>A wrong answer moves you down one level and shows the right answer. Stuck? Press <b>Skip</b> for a new question.</li>
+      <li>When time is up you get a code. Paste it in the class chat.</li>
+    </ul>
+    <div class="noai">🚫🤖 <b>Please don't use AI or a calculator.</b> Do the math yourself. It's the only way to get better.</div>
+    <button id="go" class="big">Start</button>
+  </div>
+  <div id="game" hidden>
+    <div class="hud">
+      <div class="stat score"><span class="lbl">Points</span><span class="val" id="score">0</span></div>
+      <div class="stat"><span class="lbl">Right</span><span class="val" id="right">0</span></div>
+      <div class="stat time"><span class="lbl">Time</span><span class="val" id="clock">10:00</span></div>
+    </div>
+    <div class="bar"><div id="tfill"></div></div>
+    <div class="card" id="qcard">
+      <div id="ev" class="ev" hidden></div>
+      <span class="tag" id="tag"></span><span class="dots" id="dots"></span>
+      <div class="coach" id="coach"></div>
+      <div id="qtext"></div>
+      <div class="row"><input id="ans" type="text" inputmode="numeric" autocomplete="off" autocapitalize="off" placeholder="Your answer"><button id="submit" class="big" style="margin-top:0">Go</button></div>
+      <div id="fb"></div>
+      <button id="skip" style="margin-top:6px">Skip (new question)</button>
+      <button id="mycode" style="margin-top:6px">📋 Get my code so far</button>
+      <textarea id="codebox" rows="3" readonly hidden style="margin-top:8px"></textarea>
+    </div>
+  </div>
+  <div id="end" class="card" hidden>
+    <h2>🏁 Time's up!</h2>
+    <div class="big-score" id="fscore">0</div>
+    <div style="text-align:center;color:var(--muted);font-weight:700">points</div>
+    <div class="stats"><span class="pill" id="fcor"></span><span class="pill" id="facc"></span><span class="pill" id="flv"></span></div>
+    <p><b>Your code</b> (copy it and paste it in the class chat):</p>
+    <textarea id="fcode" rows="3" readonly></textarea>
+    <button id="copy" style="margin-top:10px">📋 Copy my code</button>
+    <button id="again" style="margin-top:10px">🔁 Play again</button>
+  </div>
+</div>
+<script>
+var CSALT="553ab135c7b7";
+var params=new URLSearchParams(location.search);var MIN=parseFloat(params.get('min'))||10;if(MIN<0.05)MIN=0.05;if(MIN>60)MIN=60;
+var BASE=[10,30,60],BMAX=[10,10,10],TARGET=[8,25,60],TN=['Easy','Medium','Hard'],TE=['⚡','🤔','🧠'];
+var COACH=['Quick! Answer fast for a speed bonus.','A little thinking: take it step by step.','Take your time. These are worth the most.'];
+function cyrb53(str,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
+ h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
+function R(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function P(a){return a[Math.floor(Math.random()*a.length)];}
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function lcm(a,b){return a/gcd(a,b)*b;}
+function divs(n){var c=0,s=0;for(var d=1;d<=n;d++)if(n%d===0){c++;s+=d;}return [c,s];}
+var GEN=[[
+ function(){var a=R(11,19),b=R(2,9);return{q:a+' × '+b+' = ?',a:a*b};},
+ function(){var a=R(25,79),b=R(15,68);return{q:a+' + '+b+' = ?',a:a+b};},
+ function(){var a=R(60,200),b=R(11,a-10);return{q:a+' − '+b+' = ?',a:a-b};},
+ function(){if(Math.random()<0.5){var n=2*R(12,60);return{q:'What is half of '+n+'?',a:n/2};}var m=R(26,75);return{q:'What is double '+m+'?',a:m*2};},
+ function(){var p=P([10,25,50]),n=p===25?4*R(3,30):(p===10?10*R(3,40):2*R(8,60));return{q:'What is '+p+'% of '+n+'?',a:p*n/100};},
+ function(){var c=R(12,48),x=R(11,60);return{q:'<i>x</i> + '+c+' = '+(x+c)+'. What is <i>x</i>?',a:x};},
+ function(){var a=R(6,9),b=R(6,9);return{q:a+' × '+b+' = ?',a:a*b};},
+ function(){var n=R(11,15);return{q:'What is '+n+'<sup>2</sup>?',a:n*n};},
+ function(){var w=R(5,25),h=R(5,25);return{q:'A rectangle is '+w+' by '+h+'. What is its perimeter?',a:2*(w+h)};}
+],[
+ function(){for(;;){var m=R(10,30),a=R(5,40),b=R(5,40),c=R(5,40),d=4*m-a-b-c;if(d>=1&&d<=60&&d!==a&&d!==b&&d!==c)return{q:'The average of four numbers is '+m+'. Three of them are '+a+', '+b+' and '+c+'. What is the fourth number?',a:d};}},
+ function(){var s=R(10,60);return{q:'The sum of 5 consecutive whole numbers is '+(5*s+10)+'. What is the largest of the 5 numbers?',a:s+4};},
+ function(){var p=25*R(2,12);return{q:'A jacket costs $'+p+'. The price goes up 20%, and then the new price goes down 20%. What is the final price in dollars?',a:p*96/100};},
+ function(){var a=P([2,3,4,7,8,9]),n=R(20,2030),u=1;for(var i=0;i<n;i++)u=(u*a)%10;return{q:'What is the units digit of '+a+'<sup>'+n+'</sup>?',a:u};},
+ function(){var n=R(6,16);return{q:n+' people are at a party and every two people shake hands exactly once. How many handshakes happen?',a:n*(n-1)/2};},
+ function(){var t=P([[6,8],[12,18],[10,15],[8,12],[9,12],[15,20],[12,20],[14,21]]);return{q:'Two buses leave the station together. One returns every '+t[0]+' minutes and the other every '+t[1]+' minutes. After how many minutes will they leave together again?',a:lcm(t[0],t[1])};},
+ function(){var t=P([[3,5],[2,3],[4,5],[1,4],[3,7]]),k=R(3,9);return{q:'The ratio of boys to girls in a club is '+t[0]+' : '+t[1]+'. There are '+(t[0]+t[1])*k+' students in all. How many girls are there?',a:t[1]*k};},
+ function(){var w=R(3,15),h=R(w+1,20);return{q:'A rectangle has perimeter '+2*(w+h)+' and one side of length '+w+'. What is its area?',a:w*h};},
+ function(){var n=P([12,18,20,24,28,30,36,40,42,45,48]);return{q:'How many positive divisors does '+n+' have?',a:divs(n)[0]};},
+ function(){var a=R(6,13),N=R(100,200);return{q:'How many multiples of '+a+' are there from 1 to '+N+'?',a:Math.floor(N/a)};},
+ function(){for(;;){var n1=R(2,5),p1=R(3,9),n2=R(2,5),p2=R(1,6),bill=P([50,100]),tot=n1*p1+n2*p2;if(tot<bill-4)return{q:'Ben buys '+n1+' notebooks at $'+p1+' each and '+n2+' pens at $'+p2+' each. He pays with a $'+bill+' bill. How many dollars of change does he get?',a:bill-tot};}}
+],[
+ function(){var t=P([[12,6],[10,15],[20,30],[6,3],[12,4],[30,60],[24,8],[18,9],[36,18],[20,5],[60,20]]);return{q:'Ann can paint a fence alone in '+t[0]+' hours. Ben can paint it alone in '+t[1]+' hours. How many hours will it take them to paint it together?',a:t[0]*t[1]/(t[0]+t[1])};},
+ function(){var t=P([[40,60],[30,60],[20,30],[60,90],[10,15],[24,40],[30,45],[45,90],[12,20],[15,30],[20,60]]);return{q:'Mia drives to a town at '+t[0]+' mph and drives back the same way at '+t[1]+' mph. What is her average speed for the whole round trip, in mph?',a:2*t[0]*t[1]/(t[0]+t[1])};},
+ function(){var d=R(1,9),k=P([2,3,4]);var lo=k===2?10:(k===3?100:1000),hi=lo*10-1,c=0;for(var n=lo;n<=hi;n++)if(String(n).indexOf(String(d))>=0)c++;return{q:'How many '+k+'-digit numbers contain at least one digit '+d+'?',a:c};},
+ function(){var x=R(3,9),oa=R(5,15),ob=R(4,14),c=R(2,8);return{q:'In a class of '+(oa+ob+x+c)+' students, '+(oa+x)+' play soccer, '+(ob+x)+' play chess, and '+c+' play neither. How many students play both?',a:x};},
+ function(){var t=P([[5,12,13],[3,4,5],[8,15,17],[7,24,25],[6,8,10],[10,24,26]]),k=Math.random()<0.5?0:1;return{q:'A right triangle has a hypotenuse of '+t[2]+' and one leg of '+t[k]+'. What is its area?',a:t[0]*t[1]/2};},
+ function(){var n=R(8,20);return{q:'How many diagonals does a polygon with '+n+' sides have?',a:n*(n-3)/2};},
+ function(){var t=P([[3,4,5],[2,3,4],[4,5,6],[3,4,6],[5,6,10],[6,8,12],[3,5,6],[4,6,9]]);var L=lcm(lcm(t[0],t[1]),t[2]);return{q:'What is the smallest positive integer that leaves a remainder of '+(t[0]-1)+' when divided by '+t[0]+', a remainder of '+(t[1]-1)+' when divided by '+t[1]+', and a remainder of '+(t[2]-1)+' when divided by '+t[2]+'?',a:L-1};},
+ function(){var ab=P([[3,5],[3,7],[4,5],[4,6]]),N=R(40,120),c=0;for(var i=1;i<=N;i++)if(i%ab[0]===0||i%ab[1]===0)c++;return{q:'How many integers from 1 to '+N+' are multiples of '+ab[0]+' <b>or</b> '+ab[1]+' (or both)?',a:c};},
+ function(){var a=R(2,7),d=R(3,5),n=R(10,20),l=a+(n-1)*d;return{q:'Find the sum: '+a+' + '+(a+d)+' + '+(a+2*d)+' + ... + '+l+'.',a:n*(a+l)/2};},
+ function(){var p=20*R(3,15);return{q:'A coat originally costs $'+p+'. It is marked down 20%, and then the sale price is marked down another 25%. What is the final price in dollars?',a:p*3/5};},
+ function(){var n=P([12,18,20,24,28,30,36,45,48]);return{q:'What is the <b>sum</b> of all positive divisors of '+n+'?',a:divs(n)[1]};}
+]];
+var $=function(id){return document.getElementById(id);};
+var S=null,cur=null,locked=false,recent=[],clk=null,t0=0;
+function norm(s){s=String(s).trim().toLowerCase().replace(/[\s,$%]/g,'');if(s!==''&&!isNaN(Number(s)))s=String(Number(s));return s;}
+function fresh(){return {name:'',score:0,correct:0,answered:0,lc:[0,0,0],level:0,up:0,maxLevel:0,end:0,over:false,lastGen:[-1,-1,-1]};}
+function genQ(t){var tries=0;for(;;){var g=Math.floor(Math.random()*GEN[t].length);if(g===S.lastGen[t]&&tries<8){tries++;continue;}var q=GEN[t][g]();if(recent.indexOf(q.q)<0||tries>25){S.lastGen[t]=g;recent.push(q.q);if(recent.length>14)recent.shift();q.tier=t;return q;}tries++;}}
+function b64(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function makeCode(){var p=[S.name,S.score,S.correct,S.answered,S.lc[0],S.lc[1],S.lc[2]].join('|');var chk=cyrb53(p+'|'+CSALT).toString(36).slice(-5);return b64(p+'|'+chk);}
+function hud(){$('score').textContent=S.score;$('right').textContent=S.correct;}
+function dots(){var s='';for(var i=0;i<3;i++)s+=(S.level>=2||i<S.up)?'●':'○';return s;}
+function updTag(){if(!cur||S.over)return;var t=cur.tier;$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+BASE[t]+' to '+(BASE[t]+BMAX[t])+' pts';
+ $('dots').textContent=S.level>=2?'':dots();$('dots').title='Right in a row to level up';$('coach').textContent=COACH[t]+(S.level>=2?'':'  (3 right in a row = level up)');}
+function nextQ(){if(S.over)return;cur=genQ(S.level);locked=false;updTag();$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';t0=performance.now();$('ans').focus();}
+function fb(c,t){$('fb').className=c;$('fb').textContent=t;}
+function showEv(t){var e=$('ev');e.textContent=t;e.hidden=false;clearTimeout(showEv.t);showEv.t=setTimeout(function(){e.hidden=true;},3500);}
+function submit(){if(locked||S.over||!cur)return;var v=$('ans').value;if(v.trim()==='')return;locked=true;$('ans').disabled=true;$('submit').disabled=true;S.answered++;
+ var secs=(performance.now()-t0)/1000,t=cur.tier,ok=norm(v)===String(cur.a);
+ if(ok){var bonus=Math.round(BMAX[t]*Math.max(0,1-secs/TARGET[t])),pts=BASE[t]+bonus;S.score+=pts;S.correct++;S.lc[t]++;S.up++;
+  var lu=(S.up>=3&&S.level<2);if(lu){S.level++;S.up=0;if(S.level>S.maxLevel)S.maxLevel=S.level;showEv('⬆️ Level up! Now '+TN[S.level]+'. These are worth more.');}
+  fb('ok','✅ Correct! +'+pts+(bonus?' ('+BASE[t]+' + '+bonus+' speed bonus)':''));}
+ else{S.up=0;var dn=S.level>0;if(dn)S.level--;fb('no','❌ Not quite. The answer was '+cur.a+'.'+(dn?' ⬇️ Back to '+TN[S.level]+'.':''));}
+ hud();setTimeout(function(){if(!S.over)nextQ();},ok?500:1800);}
+function skip(){if(locked||S.over||!cur)return;S.up=0;nextQ();}
+function tick(){var left=Math.max(0,S.end-Date.now());var s=Math.ceil(left/1000),m=Math.floor(s/60);$('clock').textContent=m+':'+('0'+(s%60)).slice(-2);$('tfill').style.width=(left/(MIN*60000)*100)+'%';if(left<=0)finish();}
+function clean(s){return s.replace(/[|]/g,'').trim().slice(0,20);}
+function begin(){S=fresh();S.name=clean($('name').value)||'Player';recent=[];S.end=Date.now()+MIN*60000;
+ $('start').hidden=true;$('end').hidden=true;$('game').hidden=false;$('codebox').hidden=true;hud();nextQ();tick();clearInterval(clk);clk=setInterval(tick,200);}
+function finish(){if(S.over)return;S.over=true;clearInterval(clk);$('game').hidden=true;$('end').hidden=false;
+ $('fscore').textContent=S.score;$('fcor').textContent='✅ '+S.correct+' of '+S.answered+' right';$('facc').textContent='🎯 '+(S.answered?Math.round(100*S.correct/S.answered):0)+'% accuracy';$('flv').textContent='🏔 Reached '+TN[S.maxLevel];$('fcode').value=makeCode();}
+$('mins').textContent=(MIN%1===0)?MIN:MIN.toFixed(1);$('clock').textContent=Math.floor(MIN)+':'+('0'+Math.round((MIN%1)*60)).slice(-2);
+$('go').onclick=begin;$('submit').onclick=submit;$('skip').onclick=skip;
+$('ans').addEventListener('keydown',function(e){if(e.key==='Enter')submit();});
+$('name').addEventListener('keydown',function(e){if(e.key==='Enter')begin();});
+$('mycode').onclick=function(){$('codebox').value=makeCode();$('codebox').hidden=false;$('codebox').select();};
+$('again').onclick=function(){$('end').hidden=true;$('start').hidden=false;};
+$('copy').onclick=function(){var t=$('fcode');t.select();try{document.execCommand('copy');$('copy').textContent='✅ Copied!';}catch(e){$('copy').textContent='Select the code and copy it';}};
+</script></body></html>
