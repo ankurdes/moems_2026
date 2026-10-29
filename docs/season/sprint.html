@@ -8,7 +8,7 @@
   header{background:linear-gradient(135deg,#3b82f6 0%,#7c3aed 55%,#ec4899 100%);color:#fff;padding:18px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.2)}
   h1{margin:0;font-size:2em;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.3)}
   .subtitle{opacity:.95;margin-top:2px;font-size:.95em}
-  .container{max-width:760px;margin:0 auto;padding:16px}
+  .container{max-width:1000px;margin:0 auto;padding:16px}
   .card{background:#fff;border-radius:16px;padding:18px 22px;margin-bottom:16px;box-shadow:0 4px 14px rgba(0,0,0,.08);border-top:6px solid var(--primary)}
   h2{margin:0 0 8px;color:var(--primary);font-size:1.25em}
   label{display:block;font-weight:700;margin:12px 0 4px}
@@ -22,6 +22,12 @@
   [hidden]{display:none!important}
 
   .hud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px}
+  .cols{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+  .up{border:2px solid #e2e8f0;border-radius:12px;padding:10px 12px;margin-bottom:10px;background:#f8fafc}
+  .up .n{font-weight:800}.up .lv{float:right;font-size:.8em;color:var(--muted);font-weight:700}.up .d{font-size:.9em;color:var(--muted);margin:2px 0 6px}
+  .up button{width:100%;padding:8px}
+  .stat.streak .val{color:#c2410c}
   .stat{background:#fff;border-radius:14px;padding:8px 14px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center}
   .stat .lbl{display:block;font-size:.72em;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
   .stat .val{font-size:1.9em;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.15}
@@ -56,10 +62,12 @@
     <input id="name" type="text" maxlength="20" autocomplete="off" autocapitalize="words">
     <ul class="rules">
       <li>You have <b id="mins">10</b> minutes. Type <b>just the number</b> and press Enter.</li>
-      <li>Before each question, pick <b>Easy</b> (10 pts), <b>Medium</b> (30 pts) or <b>Hard</b> (60 pts). Answering fast adds up to 10 bonus points.</li>
+      <li>Before each question, pick <b>Easy</b> (5 pts), <b>Medium</b> (30 pts) or <b>Hard</b> (80 pts). Answering fast adds a small speed bonus.</li>
+      <li><b>Spend your points on upgrades:</b> a <b>Multiplier</b> (every answer is worth more) and a <b>Brain bonus</b> (extra points on Medium and Hard). Spend early so they pay off longer!</li>
+      <li>Tip: rushing Easy questions won't win. Getting Medium and Hard ones <b>right</b> is worth much more.</li>
       <li>Easy is one quick idea. Medium is two small steps. Hard needs a contest trick. Pick what you think you can get right!</li>
-      <li>A wrong answer scores 0 and shows you the right answer. <b>Skipping costs 5 points</b>, so choose carefully.</li>
-      <li>When time is up you get a code. Paste it in the class chat.</li>
+      <li>A wrong answer scores 0 and shows you the right answer. <b>Skipping costs 5 points.</b></li>
+      <li>When time is up, the points you have left are your score. You get a code to paste in the class chat.</li>
     </ul>
     <div class="noai">🚫🤖 <b>Please don't use AI or a calculator.</b> Do the math yourself. It's the only way to get better.</div>
     <button id="go" class="big">Start</button>
@@ -67,17 +75,18 @@
   <div id="game" hidden>
     <div class="hud">
       <div class="stat score"><span class="lbl">Points</span><span class="val" id="score">0</span></div>
-      <div class="stat"><span class="lbl">Right</span><span class="val" id="right">0</span></div>
+      <div class="stat streak"><span class="lbl">Streak 🔥</span><span class="val" id="streak">0</span></div>
       <div class="stat time"><span class="lbl">Time</span><span class="val" id="clock">10:00</span></div>
     </div>
     <div class="bar"><div id="tfill"></div></div>
+    <div class="cols">
     <div class="card" id="qcard">
       <div id="ev" class="ev" hidden></div>
       <div id="picker"><h2>Pick your next question</h2>
         <div class="tiers">
-          <button class="tier t0" data-t="0">⚡ Easy<small>10 to 20 pts · one quick idea</small></button>
-          <button class="tier t1" data-t="1">🤔 Medium<small>30 to 40 pts · a couple of steps</small></button>
-          <button class="tier t2" data-t="2">🧠 Hard<small>60 to 70 pts · a contest trick</small></button>
+          <button class="tier t0" data-t="0"></button>
+          <button class="tier t1" data-t="1"></button>
+          <button class="tier t2" data-t="2"></button>
         </div>
         <div class="keys">Tip: press 1, 2 or 3 on your keyboard</div>
         <div id="fb0" style="margin-top:10px;font-weight:800"></div>
@@ -90,8 +99,13 @@
       <div id="fb"></div>
       <button id="skip" style="margin-top:6px">Skip (−5 points)</button>
       </div>
-      <button id="mycode" style="margin-top:6px">📋 Get my code so far</button>
+    </div>
+    <div class="card" style="border-top-color:var(--accent)">
+      <h2 style="color:var(--accent)">🛒 Upgrades</h2>
+      <div id="ups"></div>
+      <button id="mycode">📋 Get my code so far</button>
       <textarea id="codebox" rows="3" readonly hidden style="margin-top:8px"></textarea>
+    </div>
     </div>
   </div>
   <div id="end" class="card" hidden>
@@ -108,7 +122,8 @@
 <script>
 var CSALT="553ab135c7b7";
 var params=new URLSearchParams(location.search);var MIN=parseFloat(params.get('min'))||10;if(MIN<0.05)MIN=0.05;if(MIN>60)MIN=60;
-var BASE=[10,30,60],BMAX=[10,10,10],TARGET=[12,30,60],TN=['Easy','Medium','Hard'],TE=['⚡','🤔','🧠'];
+var MU=[1,1.5,2,2.5,3],MC=[50,150,400,900],BR=[0,0.5,1,1.5,2],BC=[40,120,300,700];
+var BASE=[5,30,80],BMAX=[1,6,16],TARGET=[12,30,60],TN=['Easy','Medium','Hard'],TE=['⚡','🤔','🧠'];
 var COACH=['One quick idea. Look for the shortcut and go fast.','Two small steps.','A contest trick. Worth the most.'];
 function cyrb53(str,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
  h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
@@ -170,34 +185,42 @@ var GEN=[[
 var $=function(id){return document.getElementById(id);};
 var S=null,cur=null,locked=false,recent=[],clk=null,t0=0;
 function norm(s){s=String(s).trim().toLowerCase().replace(/[\s,$%]/g,'');if(s!==''&&!isNaN(Number(s)))s=String(Number(s));return s;}
-function fresh(){return {skips:0,name:'',score:0,correct:0,answered:0,lc:[0,0,0],level:0,up:0,maxLevel:0,end:0,over:false,lastGen:[-1,-1,-1]};}
+function fresh(){return {skips:0,streak:0,best:0,uv:[0,0],name:'',score:0,correct:0,answered:0,lc:[0,0,0],level:0,up:0,maxLevel:0,end:0,over:false,lastGen:[-1,-1,-1]};}
 function genQ(t){var tries=0;for(;;){var g=Math.floor(Math.random()*GEN[t].length);if(g===S.lastGen[t]&&tries<8){tries++;continue;}var q=GEN[t][g]();if(recent.indexOf(q.q)<0||tries>25){S.lastGen[t]=g;recent.push(q.q);if(recent.length>14)recent.shift();q.tier=t;return q;}tries++;}}
 function b64(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function makeCode(){var p=[S.name,S.score,S.correct,S.answered,S.lc[0],S.lc[1],S.lc[2]].join('|');var chk=cyrb53(p+'|'+CSALT).toString(36).slice(-5);return b64(p+'|'+chk);}
-function hud(){$('score').textContent=S.score;$('right').textContent=S.correct;}
-function updTag(){if(!cur||S.over)return;var t=cur.tier;$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+BASE[t]+' to '+(BASE[t]+BMAX[t])+' pts';$('coach').textContent=COACH[t];}
-function showPicker(msg,cls){cur=null;locked=false;$('qbox').hidden=true;$('picker').hidden=false;$('fb0').className=cls||'';$('fb0').style.color=cls==='ok'?'#16a34a':(cls==='no'?'#dc2626':'');$('fb0').textContent=msg||'';}
+function hud(){$('score').textContent=S.score;$('streak').textContent=S.streak;}
+function ptsFor(t,bonus){return Math.round((BASE[t]+bonus)*(1+(t>0?BR[S.uv[1]]:0))*MU[S.uv[0]]);}
+var TD=['one quick idea','two small steps','a contest trick'];
+function labelTiers(){var bs=document.querySelectorAll('.tier');for(var t=0;t<3;t++)bs[t].innerHTML=TE[t]+' '+TN[t]+'<small>'+ptsFor(t,0)+' to '+ptsFor(t,BMAX[t])+' pts · '+TD[t]+'</small>';}
+var UPS=[{n:'✖️ Multiplier',c:MC,d:function(i){return '× '+MU[i]+' on every answer';}},{n:'🧠 Brain bonus',c:BC,d:function(i){return i?'+'+Math.round(BR[i]*100)+'% on Medium and Hard answers':'none yet';}}];
+function renderShop(){var h='';for(var k=0;k<2;k++){var lv=S.uv[k],max=lv>=UPS[k].c.length;h+='<div class="up"><span class="lv">Level '+lv+' of '+UPS[k].c.length+'</span><div class="n">'+UPS[k].n+'</div><div class="d">Now: '+UPS[k].d(lv)+(max?'':'<br>Next: '+UPS[k].d(lv+1))+'</div>'+
+ (max?'<button disabled>MAXED OUT</button>':'<button data-k="'+k+'"'+(S.score<UPS[k].c[lv]?' disabled':'')+'>Buy for '+UPS[k].c[lv]+' pts</button>')+'</div>';}$('ups').innerHTML=h;}
+function updTag(){if(!cur||S.over)return;var t=cur.tier;$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+ptsFor(t,0)+' to '+ptsFor(t,BMAX[t])+' pts';$('coach').textContent=COACH[t];}
+function showPicker(msg,cls){cur=null;locked=false;labelTiers();renderShop();$('qbox').hidden=true;$('picker').hidden=false;$('fb0').className=cls||'';$('fb0').style.color=cls==='ok'?'#16a34a':(cls==='no'?'#dc2626':'');$('fb0').textContent=msg||'';}
 function pickTier(t){if(S.over||$('picker').hidden)return;cur=genQ(t);locked=false;$('picker').hidden=true;$('qbox').hidden=false;updTag();$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';t0=performance.now();$('ans').focus();}
 function nextQ(){showPicker();}
 function fb(c,t){$('fb').className=c;$('fb').textContent=t;}
 function showEv(t){var e=$('ev');e.textContent=t;e.hidden=false;clearTimeout(showEv.t);showEv.t=setTimeout(function(){e.hidden=true;},3500);}
 function submit(){if(locked||S.over||!cur)return;var v=$('ans').value;if(v.trim()==='')return;locked=true;$('ans').disabled=true;$('submit').disabled=true;S.answered++;
  var secs=(performance.now()-t0)/1000,t=cur.tier,ok=norm(v)===String(cur.a),msg;
- if(ok){var bonus=Math.round(BMAX[t]*Math.max(0,1-secs/TARGET[t])),pts=BASE[t]+bonus;S.score+=pts;S.correct++;S.lc[t]++;
-  msg='✅ Correct! +'+pts+(bonus?' ('+BASE[t]+' + '+bonus+' speed bonus)':'');}
- else{msg='❌ Not quite. The answer was '+cur.a+'.';}
- fb(ok?'ok':'no',msg);hud();setTimeout(function(){if(!S.over)showPicker(msg,ok?'ok':'no');},ok?500:1800);}
-function skip(){if(locked||S.over||!cur)return;S.skips++;S.score=Math.max(0,S.score-5);hud();showPicker('⏭ Skipped: −5 points','no');}
+ if(ok){var bonus=Math.round(BMAX[t]*Math.max(0,1-secs/TARGET[t])),pts=ptsFor(t,bonus);S.score+=pts;S.correct++;S.lc[t]++;S.streak++;if(S.streak>S.best)S.best=S.streak;
+  var parts=[];if(bonus)parts.push('speed +'+bonus);if(t>0&&BR[S.uv[1]])parts.push('brain +'+Math.round(BR[S.uv[1]]*100)+'%');if(MU[S.uv[0]]>1)parts.push('× '+MU[S.uv[0]]);
+  msg='✅ Correct! +'+pts+(parts.length?' ('+parts.join(', ')+')':'');}
+ else{S.streak=0;msg='❌ Not quite. The answer was '+cur.a+'.';}
+ fb(ok?'ok':'no',msg);hud();renderShop();setTimeout(function(){if(!S.over)showPicker(msg,ok?'ok':'no');},ok?500:1800);}
+function skip(){if(locked||S.over||!cur)return;S.skips++;S.streak=0;S.score=Math.max(0,S.score-5);hud();showPicker('⏭ Skipped: −5 points','no');}
 function tick(){var left=Math.max(0,S.end-Date.now());var s=Math.ceil(left/1000),m=Math.floor(s/60);$('clock').textContent=m+':'+('0'+(s%60)).slice(-2);$('tfill').style.width=(left/(MIN*60000)*100)+'%';if(left<=0)finish();}
 function clean(s){return s.replace(/[|]/g,'').trim().slice(0,20);}
 function begin(){S=fresh();S.name=clean($('name').value)||'Player';recent=[];S.end=Date.now()+MIN*60000;
- $('start').hidden=true;$('end').hidden=true;$('game').hidden=false;$('codebox').hidden=true;hud();nextQ();tick();clearInterval(clk);clk=setInterval(tick,200);}
+ $('start').hidden=true;$('end').hidden=true;$('game').hidden=false;$('codebox').hidden=true;hud();renderShop();nextQ();tick();clearInterval(clk);clk=setInterval(tick,200);}
 function finish(){if(S.over)return;S.over=true;clearInterval(clk);$('game').hidden=true;$('end').hidden=false;
- $('fscore').textContent=S.score;$('fcor').textContent='✅ '+S.correct+' of '+S.answered+' right';$('facc').textContent='🎯 '+(S.answered?Math.round(100*S.correct/S.answered):0)+'% accuracy';$('flv').textContent='⚡ '+S.lc[0]+' · 🤔 '+S.lc[1]+' · 🧠 '+S.lc[2]+' right';$('fcode').value=makeCode();}
+ $('fscore').textContent=S.score;$('fcor').textContent='✅ '+S.correct+' of '+S.answered+' right · 🔥 best streak '+S.best;$('facc').textContent='🎯 '+(S.answered?Math.round(100*S.correct/S.answered):0)+'% accuracy';$('flv').textContent='⚡ '+S.lc[0]+' · 🤔 '+S.lc[1]+' · 🧠 '+S.lc[2]+' right';$('fcode').value=makeCode();}
 $('mins').textContent=(MIN%1===0)?MIN:MIN.toFixed(1);$('clock').textContent=Math.floor(MIN)+':'+('0'+Math.round((MIN%1)*60)).slice(-2);
 $('go').onclick=begin;$('submit').onclick=submit;$('skip').onclick=skip;
 $('ans').addEventListener('keydown',function(e){if(e.key==='Enter')submit();});
 $('name').addEventListener('keydown',function(e){if(e.key==='Enter')begin();});
+$('ups').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b||!S||S.over)return;var k=+b.getAttribute('data-k'),lv=S.uv[k];if(lv>=UPS[k].c.length||S.score<UPS[k].c[lv])return;S.score-=UPS[k].c[lv];S.uv[k]++;hud();renderShop();if(!$('picker').hidden)labelTiers();else updTag();});
 document.querySelectorAll('.tier').forEach(function(b){b.onclick=function(){pickTier(+b.getAttribute('data-t'));};});
 document.addEventListener('keydown',function(e){if(!S||S.over||$('game').hidden||$('picker').hidden)return;if(e.key==='1'||e.key==='2'||e.key==='3')pickTier(+e.key-1);});
 $('mycode').onclick=function(){$('codebox').value=makeCode();$('codebox').hidden=false;$('codebox').select();};
