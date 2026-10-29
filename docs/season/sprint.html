@@ -57,7 +57,7 @@
     <ul class="rules">
       <li>You have <b id="mins">10</b> minutes. Type <b>just the number</b> and press Enter.</li>
       <li>Before each question, pick <b>Easy</b> (10 pts), <b>Medium</b> (30 pts) or <b>Hard</b> (60 pts). Answering fast adds up to 10 bonus points.</li>
-      <li>Easy is quick mental math. Medium takes a couple of steps. Hard is contest level. Pick what you think you can get right!</li>
+      <li>Easy is one quick idea. Medium is two small steps. Hard needs a contest trick. Pick what you think you can get right!</li>
       <li>A wrong answer scores 0 and shows you the right answer. <b>Skipping costs 5 points</b>, so choose carefully.</li>
       <li>When time is up you get a code. Paste it in the class chat.</li>
     </ul>
@@ -75,9 +75,9 @@
       <div id="ev" class="ev" hidden></div>
       <div id="picker"><h2>Pick your next question</h2>
         <div class="tiers">
-          <button class="tier t0" data-t="0">⚡ Easy<small>10 to 20 pts · quick mental math, go fast</small></button>
+          <button class="tier t0" data-t="0">⚡ Easy<small>10 to 20 pts · one quick idea</small></button>
           <button class="tier t1" data-t="1">🤔 Medium<small>30 to 40 pts · a couple of steps</small></button>
-          <button class="tier t2" data-t="2">🧠 Hard<small>60 to 70 pts · contest level</small></button>
+          <button class="tier t2" data-t="2">🧠 Hard<small>60 to 70 pts · a contest trick</small></button>
         </div>
         <div class="keys">Tip: press 1, 2 or 3 on your keyboard</div>
         <div id="fb0" style="margin-top:10px;font-weight:800"></div>
@@ -108,8 +108,8 @@
 <script>
 var CSALT="553ab135c7b7";
 var params=new URLSearchParams(location.search);var MIN=parseFloat(params.get('min'))||10;if(MIN<0.05)MIN=0.05;if(MIN>60)MIN=60;
-var BASE=[10,30,60],BMAX=[10,10,10],TARGET=[15,40,90],TN=['Easy','Medium','Hard'],TE=['⚡','🤔','🧠'];
-var COACH=['Quick! Look for a shortcut. Speed earns a bonus.','Two steps: think it through.','Contest level. Take your time, these are worth the most.'];
+var BASE=[10,30,60],BMAX=[10,10,10],TARGET=[12,30,60],TN=['Easy','Medium','Hard'],TE=['⚡','🤔','🧠'];
+var COACH=['One quick idea. Look for the shortcut and go fast.','Two small steps.','A contest trick. Worth the most.'];
 function cyrb53(str,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
  h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
 function R(a,b){return a+Math.floor(Math.random()*(b-a+1));}
@@ -117,49 +117,55 @@ function P(a){return a[Math.floor(Math.random()*a.length)];}
 function gcd(a,b){return b?gcd(b,a%b):a;}
 function lcm(a,b){return a/gcd(a,b)*b;}
 function divs(n){var c=0,s=0;for(var d=1;d<=n;d++)if(n%d===0){c++;s+=d;}return [c,s];}
-var BOX=[[1,2,4,5],[1,3,3,5],[1,4,12,13],[1,5,8,10],[1,6,24,25],[2,2,3,5],[2,3,12,13],[2,4,8,10]];
-var KDIV=[[6,12],[8,24],[9,36],[10,48],[12,60],[16,120],[18,180]];
+var BOX=[[1,2,4,5],[1,3,3,5],[2,2,3,5],[2,3,12,13],[1,4,12,13],[2,4,8,10]];
+var KDIV=[[6,12],[8,24],[9,36],[10,48],[12,60]];
 function isPrime(n){if(n<2)return false;for(var d=2;d*d<=n;d++)if(n%d===0)return false;return true;}
-var PR_ODD=[];for(var _n=51;_n<400;_n+=2)if(isPrime(_n-2))PR_ODD.push(_n);
+var PR_ODD=[];for(var _n=21;_n<=101;_n+=2)if(isPrime(_n-2))PR_ODD.push(_n);
+function seqQ(){var k=R(0,3),t=[],x;
+ if(k===0){x=R(1,4);for(var i=0;i<5;i++)t.push((x+i)*(x+i+1));return{q:'What comes next? '+t.join(', ')+', ?',a:(x+5)*(x+6)};}
+ if(k===1){x=R(1,4);var c=R(-1,3);for(var i=0;i<5;i++)t.push((x+i)*(x+i)+c);return{q:'What comes next? '+t.join(', ')+', ?',a:(x+5)*(x+5)+c};}
+ if(k===2){x=R(1,4);for(var i=0;i<5;i++)t.push((x+i)*(x+i+1)/2);return{q:'What comes next? '+t.join(', ')+', ?',a:(x+5)*(x+6)/2};}
+ x=R(1,5);t.push(x);for(var i=1;i<5;i++)t.push(2*t[i-1]+1);return{q:'What comes next? '+t.join(', ')+', ?',a:2*t[4]+1};}
 var GEN=[[
- function(){var k=R(3,25);return{q:'25 × '+(4*k)+' = ?',a:100*k};},
- function(){var n=R(12,60);return{q:'99 × '+n+' = ?',a:99*n};},
- function(){var n=R(12,89);return{q:'11 × '+n+' = ?',a:11*n};},
- function(){var n=P([15,25,35,45,55,65,75,85,95]);return{q:'What is '+n+'<sup>2</sup>?',a:n*n};},
- function(){var b=R(20,60),d=R(2,9),a=b+d;return{q:a+'<sup>2</sup> − '+b+'<sup>2</sup> = ?',a:(a-b)*(a+b)};},
- function(){var n=R(10,40);return{q:'What is 1 + 2 + 3 + ... + '+n+'?',a:n*(n+1)/2};},
- function(){var n=R(5,12);return{q:'What is the sum of the interior angles of a polygon with '+n+' sides, in degrees?',a:(n-2)*180};},
- function(){var t=P([['15%',20,3],['12.5%',8,1],['75%',4,3],['35%',20,7],['40%',5,2]]),k=R(3,20),n=t[1]*k;return{q:'What is '+t[0]+' of '+n+'?',a:t[2]*k};},
+ function(){var a=R(1000,3000),b=R(100,999);return{q:'What is the units digit of '+a+' × '+b+'?',a:(a%10)*(b%10)%10};},
+ function(){var s=R(10,50),k=R(5,15);return{q:'What is the average of all the whole numbers from '+s+' to '+(s+2*k)+'?',a:s+k};},
+ seqQ,
+ function(){var n=P([5,6,8,9,10,12]);return{q:'Each interior angle of a regular polygon with '+n+' sides is how many degrees?',a:(n-2)*180/n};},
+ function(){var n=R(5,15);return{q:'1 + 3 + 5 + ... + '+(2*n-1)+' = ?',a:n*n};},
+ function(){for(;;){var a=P([20,25,40,50,80]),p=P([10,20,25,50,75]),b=a*(100+p)/100;if(b===Math.floor(b))return{q:'A price goes up from $'+a+' to $'+b+'. By what percent did it increase?',a:p};}},
+ function(){var n1=R(2,6),u=R(5,25),n2=R(3,12);if(n2===n1)n2++;return{q:n1+' pencils cost '+(n1*u)+' cents. How many cents do '+n2+' pencils cost?',a:n2*u};},
+ function(){var v=[];while(v.length<5){var x=R(1,50);if(v.indexOf(x)<0)v.push(x);}var s=v.slice().sort(function(p,q){return p-q;});return{q:'What is the median of '+v.join(', ')+'?',a:s[2]};},
  function(){for(;;){var g=R(4,15),x=R(2,9),y=R(2,9);if(x!==y&&gcd(x,y)===1)return{q:'What is the greatest common factor of '+(g*x)+' and '+(g*y)+'?',a:g};}},
- function(){var x=R(2,15),a=R(5,9),c=R(2,a-1),b=R(1,(a-c)*x-1),d=(a-c)*x-b;return{q:'Solve for <i>x</i>: '+a+'<i>x</i> − '+b+' = '+c+'<i>x</i> + '+d,a:x};}
+ function(){var a=R(6,19);return{q:'How many 2-digit numbers are multiples of '+a+'?',a:Math.floor(99/a)-Math.floor(9/a)};},
+ function(){var a=R(10,80),c=0;for(var n=a;n<=a+20;n++)if(isPrime(n))c++;return{q:'How many prime numbers are there from '+a+' to '+(a+20)+'?',a:c};}
 ],[
- function(){for(;;){var m=R(10,30),a=R(5,40),b=R(5,40),c=R(5,40),d=4*m-a-b-c;if(d>=1&&d<=60&&d!==a&&d!==b&&d!==c)return{q:'The average of four numbers is '+m+'. Three of them are '+a+', '+b+' and '+c+'. What is the fourth number?',a:d};}},
- function(){var s=R(10,60);return{q:'The sum of 6 consecutive whole numbers is '+(6*s+15)+'. What is the largest of the 6 numbers?',a:s+5};},
- function(){var a=P([2,3,4,7,8,9]),n=R(20,2030),u=1;for(var i=0;i<n;i++)u=(u*a)%10;return{q:'What is the units digit of '+a+'<sup>'+n+'</sup>?',a:u};},
- function(){var t=P([[6,8],[12,18],[10,15],[8,12],[9,12],[15,20],[12,20],[14,21]]);return{q:'Two buses leave the station together. One returns every '+t[0]+' minutes and the other every '+t[1]+' minutes. After how many minutes will they leave together again?',a:lcm(t[0],t[1])};},
+ function(){for(;;){var m=R(10,30),a=R(5,40),b=R(5,40),c=3*m-a-b;if(c>=1&&c<=60&&c!==a&&c!==b)return{q:'The average of three numbers is '+m+'. Two of them are '+a+' and '+b+'. What is the third number?',a:c};}},
+ function(){var s=R(10,60);return{q:'The sum of 4 consecutive whole numbers is '+(4*s+6)+'. What is the largest of the 4 numbers?',a:s+3};},
+ function(){var a=P([2,3,4,7,8,9]),n=R(10,100),u=1;for(var i=0;i<n;i++)u=(u*a)%10;return{q:'What is the units digit of '+a+'<sup>'+n+'</sup>?',a:u};},
+ function(){var t=P([[6,8],[12,18],[10,15],[8,12],[9,12],[15,20],[4,6],[6,9]]);return{q:'Two buses leave the station together. One returns every '+t[0]+' minutes and the other every '+t[1]+' minutes. After how many minutes will they leave together again?',a:lcm(t[0],t[1])};},
  function(){var t=P([[3,5],[2,3],[4,5],[1,4],[3,7]]),k=R(3,9);return{q:'The ratio of boys to girls in a club is '+t[0]+' : '+t[1]+'. There are '+(t[0]+t[1])*k+' students in all. How many girls are there?',a:t[1]*k};},
- function(){var w=R(3,15),h=R(w+1,20);return{q:'A rectangle has perimeter '+2*(w+h)+' and one side of length '+w+'. What is its area?',a:w*h};},
- function(){var n=P([24,36,40,48,60,72,80,84,90,96,100]);return{q:'How many positive divisors does '+n+' have?',a:divs(n)[0]};},
- function(){var t=P([[12,6],[10,15],[20,30],[6,3],[12,4],[30,60],[24,8],[18,9],[36,18],[20,5],[60,20]]);return{q:'Ann can paint a fence alone in '+t[0]+' hours. Ben can paint it alone in '+t[1]+' hours. How many hours will it take them to paint it together?',a:t[0]*t[1]/(t[0]+t[1])};},
- function(){var t=P([[40,60],[30,60],[20,30],[60,90],[10,15],[24,40],[30,45],[45,90],[12,20],[15,30],[20,60]]);return{q:'Mia drives to a town at '+t[0]+' mph and drives back the same way at '+t[1]+' mph. What is her average speed for the whole round trip, in mph?',a:2*t[0]*t[1]/(t[0]+t[1])};},
- function(){var x=R(3,9),oa=R(5,15),ob=R(4,14),c=R(2,8);return{q:'In a class of '+(oa+ob+x+c)+' students, '+(oa+x)+' play soccer, '+(ob+x)+' play chess, and '+c+' play neither. How many students play both?',a:x};},
- function(){var t=P([[5,12,13],[3,4,5],[8,15,17],[7,24,25],[6,8,10],[10,24,26],[9,12,15]]),k=Math.random()<0.5?0:1;return{q:'A right triangle has a hypotenuse of '+t[2]+' and one leg of '+t[k]+'. What is its area?',a:t[0]*t[1]/2};},
- function(){var n=R(8,20);return{q:'How many diagonals does a polygon with '+n+' sides have?',a:n*(n-3)/2};},
- function(){var p=20*R(3,15);return{q:'A coat costs $'+p+'. It is marked down 20%, and then the sale price is marked down another 25%. What is the final price in dollars?',a:p*3/5};}
+ function(){var n=R(5,12);return{q:n+' people each shake hands with every other person once. How many handshakes are there?',a:n*(n-1)/2};},
+ function(){var n=P([12,18,20,24,28,30,36,40,45,48]);return{q:'How many positive divisors does '+n+' have?',a:divs(n)[0]};},
+ function(){var w=R(3,10),h=R(w+1,14);return{q:'A rectangle has perimeter '+2*(w+h)+' and one side of length '+w+'. What is its area?',a:w*h};},
+ function(){var t=P([[3,4,5],[5,12,13],[8,15,17],[6,8,10],[9,12,15],[12,16,20]]);return{q:'A right triangle has legs '+t[0]+' and '+t[1]+'. How long is the hypotenuse?',a:t[2]};},
+ function(){var t=P([[12,6],[6,3],[12,4],[20,5],[10,15],[24,8]]);return{q:'Ann can do a job alone in '+t[0]+' hours. Ben can do it alone in '+t[1]+' hours. How many hours does it take them working together?',a:t[0]*t[1]/(t[0]+t[1])};},
+ function(){var n=R(5,12);return{q:'How many diagonals does a polygon with '+n+' sides have?',a:n*(n-3)/2};},
+ function(){var p=20*R(2,10);return{q:'A coat costs $'+p+'. It is 20% off, and then 25% off the sale price. What is the final price in dollars?',a:p*3/5};},
+ function(){var x=R(3,9),oa=R(5,12),ob=R(4,10),c=R(2,6);return{q:'In a class of '+(oa+ob+x+c)+' students, '+(oa+x)+' play soccer, '+(ob+x)+' play chess, and '+c+' play neither. How many play both?',a:x};}
 ],[
- function(){var n=5*R(10,30),z=0,f=5;while(f<=n){z+=Math.floor(n/f);f*=5;}return{q:'How many zeros are at the end of '+n+'! (that is, '+n+' × '+(n-1)+' × ... × 2 × 1)?',a:z};},
- function(){var n=P([24,36,48,60,72,84,90,96,100]);return{q:'What is the <b>sum</b> of all positive divisors of '+n+'?',a:divs(n)[1]};},
- function(){var ab=P([[3,5],[4,6],[6,10],[3,7],[4,10]]),N=R(100,300),c=0;for(var i=1;i<=N;i++)if(i%ab[0]===0||i%ab[1]===0)c++;return{q:'How many integers from 1 to '+N+' are multiples of '+ab[0]+' <b>or</b> '+ab[1]+' (or both)?',a:c};},
- function(){var k=2*R(10,30);return{q:'Find the value of '+k+'<sup>2</sup> − '+(k-1)+'<sup>2</sup> + '+(k-2)+'<sup>2</sup> − '+(k-3)+'<sup>2</sup> + ... + 2<sup>2</sup> − 1<sup>2</sup>.',a:k*(k+1)/2};},
+ function(){var n=5*R(5,20),z=0,f=5;while(f<=n){z+=Math.floor(n/f);f*=5;}return{q:'How many zeros are at the end of '+n+'! (that is, '+n+' × '+(n-1)+' × ... × 2 × 1)?',a:z};},
+ function(){var t=P(KDIV);return{q:'What is the <b>smallest</b> positive integer with exactly '+t[0]+' positive divisors?',a:t[1]};},
+ function(){var ab=P([[2,3],[3,5],[4,6],[2,5],[3,4]]),N=R(30,80),c=0;for(var i=1;i<=N;i++)if(i%ab[0]===0||i%ab[1]===0)c++;return{q:'How many integers from 1 to '+N+' are multiples of '+ab[0]+' <b>or</b> '+ab[1]+' (or both)?',a:c};},
+ function(){var k=2*R(5,10);return{q:'Find '+k+'<sup>2</sup> − '+(k-1)+'<sup>2</sup> + '+(k-2)+'<sup>2</sup> − '+(k-3)+'<sup>2</sup> + ... + 2<sup>2</sup> − 1<sup>2</sup>.',a:k*(k+1)/2};},
  function(){var N=P(PR_ODD);return{q:'Two prime numbers add up to '+N+'. What is their <b>product</b>?',a:2*(N-2)};},
- function(){var m=R(10,40);return{q:'What is the <b>smallest</b> number of integers you must choose from 1, 2, 3, ..., '+(2*m)+' to be <b>sure</b> that two of them add up to '+(2*m+1)+'?',a:m+1};},
- function(){var a=P([2,3]),T=P([12,16,18,24,30,36]),c=T-a*a,n=0;for(var x=1;x<=a+T;x++){if(x===a)continue;if(T%(x-a)!==0)continue;var y=a+T/(x-a);if(y>0)n++;}return{q:'How many ordered pairs of positive integers (<i>x</i>, <i>y</i>) satisfy <i>xy</i> − '+a+'<i>x</i> − '+a+'<i>y</i> = '+c+'?',a:n};},
- function(){var b=P(BOX);return{q:'A closed box measures '+b[0]+' by '+b[1]+' by '+b[2]+'. An ant walks along the <b>outside surface</b> from one corner to the opposite corner. What is the length of the shortest path?',a:b[3]};},
- function(){var d=R(1,9),k=P([3,4]),lo=k===3?100:1000,hi=lo*10-1,c=0;for(var n=lo;n<=hi;n++)if(String(n).indexOf(String(d))>=0)c++;return{q:'How many '+k+'-digit numbers contain at least one digit '+d+'?',a:c};},
- function(){var t=P(KDIV);return{q:'What is the <b>smallest</b> positive integer that has exactly '+t[0]+' positive divisors?',a:t[1]};},
- function(){var t=P([[2,7],[3,7],[2,5],[3,5],[2,9],[4,7]]),n=R(20,200),r=1;for(var i=0;i<n;i++)r=(r*t[0])%t[1];return{q:'What is the remainder when '+t[0]+'<sup>'+n+'</sup> is divided by '+t[1]+'?',a:r};},
- function(){var t=P([[3,4,5],[2,3,4],[4,5,6],[3,4,6],[5,6,10],[6,8,12],[3,5,6],[4,6,9]]);var L=lcm(lcm(t[0],t[1]),t[2]);return{q:'What is the smallest positive integer that leaves a remainder of '+(t[0]-1)+' when divided by '+t[0]+', '+(t[1]-1)+' when divided by '+t[1]+', and '+(t[2]-1)+' when divided by '+t[2]+'?',a:L-1};},
- function(){var a=R(2,9),d=R(3,7),n=R(15,30),l=a+(n-1)*d;return{q:'Find the sum: '+a+' + '+(a+d)+' + '+(a+2*d)+' + ... + '+l+'.',a:n*(a+l)/2};}
+ function(){var m=R(5,15);return{q:'What is the <b>smallest</b> number of integers you must pick from 1, 2, ..., '+(2*m)+' to be <b>sure</b> two of them add up to '+(2*m+1)+'?',a:m+1};},
+ function(){var t=P([[40,60],[30,60],[20,30],[10,15],[30,45],[15,30],[20,60]]);return{q:'Mia drives to a town at '+t[0]+' mph and back the same way at '+t[1]+' mph. What is her average speed for the round trip, in mph?',a:2*t[0]*t[1]/(t[0]+t[1])};},
+ function(){var t=P([[2,3,4],[3,4,5],[3,4,6],[2,3,5]]);var L=lcm(lcm(t[0],t[1]),t[2]);return{q:'What is the smallest positive integer that leaves a remainder of '+(t[0]-1)+' when divided by '+t[0]+', '+(t[1]-1)+' when divided by '+t[1]+', and '+(t[2]-1)+' when divided by '+t[2]+'?',a:L-1};},
+ function(){var n=P([12,18,20,24,28,30,36]);return{q:'What is the <b>sum</b> of all positive divisors of '+n+'?',a:divs(n)[1]};},
+ function(){var a=R(1,5),d=R(2,4),n=R(8,12),l=a+(n-1)*d;return{q:'Find the sum: '+a+' + '+(a+d)+' + '+(a+2*d)+' + ... + '+l+'.',a:n*(a+l)/2};},
+ function(){var b=P(BOX);return{q:'A closed box measures '+b[0]+' by '+b[1]+' by '+b[2]+'. An ant walks on the <b>outside surface</b> from one corner to the opposite corner. What is the length of the shortest path?',a:b[3]};},
+ function(){var s=R(2,12);return{q:'Two dice are rolled. Out of the 36 possible outcomes, how many give a sum of '+s+'?',a:6-Math.abs(s-7)};},
+ function(){var t=P([[5,12,13],[3,4,5],[8,15,17],[6,8,10]]),k=Math.random()<0.5?0:1;return{q:'A right triangle has a hypotenuse of '+t[2]+' and one leg of '+t[k]+'. What is its area?',a:t[0]*t[1]/2};}
 ]];
 var $=function(id){return document.getElementById(id);};
 var S=null,cur=null,locked=false,recent=[],clk=null,t0=0;
