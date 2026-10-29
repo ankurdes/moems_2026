@@ -1,0 +1,23 @@
+docs/season/day04.html
+  s_7f3d1ac77af38c::t_b032ce2aa07baf 1-230
+docs/season/day04_coach_a96a914e.html
+  s_7f3d1ac77af38c::t_96c0272978efc8 1-306
+docs/season/mathsprint_a15275.html
+  s_7f3d1ac77af38c::t_f95c2a18fa49ee 126,135,138,154-157,170-176,178,180-189
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fd5cb99eda9c54f07718aa07cc61fc339cfe0815",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "unknown"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
