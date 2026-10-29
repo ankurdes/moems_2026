@@ -66,7 +66,7 @@
       <li><b>Spend your points on upgrades</b> (same price for both):<br>✖️ <b>Multiplier</b>: every answer ×1.5, then ×2, ×2.5, ×3, ×3.5<br>🧠 <b>Brain bonus</b>: Medium ×2, ×3, ×4, ×5, ×6 and Hard ×2.5, ×4, ×5.5, ×7, ×8.5 (Easy stays ×1)<br>Both stack. Good at Medium and Hard? The Brain bonus pays off big.</li>
       <li>Tip: rushing Easy questions won't win. Getting Medium and Hard ones <b>right</b> is worth much more.</li>
       <li>Easy is one quick idea. Medium is two small steps. Hard needs a contest trick. Pick what you think you can get right!</li>
-      <li>A wrong answer scores 0 and shows you the right answer. <b>Skipping costs 5 points.</b></li>
+      <li>A <b>wrong answer loses 25%</b> of what the question was worth. <b>Skipping loses only 10%</b>. So if you're not sure, skip instead of guessing!</li>
       <li>When time is up, the points you have left are your score. You get a code to paste in the class chat.</li>
     </ul>
     <div class="noai">🚫🤖 <b>Please don't use AI or a calculator.</b> Do the math yourself. It's the only way to get better.</div>
@@ -97,7 +97,7 @@
       <div id="qtext"></div>
       <div class="row"><input id="ans" type="text" inputmode="numeric" autocomplete="off" autocapitalize="off" placeholder="Your answer"><button id="submit" class="big" style="margin-top:0">Go</button></div>
       <div id="fb"></div>
-      <button id="skip" style="margin-top:6px">Skip (−5 points)</button>
+      <button id="skip" style="margin-top:6px">Skip</button>
       </div>
     </div>
     <div class="card" style="border-top-color:var(--accent)">
@@ -202,7 +202,9 @@ function labelTiers(){var bs=document.querySelectorAll('.tier');for(var t=0;t<3;
 var UPS=[{n:'✖️ Multiplier',c:MC,d:function(i){return '×'+MU[i]+' on every answer'+(i?'':' (none yet)');}},{n:'🧠 Brain bonus',c:BC,d:function(i){return i?'Medium ×'+BR[i][1]+', Hard ×'+BR[i][2]+' (Easy stays ×1)':'×1 (none yet)';}}];
 function renderShop(){var h='';for(var k=0;k<2;k++){var lv=S.uv[k],max=lv>=UPS[k].c.length;h+='<div class="up"><span class="lv">Level '+lv+' of '+UPS[k].c.length+'</span><div class="n">'+UPS[k].n+'</div><div class="d">Now: '+UPS[k].d(lv)+(max?'':'<br>Next: '+UPS[k].d(lv+1))+'</div>'+
  (max?'<button disabled>MAXED OUT</button>':'<button data-k="'+k+'"'+(S.score<UPS[k].c[lv]?' disabled':'')+'>Buy for '+UPS[k].c[lv]+' pts</button>')+'</div>';}$('ups').innerHTML=h;}
-function updTag(){if(!cur||S.over)return;var t=cur.tier;$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+ptsFor(t,0)+' to '+ptsFor(t,BMAX[t])+' pts';$('coach').textContent=COACH[t];}
+function penW(t){return Math.round(0.25*ptsFor(t,0));}
+function penS(t){return Math.max(1,Math.round(0.1*ptsFor(t,0)));}
+function updTag(){if(!cur||S.over)return;var t=cur.tier;$('skip').textContent='Skip (−'+penS(t)+')';$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+ptsFor(t,0)+' to '+ptsFor(t,BMAX[t])+' pts';$('coach').textContent=COACH[t]+' Wrong answer: −'+penW(t)+'. Skip: −'+penS(t)+'.';}
 function showPicker(msg,cls){cur=null;locked=false;labelTiers();renderShop();$('qbox').hidden=true;$('picker').hidden=false;$('fb0').className=cls||'';$('fb0').style.color=cls==='ok'?'#16a34a':(cls==='no'?'#dc2626':'');$('fb0').textContent=msg||'';}
 function pickTier(t){if(S.over||$('picker').hidden)return;cur=genQ(t);locked=false;$('picker').hidden=true;$('qbox').hidden=false;updTag();$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';t0=performance.now();$('ans').focus();}
 function nextQ(){showPicker();}
@@ -213,9 +215,9 @@ function submit(){if(locked||S.over||!cur)return;var v=$('ans').value;if(v.trim(
  if(ok){var bonus=Math.round(BMAX[t]*Math.max(0,1-secs/TARGET[t])),pts=ptsFor(t,bonus);S.score+=pts;S.correct++;S.lc[t]++;S.streak++;if(S.streak>S.best)S.best=S.streak;
   var parts=[];if(bonus)parts.push('speed +'+bonus);if(MU[S.uv[0]]>1)parts.push('multiplier ×'+MU[S.uv[0]]);if(BR[S.uv[1]][t]>1)parts.push('brain ×'+BR[S.uv[1]][t]);
   msg='✅ Correct! +'+pts+(parts.length?' ('+parts.join(', ')+')':'');}
- else{S.streak=0;msg='❌ Not quite. The answer was '+cur.a+'.';}
+ else{var pw=penW(t);S.streak=0;S.score=Math.max(0,S.score-pw);msg='❌ Not quite. The answer was '+cur.a+'. −'+pw+' points.';}
  fb(ok?'ok':'no',msg);hud();renderShop();setTimeout(function(){if(!S.over)showPicker(msg,ok?'ok':'no');},ok?500:1800);}
-function skip(){if(locked||S.over||!cur)return;S.skips++;S.streak=0;S.score=Math.max(0,S.score-5);hud();showPicker('⏭ Skipped: −5 points','no');}
+function skip(){if(locked||S.over||!cur)return;var ps=penS(cur.tier);S.skips++;S.streak=0;S.score=Math.max(0,S.score-ps);hud();showPicker('⏭ Skipped: −'+ps+' points','no');}
 function tick(){var left=Math.max(0,S.end-Date.now());var s=Math.ceil(left/1000),m=Math.floor(s/60);$('clock').textContent=m+':'+('0'+(s%60)).slice(-2);$('tfill').style.width=(left/(MIN*60000)*100)+'%';if(left<=0)finish();}
 function clean(s){return s.replace(/[|]/g,'').trim().slice(0,20);}
 function begin(){S=fresh();S.name=clean($('name').value)||'Player';recent=[];S.end=Date.now()+MIN*60000;
