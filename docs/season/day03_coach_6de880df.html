@@ -126,19 +126,18 @@
 
   <div class="section warm">
     <h2>🧩 Team brain teaser (10 min)</h2>
-    <p class="lede">Work on it together as one team. Try to find a way to do it, and if you think it's impossible, find a convincing reason why.</p>
+    <p class="lede">Work on it together as a team.</p>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">1</span><span class="topic">The chessboard puzzle</span></div>
-      <img class="qimg" src="img/s3_q01.png" alt="Question image" width="1005" draggable="false">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The domino puzzle</span></div>
+      <img class="qimg" src="img/s3_q01.png" alt="Question image" width="985" draggable="false">
       <button onclick="toggle(this)">Show answer</button>
       <div class="solution"><span class="ans">Answer: No, it can't be done</span><ol>
-<li><b>Count first.</b> 64 − 2 = 62 squares, and 31 dominoes cover 31 × 2 = 62 squares. So the counting works out, and that alone doesn't settle it. We need another idea.</li>
-<li><b>Color the board</b> like a checkerboard, with 32 black and 32 white squares. Squares that share a side always have different colors.</li>
-<li>So every domino covers <b>one black and one white</b> square, no matter how you place it. Then 31 dominoes cover exactly 31 black and 31 white squares.</li>
-<li>Opposite corners of the board are the <b>same color</b>. Say both are white. Removing them leaves 30 white and 32 black squares.</li>
-<li>30 white and 32 black can't be covered by 31 black-and-white pairs. So it's impossible. (A computer search for a tiling agrees.)</li>
-<li>If you removed two corners on the <b>same side</b> instead, they'd be different colors, leaving 31 and 31, and then it can be done.</li></ol><div class="trick"><b>⚡ Trick:</b> When a problem asks <i>can it be done?</i>, look for something that never changes, like odd or even, or a black and white coloring. Coloring the board is the key move. It turns a messy tiling problem into a simple count.</div></div>
+<li><b>Try it.</b> Draw the grid and try a few ways. You always get stuck with two squares left that aren't next to each other.</li>
+<li><b>Color it</b> like a checkerboard. Every domino covers <b>one dark and one light</b> square.</li>
+<li>Opposite corners are the <b>same color</b>. Cross both out and you have 6 of one color and 8 of the other.</li>
+<li>7 dominoes always cover 7 dark and 7 light squares, so 6 and 8 can't work. (A computer search agrees.)</li>
+<li><b>Bonus:</b> the same reason works for a full 8 × 8 chessboard with opposite corners removed.</li></ol><div class="trick"><b>⚡ Trick:</b> When a puzzle asks <i>can it be done?</i>, look for something that never changes, like a checkerboard coloring. It turns a puzzle into a simple count.</div></div>
     </div>
   </div>
 
