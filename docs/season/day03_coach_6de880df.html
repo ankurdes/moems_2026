@@ -211,14 +211,14 @@
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">6</span><span class="topic">Counting</span></div>
-      <img class="qimg" src="img/s3_q07.png" alt="Question image" width="238" draggable="false">
+      <img class="qimg" src="img/s3_q07.png" alt="Question image" width="241" draggable="false">
       <button onclick="openSol(this)">Show solution</button>
-      <div class="solution"><span class="ans">Answer: 3168</span><ol>
-<li>Counting numbers with at least one 7 directly is messy, because a number might have one 7, two 7s, three, or four. Count the <b>opposite</b> instead: numbers with <b>no</b> 7 at all.</li>
-<li>There are 9000 four-digit numbers in total (1000 to 9999).</li>
-<li>With no 7: the first digit can be 1 to 9 except 7, which is 8 choices. Each of the other three digits can be 0 to 9 except 7, which is 9 choices each.</li>
-<li>No 7 at all: 8 × 9 × 9 × 9 = 5832.</li>
-<li>At least one 7 = 9000 − 5832 = <b>3168</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Whenever a problem says <i>at least one</i>, count the opposite (<i>none</i>) and subtract from the total. It turns many cases into one.</div></div>
+      <div class="solution"><span class="ans">Answer: 100</span><ol>
+<li>Counting teams with 1 girl, 2 girls or 3 girls separately works, but it takes three cases. Count the <b>opposite</b> instead: teams with <b>no</b> girls.</li>
+<li>All possible teams of 3 from 10 people: (10 × 9 × 8) ÷ (3 × 2 × 1) = 120. We divide by 3 × 2 × 1 because the order you pick people in doesn't matter.</li>
+<li>Teams with no girls (all boys) from the 6 boys: (6 × 5 × 4) ÷ (3 × 2 × 1) = 20.</li>
+<li>At least one girl = 120 − 20 = <b>100</b>.</li>
+<li>Check with the three cases: 1 girl: 4 × 15 = 60. 2 girls: 6 × 6 = 36. 3 girls: 4. Total 60 + 36 + 4 = 100. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> Whenever a problem says <i>at least one</i>, count the opposite (<i>none</i>) and subtract from the total. It turns several cases into one.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">7</span><span class="topic">Algebra</span></div>
