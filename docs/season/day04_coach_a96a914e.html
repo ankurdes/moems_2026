@@ -129,15 +129,17 @@
     <p class="lede">Work on it together as a team.</p>
 
     <div class="prob">
-      <div class="prob-head"><span class="qnum">1</span><span class="topic">Martian truth days</span></div>
-      <img class="qimg" src="img/s4_q01.png" alt="Question image" width="981" draggable="false">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The 25 puzzle</span></div>
+      <img class="qimg" src="img/s4_q01.png" alt="Question image" width="761" draggable="false">
       <button onclick="toggle(this)">Show answer</button>
-      <div class="solution"><span class="ans">Answer: Every day except Saturday</span><ol>
-<li>Check each day. On a <b>truth day</b> the statement must be true, so tomorrow must be a lie day. On a <b>lie day</b> the statement must be false, so tomorrow must be a truth day.</li>
-<li>Monday (truth): Tuesday is a lie day ✓. Wednesday: Thursday is a lie day ✓. Friday: Saturday is a lie day ✓.</li>
-<li>Tuesday (lie): Wednesday is a truth day ✓. Thursday: Friday is a truth day ✓. Sunday: Monday is a truth day ✓.</li>
-<li>Saturday (lie): Sunday is also a lie day, so the statement would be true, and a liar can't say something true ✗.</li>
-<li>So the answer is <b>every day except Saturday</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> For truth and lie puzzles, make a small table and test every case. Don't try to reason it all in your head.</div></div>
+      <div class="solution"><span class="ans">Answer: 4975</span><ol>
+<li>A number is divisible by 25 only if it ends in <b>00, 25, 50 or 75</b>.</li>
+<li>A 3-digit number can't work: the best is 9 + 7 + 5 = 21 (for x75), which is less than 25.</li>
+<li>For 4 digits, check each ending. The first two digits must make up the rest of the 25:
+  <br>ends in 75 (7 + 5 = 12): first two digits add to 13, smallest is <b>49</b>, giving 4975
+  <br>ends in 25 (2 + 5 = 7): first two digits add to 18, so 99, giving 9925
+  <br>ends in 50 or 00: the first two digits would need to add to 20 or 25, which is impossible</li>
+<li>The smallest is <b>4975</b>. Check: 4 + 9 + 7 + 5 = 25 and 4975 ÷ 25 = 199. ✓ (A computer search agrees.)</li></ol><div class="trick"><b>⚡ Trick:</b> Split the problem: first use the divisibility rule to list the possible endings, then make the front digits as small as possible. To make a number small, put the smaller digit first.</div></div>
     </div>
   </div>
 
