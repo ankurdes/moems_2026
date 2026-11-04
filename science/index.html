@@ -202,6 +202,11 @@ img{max-width:100%}
     <div class="sec">
       <h2>Pick your drill</h2>
       <div class="grid">
+        <button class="mode" data-mode="rules">
+          <span class="k">Read this first</span>
+          <span class="t">The Rules</span>
+          <span class="d">How many make the team, the deadlines, how competition day runs, and what drops a team a tier.</span>
+        </button>
         <button class="mode" data-mode="quick">
           <span class="k">10 questions</span>
           <span class="t">Warm-Up Set</span>
@@ -347,6 +352,18 @@ img{max-width:100%}
         <button class="btn sec" id="rStop">Stop</button>
       </div>
     </div>
+  </section>
+
+  <!-- RULES -->
+  <section id="rules" hidden>
+    <div class="hero" style="padding-block:26px 20px">
+      <div class="eyebrow">2027 Division A rulebook</div>
+      <h1 style="font-size:clamp(28px,7vw,42px)">The rules, <em>plainly.</em></h1>
+      <p>Who makes the team, what the deadlines are, how competition day runs, and what gets a team dropped a tier. Taken from the front pages of the official rulebook.</p>
+    </div>
+    <div id="rulesBody"></div>
+    <div class="go"><button class="btn sec" id="backBtn3">Back to drills</button></div>
+    <p class="foot">From the 2027 Science Olympiad Division A rulebook for San Joaquin County, updated 10.14.26. Your coach is the final word, so check anything that affects a deadline.</p>
   </section>
 
   <!-- STUDY -->
@@ -660,6 +677,44 @@ const BANK=[
 ];
 BANK.forEach(function(x,i){x.id=x.t+"-"+i;});
 
+const RULES=[
+{h:"How many actually make the team",items:[
+"A team is <b>up to 18 students</b>.",
+"<b>No more than 7 of those 18 can be sixth graders.</b> That is the number that matters for you, and it is the tightest squeeze on the whole roster.",
+"Division A is <b>grades 3 to 6</b>, so you are competing for one of those seven senior spots against every other sixth grader who tries out.",
+"A team may also carry <b>3 alternates</b>. Alternates are listed separately, not on the Official Team Member list.",
+"An alternate can be moved onto the official list <b>right up to 8:45am on competition day</b>. If someone drops out that morning, the head coach makes the swap at the check-in table.",
+"So being named an alternate is not the end of it. People get sick."],
+note:"Being one of seven sixth graders is the bar. Most events are run by pairs, so the coach is looking for people who can carry an event with a partner, not just score well on a test."},
+
+{h:"Dates on the official calendar",rows:[
+["Registration due","October 22, 2026, or sooner if 55 teams sign up"],
+["Coaches meeting","October 27, 2026"],
+["Second-team lottery","Announced at that October 27 meeting"],
+["Permission forms and roster due","February 5, 2027"],
+["Alternate swaps close","8:45am on competition day"]],
+note:"Registration closes early if the county hits 55 teams, so the school has to move fast. The roster deadline in February is the one that locks in who is actually on the team."},
+
+{h:"How competition day runs",items:[
+"<b>Each team has to run one event itself.</b> Events are claimed first come, first served, and a volunteer from your school acts as the Event Manager for it.",
+"<b>Do not over-commit to too many events.</b> The rulebook says this directly. Event Managers can sometimes let students switch times, but it is not guaranteed and not required.",
+"If two teams come from the same school, <b>both are placed in the same section and may not work together</b>.",
+"<b>Impound</b> is when built devices are handed in before competition starts, so nobody can change them afterwards.",
+"At impound, <b>a team member drops the device off. Coaches and parents are not allowed to.</b>",
+"Impound for an event happens in the same room as that event.",
+"Families watch <b>open events</b> from designated areas only, and may not talk to competing students or Event Managers."],
+note:"The impound rule is worth remembering. If your event impounds, the build has to be finished and handed in by you, not carried in by a parent."},
+
+{h:"Code of ethics, and what happens if you break it",items:[
+"<b>Students must build their own devices.</b> The rulebook is explicit that team members are expected to be the builders of everything used in the events.",
+"Compete with <b>honesty, integrity and sportsmanship</b>, and give your best effort.",
+"Courtesy is expected toward staff, volunteers, other teams and guests, and that applies to <b>students, coaches, parents and guests</b> alike.",
+"A parent who ignores the spectator rules <b>can get the whole team disqualified</b>.",
+"The disqualification policy changed this year. The goal is now to keep everyone participating rather than to disqualify.",
+"Instead of being removed, a team that breaks a rule drops to <b>Tier status</b>, which means it is ranked after all the Tier 1 teams have been placed."],
+note:"Tier status is softer than disqualification, but it still means you finish below every clean team. A parent helping with a build can cost the team more than the help was worth."}
+];
+
 const SHEET=[
 {h:"The 23 events, and what you are allowed to bring",items:[
 "<b>Astronomy</b> (team of 2) ... stars and galaxies. One 8.5 x 11 double-sided note sheet allowed.",
@@ -744,7 +799,7 @@ var seen=store.get("seen",[]);
 var S=null;
 
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
-function show(id){["home","quiz","res","study","read"].forEach(function(s){$("#"+s).hidden=(s!==id)});
+function show(id){["home","quiz","res","study","read","rules"].forEach(function(s){$("#"+s).hidden=(s!==id)});
   $("#homeBtn").hidden=(id==="home");window.scrollTo({top:0,behavior:"instant"})}
 
 function refreshHome(){
@@ -883,9 +938,9 @@ function finish(){
   show("res");
 }
 
-function buildStudy(){
-  var w=$("#studyBody");
-  SHEET.forEach(function(s,i){
+function buildSheet(sel,arr){
+  var w=$(sel);
+  arr.forEach(function(s,i){
     var d=document.createElement("details");
     if(i===0)d.open=true;
     var inner='<summary>'+s.h+'</summary><div class="sbody">';
@@ -900,18 +955,21 @@ function buildStudy(){
     w.appendChild(d);
   });
 }
+function buildStudy(){ buildSheet("#studyBody",SHEET); buildSheet("#rulesBody",RULES); }
 
 Array.prototype.forEach.call(document.querySelectorAll(".mode[data-mode]"),function(b){
   b.onclick=function(){
     var m=b.dataset.mode;
     if(m==="study"){show("study");$("#barFill").style.width="0%"}
     else if(m==="read"){openRead()}
+    else if(m==="rules"){show("rules");$("#barFill").style.width="0%"}
     else start(m);
   };
 });
 $("#homeBtn").onclick=function(){refreshHome();show("home");$("#barFill").style.width="0%"};
 $("#backBtn").onclick=$("#homeBtn").onclick;
 $("#backBtn2").onclick=$("#homeBtn").onclick;
+$("#backBtn3").onclick=$("#homeBtn").onclick;
 $("#againBtn").onclick=function(){start(S.mode,S.topic)};
 $("#themeBtn").onclick=function(){
   var cur=document.documentElement.getAttribute("data-theme");
