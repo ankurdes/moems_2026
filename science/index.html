@@ -149,6 +149,16 @@ th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:up
 td.m{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
 .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+.chip.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.rfield{margin-top:4px}
+select.vsel{width:100%;max-width:420px;margin-top:12px;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-family:var(--body);font-size:14.5px}
+.vrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.cdown{font-family:var(--display);font-size:40px;font-weight:900;color:var(--hot);line-height:1;margin-top:4px}
+.rnow{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+#rOpts .opt{cursor:default}
+.lvl{display:flex;gap:6px;align-items:center;margin-top:14px}
+.lvl i{display:block;width:7px;height:7px;border-radius:50%;background:var(--line)}
+.lvl i.on{background:var(--hot)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* standalone reset (GitHub Pages) */
@@ -216,6 +226,11 @@ img{max-width:100%}
           <span class="k">Your misses</span>
           <span class="t">Fix My Mistakes</span>
           <span class="d">Only the ones you got wrong before. This is the fastest way to gain points.</span>
+        </button>
+        <button class="mode" data-mode="read" id="readBtn">
+          <span class="k">Hands free</span>
+          <span class="t">Read Me Mode</span>
+          <span class="d">Reads the question and choices out loud, waits, then gives the answer. For listening in bed with your eyes shut.</span>
         </button>
         <button class="mode" data-mode="study">
           <span class="k">No scoring</span>
@@ -286,6 +301,51 @@ img{max-width:100%}
     <div class="go">
       <button class="btn" id="againBtn">Run it again</button>
       <button class="btn sec" id="backBtn">Back to drills</button>
+    </div>
+  </section>
+
+  <!-- READ ME MODE -->
+  <section id="read" hidden>
+    <div id="readSetup">
+      <div class="hero" style="padding-block:26px 20px">
+        <div class="eyebrow">Hands free</div>
+        <h1 style="font-size:clamp(28px,7vw,42px)">Read me to <em>sleep.</em></h1>
+        <p>It reads the question and all four choices out loud, waits while you think, then tells you the answer and why. Lie down, put the phone beside you, and just listen.</p>
+      </div>
+      <div class="sec"><h2>What should it read?</h2><div class="chips rfield" id="rPool"></div></div>
+      <div class="sec"><h2>Thinking pause before the answer</h2><div class="chips rfield" id="rGap"></div></div>
+      <div class="sec"><h2>How long to keep going</h2><div class="chips rfield" id="rLen"></div></div>
+      <div class="sec"><h2>Voice speed</h2><div class="chips rfield" id="rRate"></div></div>
+      <div class="sec"><h2>Pause between each line</h2><div class="chips rfield" id="rPace"></div></div>
+      <div class="sec"><h2>Which voice</h2>
+        <select class="vsel" id="rVoice"></select>
+        <div class="vrow"><button class="ghost" id="rTry">Hear this voice</button><span class="rnow" id="rVnote"></span></div>
+      </div>
+      <div class="go">
+        <button class="btn" id="rStart">Start listening</button>
+        <button class="btn sec" id="rBack">Back to drills</button>
+      </div>
+      <p class="foot" id="rNote">Your phone has to stay unlocked for the voice to keep going, so this will try to hold the screen awake while it reads. Turn the brightness right down and lay the phone face down.</p>
+    </div>
+
+    <div id="readPlay" hidden>
+      <div class="qmeta">
+        <span class="tag" id="rTag">Topic</span>
+        <span class="count" id="rCount">1</span>
+        <span class="streak" id="rClock"></span>
+      </div>
+      <div class="qcard">
+        <div class="qtext" id="rQ">Getting the first question ready...</div>
+        <div class="opts" id="rOpts"></div>
+        <div id="rFb" hidden></div>
+        <div class="cdown" id="rCd" hidden></div>
+        <div class="lvl" id="rLvl"><i></i><i></i><i></i><i></i><span class="rnow" id="rStage">reading the question</span></div>
+      </div>
+      <div class="go">
+        <button class="btn" id="rPause">Pause</button>
+        <button class="btn sec" id="rSkip">Skip</button>
+        <button class="btn sec" id="rStop">Stop</button>
+      </div>
     </div>
   </section>
 
@@ -684,7 +744,7 @@ var seen=store.get("seen",[]);
 var S=null;
 
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
-function show(id){["home","quiz","res","study"].forEach(function(s){$("#"+s).hidden=(s!==id)});
+function show(id){["home","quiz","res","study","read"].forEach(function(s){$("#"+s).hidden=(s!==id)});
   $("#homeBtn").hidden=(id==="home");window.scrollTo({top:0,behavior:"instant"})}
 
 function refreshHome(){
@@ -845,6 +905,7 @@ Array.prototype.forEach.call(document.querySelectorAll(".mode[data-mode]"),funct
   b.onclick=function(){
     var m=b.dataset.mode;
     if(m==="study"){show("study");$("#barFill").style.width="0%"}
+    else if(m==="read"){openRead()}
     else start(m);
   };
 });
@@ -857,7 +918,285 @@ $("#themeBtn").onclick=function(){
   var dark=cur?cur==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.setAttribute("data-theme",dark?"light":"dark");
 };
-buildStudy();refreshHome();
+/* ---------------- Read Me mode ---------------- */
+var SPEAK = ("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+var R=null, VOICE=null;
+var rCfg=Object.assign({pool:"all",gap:5,len:30,rate:0.86,pace:0.45,voice:""}, store.get("read",{}));
+// a saved value that no longer matches an option would leave nothing selected
+(function(){
+  var ok={gap:[3,5,8,12],len:[15,30,45,0],rate:[0.75,0.86,0.95],pace:[0.25,0.45,0.8,1.2]},
+      def={gap:5,len:30,rate:0.86,pace:0.45};
+  Object.keys(ok).forEach(function(k){ if(ok[k].indexOf(rCfg[k])<0) rCfg[k]=def[k] });
+})();
+var LETTERS=["A","B","C","D"];
+
+var NOVELTY=/^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Eddy|Flo|Fred|Good News|Grandma|Grandpa|Hysterical|Jester|Junior|Kathy|Organ|Pipe Organ|Princess|Ralph|Reed|Rocko|Sandy|Shelley|Superstar|Trinoids|Whisper|Wobble|Zarvox)\b/i;
+function enVoices(){
+  if(!SPEAK) return [];
+  var vs=speechSynthesis.getVoices()||[];
+  var en=vs.filter(function(v){return /^en(-|_|$)/i.test(v.lang||"")});
+  var pool=en.length?en:vs;
+  function score(v){
+    var n=(v.name||"");
+    var s=0;
+    if(/premium|enhanced|neural/i.test(n)) s+=100;      // the good downloadable ones
+    if(/google/i.test(n)) s+=60;                         // Chrome neural voices
+    if(/natural/i.test(n)) s+=60;
+    if(/^(Ava|Allison|Samantha|Serena|Zoe|Evan|Nathan)/i.test(n)) s+=30;
+    if(NOVELTY.test(n)) s-=1000;
+    if(/compact|eloquence/i.test(n)) s-=50;
+    if(v.localService===false) s+=40;
+    if(/en-US/i.test(v.lang||"")) s+=10;
+    return s;
+  }
+  return pool.slice().sort(function(a,b){return score(b)-score(a)});
+}
+function pickVoice(){
+  var pool=enVoices();
+  if(!pool.length) return null;
+  if(rCfg.voice){
+    for(var i=0;i<pool.length;i++) if(pool[i].name===rCfg.voice) return pool[i];
+  }
+  return pool[0];
+}
+function buildVoiceList(){
+  var sel=$("#rVoice"); if(!sel) return;
+  var pool=enVoices();
+  if(!pool.length){ $("#rVnote").textContent="Voices still loading, give it a second."; return }
+  sel.innerHTML="";
+  pool.forEach(function(v){
+    var o=document.createElement("option");
+    o.value=v.name;
+    o.textContent=v.name+(/premium|enhanced|neural|google|natural/i.test(v.name)?"  (better quality)":"");
+    sel.appendChild(o);
+  });
+  if(!rCfg.voice) rCfg.voice=pool[0].name;
+  sel.value=rCfg.voice; VOICE=pickVoice();
+  var best=/premium|enhanced|neural|google|natural/i.test(rCfg.voice||"");
+  $("#rVnote").textContent = best ? "Good pick, that one is a high quality voice."
+    : "For a far less robotic voice, download an Enhanced or Premium voice in Settings, Accessibility, Spoken Content, Voices.";
+}
+if(SPEAK && typeof speechSynthesis.addEventListener==="function")
+  speechSynthesis.addEventListener("voiceschanged",function(){VOICE=pickVoice()});
+
+function say(text,cb){
+  if(!R||!R.playing){return}
+  if(!VOICE) VOICE=pickVoice();
+  var u=new SpeechSynthesisUtterance(text);
+  u.rate=rCfg.rate; u.pitch=1; u.lang="en-US";
+  if(VOICE) u.voice=VOICE;
+  var done=false;
+  function fin(){ if(done)return; done=true; if(R&&R.playing) cb&&cb(); }
+  u.onend=fin; u.onerror=fin;
+  R.utter=u;
+  try{ speechSynthesis.speak(u) }catch(e){ fin() }
+}
+function sayAll(parts,gapMs,cb){
+  var i=0;
+  (function step(){
+    if(!R||!R.playing) return;
+    if(i>=parts.length) return cb&&cb();
+    say(parts[i++], function(){ wait(gapMs, step) });
+  })();
+}
+var CD=null;
+function clearCountdown(){
+  if(CD){clearInterval(CD);CD=null}
+  var cd=$("#rCd"); if(cd){cd.hidden=true; cd.textContent=""}
+}
+function countdown(secs,cb){
+  clearCountdown();
+  var left=Math.round(secs), fired=false;
+  var cd=$("#rCd"); if(cd){cd.hidden=false; cd.textContent=left}
+  CD=setInterval(function(){
+    if(!R||!R.playing){clearCountdown();return}
+    left--;
+    if(cd) cd.textContent=left>0?left:"";
+    if(left<=0 && !fired){ fired=true; clearCountdown(); cb() }
+  },1000);
+}
+function wait(ms,cb){ if(!R||!R.playing)return; R.timer=setTimeout(function(){ if(R&&R.playing) cb() },ms) }
+function stage(n,label){ 
+  var d=document.querySelectorAll("#rLvl i");
+  for(var i=0;i<d.length;i++) d[i].className = i<n ? "on" : "";
+  $("#rStage").textContent=label;
+}
+
+function buildChips(host,opts,key,fmt){
+  var el=$(host); el.innerHTML="";
+  opts.forEach(function(o){
+    var b=document.createElement("button");
+    b.className="chip"+(rCfg[key]===o.v?" on":"");
+    b.textContent=o.t;
+    b.onclick=function(){ rCfg[key]=o.v; store.set("read",rCfg); buildChips(host,opts,key,fmt); };
+    el.appendChild(b);
+  });
+}
+function openRead(){
+  if(!SPEAK){ alertNoSpeech(); return }
+  var pools=[{t:"Everything",v:"all"},{t:"2027 events",v:"events"},{t:"Backstage",v:"fun"}];
+  if(missed.length) pools.push({t:"My misses ("+missed.length+")",v:"missed"});
+  Object.keys(TOPICS).forEach(function(k){ pools.push({t:TOPICS[k],v:k}) });
+  buildChips("#rPool",pools,"pool");
+  buildChips("#rGap",[{t:"3 seconds",v:3},{t:"5 seconds",v:5},{t:"8 seconds",v:8},{t:"12 seconds",v:12}],"gap");
+  buildChips("#rLen",[{t:"15 min",v:15},{t:"30 min",v:30},{t:"45 min",v:45},{t:"Until I stop",v:0}],"len");
+  buildChips("#rRate",[{t:"Very slow",v:0.75},{t:"Slow",v:0.86},{t:"Normal",v:0.95}],"rate");
+  buildChips("#rPace",[{t:"Short",v:0.25},{t:"Medium",v:0.45},{t:"Long",v:0.8},{t:"Very long",v:1.2}],"pace");
+  buildVoiceList();
+  $("#readSetup").hidden=false; $("#readPlay").hidden=true;
+  show("read"); $("#barFill").style.width="0%";
+}
+function alertNoSpeech(){
+  var b=$("#readBtn"); if(!b)return;
+  b.disabled=true;
+  b.querySelector(".d").textContent="This browser has no built-in voice, so Read Me Mode cannot run here. Try Safari or Chrome.";
+}
+
+function readPool(){
+  var k=rCfg.pool;
+  if(k==="all") return BANK.slice();
+  if(k==="events") return BANK.filter(function(x){return x.v});
+  if(k==="fun") return BANK.filter(function(x){return x.f});
+  if(k==="missed") return BANK.filter(function(x){return missed.indexOf(x.id)>-1});
+  return BANK.filter(function(x){return x.t===k});
+}
+function startRead(){
+  var pool=shuffle(readPool());
+  if(!pool.length) return;
+  R={queue:pool.map(function(q){
+       var order=shuffle([0,1,2,3]);
+       return {q:q,order:order,c:order.indexOf(q.c)};
+     }),
+     i:0, playing:true, timer:null, utter:null,
+     endAt: rCfg.len? Date.now()+rCfg.len*60000 : Infinity};
+  $("#readSetup").hidden=true; $("#readPlay").hidden=false;
+  $("#rPause").textContent="Pause";
+  keepAwake();
+  tickClock();
+  readNext();
+}
+function paint(item,reveal){
+  var q=item.q;
+  $("#rTag").textContent=TOPICS[q.t];
+  $("#rCount").textContent="question "+(R.i+1);
+  $("#rQ").textContent=q.q;
+  var o=$("#rOpts"); o.innerHTML="";
+  item.order.forEach(function(idx,pos){
+    var d=document.createElement("div");
+    d.className="opt"+(reveal&&pos===item.c?" right":"");
+    d.innerHTML="<b>"+LETTERS[pos]+"</b><span></span>";
+    d.querySelector("span").textContent=q.a[idx];
+    o.appendChild(d);
+  });
+  var fb=$("#rFb");
+  if(reveal){
+    fb.className="fb";
+    fb.innerHTML='<div class="v y">Answer: '+LETTERS[item.c]+'</div><p></p>';
+    fb.querySelector("p").textContent=q.e;
+    fb.hidden=false;
+  } else fb.hidden=true;
+}
+function readNext(){
+  if(!R||!R.playing) return;
+  if(R.i>=R.queue.length || Date.now()>R.endAt) return readDone();
+  var item=R.queue[R.i], q=item.q;
+  paint(item,false);
+  if(seen.indexOf(q.id)<0){seen.push(q.id);store.set("seen",seen)}
+  clearCountdown();
+  var pace=Math.round(rCfg.pace*1000);
+  stage(1,"reading the question");
+  sayAll([q.q+"."], pace, function(){
+    stage(2,"reading the choices");
+    var parts=item.order.map(function(idx,pos){ return LETTERS[pos]+".    "+q.a[idx]+"." });
+    sayAll(parts, pace, function(){
+      stage(3,"your turn to think");
+      countdown(rCfg.gap, function(){
+        stage(4,"here comes the answer");
+        paint(item,true);
+        sayAll(["The answer is "+LETTERS[item.c]+".", q.a[q.c]+".", q.e], pace, function(){
+          R.i++; wait(1600, readNext);
+        });
+      });
+    });
+  });
+}
+function readDone(){
+  var done=R?R.i:0;
+  stopRead();
+  $("#rQ").textContent="That is the session done. "+done+" questions.";
+  $("#rOpts").innerHTML=""; $("#rFb").hidden=true;
+  $("#rStage").textContent="finished";
+  $("#rPause").textContent="Start again"; R=null;
+}
+function stopRead(){
+  if(R){R.playing=false; clearTimeout(R.timer)}
+  clearCountdown();
+  try{ speechSynthesis.cancel() }catch(e){}
+  releaseAwake();
+  clearInterval(window.__rClock);
+}
+function tickClock(){
+  clearInterval(window.__rClock);
+  window.__rClock=setInterval(function(){
+    if(!R||!R.playing||R.endAt===Infinity){ if(R&&R.playing)$("#rClock").textContent=""; return }
+    var left=Math.max(0,R.endAt-Date.now());
+    var m=Math.floor(left/60000), s=Math.floor(left%60000/1000);
+    $("#rClock").textContent=m+":"+(s<10?"0":"")+s+" left";
+    if(left<=0) readDone();
+  },1000);
+  // iOS sometimes stalls the queue; nudge it
+  clearInterval(window.__rNudge);
+  window.__rNudge=setInterval(function(){
+    if(R&&R.playing&&speechSynthesis.paused){ try{speechSynthesis.resume()}catch(e){} }
+  },4000);
+}
+function keepAwake(){
+  if(!navigator.wakeLock||!navigator.wakeLock.request) return;
+  navigator.wakeLock.request("screen").then(function(l){ R&&(R.lock=l) }).catch(function(){});
+}
+function releaseAwake(){ try{ R&&R.lock&&R.lock.release(); R&&(R.lock=null) }catch(e){} }
+document.addEventListener("visibilitychange",function(){
+  if(document.visibilityState==="visible" && R && R.playing) keepAwake();
+});
+
+function voiceNote(){
+  var best=/premium|enhanced|neural|google|natural/i.test(rCfg.voice||"");
+  $("#rVnote").textContent = best ? "Good pick, that one is a high quality voice."
+    : "For a less robotic voice, download an Enhanced or Premium voice in Settings, Accessibility, Spoken Content, Voices.";
+}
+$("#rVoice").onchange=function(){ rCfg.voice=this.value; VOICE=pickVoice(); store.set("read",rCfg); voiceNote(); };
+$("#rTry").onclick=function(){
+  try{ speechSynthesis.cancel() }catch(e){}
+  VOICE=pickVoice();
+  var u=new SpeechSynthesisUtterance("Which mineral forms cube shaped crystals, and tastes salty?");
+  u.rate=rCfg.rate; u.lang="en-US"; if(VOICE)u.voice=VOICE;
+  try{ speechSynthesis.speak(u) }catch(e){}
+};
+$("#rStart").onclick=function(){ store.set("read",rCfg); startRead(); };
+$("#rBack").onclick=function(){ stopRead(); refreshHome(); show("home") };
+$("#rStop").onclick=function(){ stopRead(); $("#readSetup").hidden=false; $("#readPlay").hidden=true };
+$("#rSkip").onclick=function(){
+  if(!R)return;
+  clearTimeout(R.timer); clearCountdown();
+  try{speechSynthesis.cancel()}catch(e){}
+  R.playing=true; R.i++; readNext();
+};
+$("#rPause").onclick=function(){
+  if(!R){ startRead(); return }
+  if(R.playing){
+    R.playing=false; clearTimeout(R.timer); clearCountdown();
+    R.left = (R.endAt===Infinity) ? Infinity : Math.max(0, R.endAt-Date.now());
+    try{speechSynthesis.cancel()}catch(e){}
+    releaseAwake();
+    $("#rPause").textContent="Resume"; $("#rStage").textContent="paused";
+  } else {
+    R.playing=true; keepAwake(); tickClock();
+    if(R.left!==undefined && R.left!==Infinity) R.endAt=Date.now()+R.left;
+    $("#rPause").textContent="Pause"; readNext();
+  }
+};
+
+buildStudy();refreshHome();if(!SPEAK)alertNoSpeech();
 </script>
 
 </body>
