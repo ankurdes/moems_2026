@@ -1,0 +1,19 @@
+science/index.html
+  s_2d859f21a559f7::t_79a8a8738618b2 205-209,357-368,680-717,802,941-943,958,965,972
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb575a88debfc0964d10be0f364bc17789d2ab4c",
+  "prompts": {},
+  "sessions": {
+    "s_2d859f21a559f7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "43f96319-1c64-452a-b556-88ffb192afd9",
+        "model": "unknown"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
