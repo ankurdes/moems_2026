@@ -176,13 +176,14 @@ img{max-width:100%}
   <!-- HOME -->
   <section id="home">
     <div class="hero">
-      <div class="eyebrow">Division A &middot; Grades 3&ndash;6 &middot; Team selection</div>
+      <div class="eyebrow">2027 Division A &middot; Grades 3&ndash;6 &middot; Team selection</div>
       <h1>Make the <em>team.</em></h1>
-      <p>The tryout test is general science across every branch, so the trick is not being clever. It is knowing the facts cold. A quarter of the questions in here hide that science inside stage lighting, costume fabric, baking and filming, because that is the version you actually remember at 7am on test day.</p>
+      <p>Two things get you on the team. General science across every branch, and the content the official 2027 rulebook actually names. Both are in here. A third of these questions come straight off the rulebook, and a quarter hide the science inside stage lighting, costume fabric, baking and filming, because that is the version you remember at 7am on test day.</p>
       <div class="facts">
         <div class="fact"><b id="fQ">0</b> questions</div>
-        <div class="fact"><b>7</b> topics</div>
+        <div class="fact"><b>12</b> topics</div>
         <div class="fact"><b id="fFun">0</b> backstage</div>
+        <div class="fact"><b id="fEv">0</b> from the rulebook</div>
         <div class="fact" id="fBest">best run &mdash;</div>
         <div class="fact" id="fSeen">0% seen</div>
       </div>
@@ -205,6 +206,11 @@ img{max-width:100%}
           <span class="k">50 questions</span>
           <span class="t">Backstage Science</span>
           <span class="d">Stage lights, costume fabric, your camera, the kitchen. Same science the test asks, wrapped in things you actually care about.</span>
+        </button>
+        <button class="mode" data-mode="events">
+          <span class="k">2027 events</span>
+          <span class="t">Event Drills</span>
+          <span class="d">Straight from the official rulebook. Stars and galaxies, fresh water, rock and mineral ID, dentistry, plants.</span>
         </button>
         <button class="mode" data-mode="missed" id="missedBtn">
           <span class="k">Your misses</span>
@@ -250,7 +256,7 @@ img{max-width:100%}
       </div>
     </div>
 
-    <p class="foot">50 of these questions are wrapped in stage lights, costume fabric, baking and filming on purpose, because that is how you remember them. The science underneath is exactly what gets asked, and the plain-worded version shows up in the other drills so nothing surprises you on test day. Built for a 6th grader going for Division A.</p>
+    <p class="foot">96 of these questions come from the official 2027 Division A rulebook: the Astronomy syllabus, the Dynamic Planet fresh-water topic, the exact Rock Hound identification list, Dentistry and Plant Science. Another 50 wrap ordinary science inside stage lights, costume fabric, baking and filming, because that is how you remember it. The plain-worded version of everything still shows up in the topic drills, so nothing surprises you on test day. Built for a 6th grader going for Division A.</p>
   </section>
 
   <!-- QUIZ -->
@@ -297,7 +303,7 @@ img{max-width:100%}
 </div>
 
 <script>
-const TOPICS={bio:"Life Science",eco:"Ecology",earth:"Earth Science",space:"Space",phys:"Physics & Matter",chem:"Chemistry",lab:"Lab Skills & Metric"};
+const TOPICS={bio:"Life Science",eco:"Ecology",earth:"Earth Science",space:"Space",phys:"Physics & Matter",chem:"Chemistry",lab:"Lab Skills & Metric",astro:"Stars & Galaxies",water:"Fresh Water",rocks:"Rocks & Minerals",teeth:"Dentistry",plants:"Plant Science"};
 
 const BANK=[
 {t:"bio",q:"Which part of a plant cell captures sunlight to make food?",a:["Chloroplast","Mitochondria","Nucleus","Ribosome"],c:0,e:"Chloroplasts hold chlorophyll, the green pigment that absorbs light. That green color is why most leaves are green."},
@@ -494,11 +500,157 @@ const BANK=[
 {t:"bio",f:1,q:"Polyester costume fabric is a synthetic polymer, meaning it is",a:["small units linked into long chains","woven from natural cotton plant fibers","made from fine threads of metal","spun directly from animal hair"],c:0,e:"Cotton, wool and silk are natural fibers. Polyester and nylon are made from petroleum into long repeating chains."},
 {t:"lab",f:1,q:"You test whether cupcakes rise higher with baking soda or baking powder. The independent variable is",a:["which leavening agent you use","the oven temperature setting","the brand of flour you pick","how tall the cupcakes rise"],c:0,e:"You change the leavening agent and measure the height. Oven temperature, flour and bake time must all be held constant."},
 {t:"lab",f:1,q:"A recipe calls for 250 mL of milk. In cubic centimeters that is",a:["250 cm3","25 cm3","2,500 cm3","0.25 cm3"],c:0,e:"1 mL equals exactly 1 cm3, so the number does not change. It is also one quarter of a liter."},
-{t:"lab",f:1,q:"Testing which of three ring light settings makes the sharpest video, your control group would be",a:["filming with no ring light at all","filming with all three at once","filming in the dark with no camera","not filming anything"],c:0,e:"The control gets no treatment so you have a baseline. Without it you cannot tell whether the ring light helped at all."}
+{t:"lab",f:1,q:"Testing which of three ring light settings makes the sharpest video, your control group would be",a:["filming with no ring light at all","filming with all three at once","filming in the dark with no camera","not filming anything"],c:0,e:"The control gets no treatment so you have a baseline. Without it you cannot tell whether the ring light helped at all."},
+{t:"astro",v:1,q:"On a Hertzsprung-Russell diagram, most stars fall along a band called the",a:["main sequence","giant branch","white dwarf line","red shift curve"],c:0,e:"The H-R diagram plots brightness against temperature. About 90 percent of stars, including our sun, sit on the main sequence."},
+{t:"astro",v:1,q:"Our sun sits on the H-R diagram as a",a:["main sequence star","red supergiant","white dwarf star","neutron star"],c:0,e:"It is a medium yellow main-sequence star. It will leave the main sequence when it runs out of core hydrogen."},
+{t:"astro",v:1,q:"A star's color tells you its",a:["surface temperature","distance away","total age in years","chemical makeup"],c:0,e:"Blue stars are the hottest and red stars the coolest, the opposite of how we use the colors for taps."},
+{t:"astro",v:1,q:"Stars produce energy by",a:["fusing hydrogen into helium","burning hydrogen as fuel","splitting heavy atoms apart","rubbing gas particles together"],c:0,e:"Nuclear fusion in the core turns hydrogen into helium and releases enormous energy. It is fusion, not burning."},
+{t:"astro",v:1,q:"Nucleosynthesis is the process of",a:["building heavier elements in stars","forming new galaxies from cold gas","measuring a star's true brightness","splitting stars into smaller ones"],c:0,e:"Elements heavier than helium were made inside stars. The carbon and iron in you were made in one."},
+{t:"astro",v:1,q:"A star like the sun will end its life as a",a:["white dwarf","black hole","neutron star","red supergiant"],c:0,e:"It swells into a red giant, sheds its outer layers, and leaves a hot dense core. Only much heavier stars go supernova."},
+{t:"astro",v:1,q:"A star far more massive than the sun ends in a",a:["supernova explosion","slow quiet fade","white dwarf stage","permanent main sequence"],c:0,e:"What remains is a neutron star, or a black hole if the star was massive enough."},
+{t:"astro",v:1,q:"A star becomes a red giant when it",a:["runs out of hydrogen in its core","collides with another nearby star","starts spinning very much faster","cools down from the outside in"],c:0,e:"The core contracts and the outer layers expand and cool, which makes the star larger and redder."},
+{t:"astro",v:1,q:"Apparent brightness describes how bright a star",a:["looks from Earth","truly is in total","will be in future","appears through cloud"],c:0,e:"Absolute brightness is how bright it would look from a standard distance. A dim-looking star may be very luminous but far away."},
+{t:"astro",v:1,q:"In the magnitude scale that goes back to Hipparchus, a brighter star has a",a:["smaller number","larger number","negative distance","longer wavelength"],c:0,e:"First magnitude is brighter than sixth. The brightest objects even have negative magnitudes."},
+{t:"astro",v:1,q:"Population I stars, like our sun, are",a:["younger and richer in metals","older and poorer in metals","found only in halos","always far larger"],c:0,e:"Population I stars sit in the spiral arms. Population II stars are older, metal-poor, and found in the halo and globular clusters."},
+{t:"astro",v:1,q:"The three main galaxy shapes are",a:["spiral, elliptical, irregular","open, closed, barred or ringed","young, mature and old shapes","round, square and flattened"],c:0,e:"Spirals have arms, ellipticals are smooth ovals, and irregulars have no clear shape."},
+{t:"astro",v:1,q:"The Milky Way is best described as a",a:["barred spiral galaxy","giant elliptical galaxy","small irregular galaxy","loose globular cluster"],c:0,e:"It has a central bar with spiral arms. We sit about two thirds of the way out, in the Orion Arm."},
+{t:"astro",v:1,q:"The small group of galaxies containing the Milky Way and Andromeda is the",a:["Local Group","Virgo Cluster","Orion Nebula","Oort Cloud"],c:0,e:"The Local Group holds about 80 galaxies. It is itself part of the much larger Virgo Supercluster."},
+{t:"astro",v:1,q:"Astronomers measure distance to nearby stars using",a:["parallax","planet counts","radio echoes","light color"],c:0,e:"Parallax is the first rung of the cosmic distance ladder. Cepheid variable stars are used for greater distances."},
+{t:"astro",v:1,q:"Gravity keeps a star stable by",a:["balancing the outward push","stopping the star from spinning","pulling in light from nearby","heating the outer surface"],c:0,e:"Inward gravity and outward pressure from fusion stay in balance. When fusion slows, gravity wins and the core collapses."},
+{t:"astro",v:1,q:"A light year is a measure of",a:["distance","time","brightness","temperature"],c:0,e:"It is the distance light travels in a year. Proxima Centauri, the nearest star after the sun, is about 4.2 light years away."},
+{t:"astro",v:1,q:"A group of galaxies bound together on an even larger scale is called a",a:["supercluster","constellation","solar system","nebula cloud"],c:0,e:"The order of scale goes star, galaxy, group, cluster, supercluster."},
+{t:"water",v:1,q:"Roughly how much of all the water on Earth is fresh water?",a:["About 3 percent","About 30 percent","About 50 percent","About 75 percent"],c:0,e:"Around 97 percent is salt water in the oceans. Most of the small fresh share is locked in ice."},
+{t:"water",v:1,q:"Most of Earth's fresh water is stored in",a:["glaciers and ice caps","rivers and the streams","lakes and small ponds","clouds up in the sky"],c:0,e:"Glaciers and ice caps hold most of it, and most of the rest is groundwater. Rivers and lakes are a tiny slice."},
+{t:"water",v:1,q:"Water has a high specific heat capacity, which means it",a:["heats and cools slowly","freezes at a high point","evaporates very fast","conducts electricity"],c:0,e:"That is why oceans and lakes moderate the climate near them, keeping coastal areas milder."},
+{t:"water",v:1,q:"Surface tension lets a small insect stand on water because water molecules",a:["cling to each other","push the insect upward","freeze under its feet","turn briefly into gas"],c:0,e:"Cohesion between water molecules forms a skin-like surface. The same effect pulls water into round droplets."},
+{t:"water",v:1,q:"An aquifer is",a:["rock that holds water","a layer that blocks water flow","a pipe that carries water","a tool for measuring rain"],c:0,e:"Aquifers store groundwater and let it move. A layer that resists flow instead is called an aquitard."},
+{t:"water",v:1,q:"Porosity measures the amount of open space in rock, while permeability measures",a:["how easily water flows","how hard the rock surface is","how deep the rock layer lies","how much water it can hold"],c:0,e:"Clay is porous but barely permeable, since the pores are tiny and poorly connected."},
+{t:"water",v:1,q:"The water table is the",a:["top of the saturated zone","bottom of the whole aquifer","surface of a flowing river","edge of a large watershed"],c:0,e:"Above it lies the unsaturated zone, where pore spaces hold both air and water."},
+{t:"water",v:1,q:"Heavy pumping from a well creates a cone of depression, which is",a:["a dip in the water table","a crack in the bedrock","a rise in river level","a type of sinkhole"],c:0,e:"The water table sags toward the well. Nearby shallow wells can go dry as a result."},
+{t:"water",v:1,q:"In an artesian well, water rises on its own because",a:["it is under natural pressure","the pump runs on its own power","the rock is highly porous","the aquifer is very warm"],c:0,e:"Water is confined between two aquitards and under pressure, so it rises when the confining layer is pierced."},
+{t:"water",v:1,q:"Land subsidence happens when",a:["groundwater is over-pumped","a river floods over its banks","glaciers melt far too quickly","rain falls on very hard rock"],c:0,e:"The ground sinks as emptied sediments compact. Parts of California's Central Valley have dropped many feet this way."},
+{t:"water",v:1,q:"A watershed is the area of land that",a:["drains into one river or lake","separates two large aquifers","holds the most groundwater","sits above the water table"],c:0,e:"A ridge of high ground, called a divide, separates one watershed from the next."},
+{t:"water",v:1,q:"Karst topography forms when groundwater dissolves",a:["limestone","granite","basalt","sandstone"],c:0,e:"Slightly acidic water dissolves the limestone, leaving caves, sinkholes and underground drainage."},
+{t:"water",v:1,q:"A stalactite is the formation that",a:["hangs from the ceiling","grows up from the cave floor","spans right across a cavern","fills in an old sinkhole"],c:0,e:"Stalactites hold tight to the ceiling and stalagmites might reach the roof one day. A sinkhole is also called a doline."},
+{t:"water",v:1,q:"A young river is most likely to have",a:["a steep V-shaped valley","a wide flat floodplain","many looping meanders","several oxbow lakes"],c:0,e:"Young rivers cut downward fast. Mature rivers meander, and old rivers wander over broad floodplains."},
+{t:"water",v:1,q:"An oxbow lake forms when",a:["a meander loop is cut off","a glacier scrapes a hollow","a volcano crater fills up","people dam a small river"],c:0,e:"The river takes a shortcut across the neck of the bend and leaves the curve behind as a lake."},
+{t:"water",v:1,q:"A lake that fills a volcanic crater is classified as",a:["a volcanic lake","a tectonic lake","a glacial lake","an oxbow lake"],c:0,e:"Crater Lake in Oregon is the classic example. Tectonic lakes form where the crust moves instead."},
+{t:"water",v:1,q:"A lake described as eutrophic is",a:["rich in nutrients","poor in nutrients","completely frozen","very deep and clear"],c:0,e:"Oligotrophic lakes are nutrient-poor and clear. Too many nutrients can cause algae blooms that strip out oxygen."},
+{t:"water",v:1,q:"Which instrument measures the amount of precipitation that falls?",a:["Rain gauge","Hygrometer","Piezometer","Hydrometer"],c:0,e:"A hygrometer reads humidity, a piezometer reads groundwater pressure, and a hydrometer reads liquid density."},
+{t:"water",v:1,q:"The two large rivers that drain California's Central Valley are the",a:["Sacramento and San Joaquin","Colorado and the Snake River","Ganges and the Yangtze","Amazon and the Congo"],c:0,e:"They meet at the Delta and flow out through San Francisco Bay. Both are named in this year's Dynamic Planet list."},
+{t:"water",v:1,q:"What keeps the whole water cycle running?",a:["Energy from the sun","Heat from Earth's core","The pull of the moon","Wind alone"],c:0,e:"Solar energy evaporates water and drives the winds that carry the vapour. Gravity then brings it back down."},
+{t:"rocks",v:1,q:"Obsidian is an igneous rock that looks like",a:["dark smooth glass","rough grey sponge","banded pink stripes","layers of flat sheets"],c:0,e:"Lava cooled so fast that no crystals formed, so it breaks with a curved, glassy edge."},
+{t:"rocks",v:1,q:"Which rock is full of gas holes and light enough to float?",a:["Pumice","Granite","Marble","Shale"],c:0,e:"Trapped gas bubbles left it full of holes. Scoria is the darker, heavier cousin that does not float."},
+{t:"rocks",v:1,q:"Granite has large visible crystals because the magma",a:["cooled slowly underground","cooled fast in the air","was squeezed by pressure","settled out of water"],c:0,e:"Slow cooling gives crystals time to grow. Basalt came from the same kind of melt but cooled fast, so its grains are tiny."},
+{t:"rocks",v:1,q:"Conglomerate is a sedimentary rock made of",a:["rounded cemented pebbles","fine mud pressed into layers","crystals grown from brine","cooled droplets of lava"],c:0,e:"The pebbles are rounded because water tumbled them. Angular fragments instead make breccia."},
+{t:"rocks",v:1,q:"Which rock fizzes when a drop of weak acid is placed on it?",a:["Limestone","Granite","Obsidian","Slate"],c:0,e:"Limestone is calcium carbonate, so acid releases carbon dioxide bubbles. Calcite and marble fizz for the same reason."},
+{t:"rocks",v:1,q:"Bituminous coal formed from",a:["buried plant material","cooled volcanic ash","crushed sea shells","evaporated salt water"],c:0,e:"Heat and pressure turned ancient swamp plants into coal. It is grouped with the sedimentary rocks."},
+{t:"rocks",v:1,q:"Limestone turns into which rock under heat and pressure?",a:["Marble","Slate","Gneiss","Quartzite"],c:0,e:"Shale becomes slate and sandstone becomes quartzite. Knowing these pairs is worth easy points."},
+{t:"rocks",v:1,q:"Gneiss is recognised by its",a:["light and dark banding","floating gas bubbles","rounded pebble chunks","glassy curved break"],c:0,e:"Heat and pressure separated the minerals into bands. It is one of the most strongly changed metamorphic rocks."},
+{t:"rocks",v:1,q:"Slate splits into flat sheets, which makes it useful for",a:["roofing tiles","drinking glasses","cooking pots","pencil leads"],c:0,e:"Pressure lined up its flat minerals, so it breaks cleanly along those planes. That property is called foliation."},
+{t:"rocks",v:1,q:"A mineral's streak is",a:["the color of its powder","the shine on its face","the way it breaks apart","how heavy it feels"],c:0,e:"Streak is more reliable than color, since the same mineral can appear in several colors but leaves one powder color."},
+{t:"rocks",v:1,q:"Pyrite is called fool's gold, but you can tell it apart because its streak is",a:["greenish black","bright yellow","pure white","deep red"],c:0,e:"Real gold leaves a gold streak and is soft. Pyrite is brassy, brittle and forms cubes."},
+{t:"rocks",v:1,q:"Hematite can be identified by its",a:["reddish brown streak","strong soapy texture","sharp salty flavour","ability to float"],c:0,e:"It is a major iron ore. The red streak shows even when the sample itself looks silvery grey."},
+{t:"rocks",v:1,q:"Which mineral forms cube-shaped crystals and tastes salty?",a:["Halite","Calcite","Fluorite","Gypsum"],c:0,e:"Halite is rock salt. Taste is the quick field test, though in competition you identify it by shape and cleavage."},
+{t:"rocks",v:1,q:"Graphite is soft enough to write with and is used in",a:["pencil leads","window glass","steel beams","concrete mix"],c:0,e:"Its carbon layers slide past each other easily. That makes it a good lubricant as well as a marker."},
+{t:"rocks",v:1,q:"Galena is a lead ore that feels",a:["very heavy for its size","lighter than most other rocks","soft and soapy to the touch","warm and slightly sticky"],c:0,e:"High specific gravity is its giveaway. It is metallic grey and breaks into neat cubes."},
+{t:"rocks",v:1,q:"Biotite mica is recognised because it",a:["peels into thin sheets","floats on top of the water","fizzes in weak acid drops","glows under a blacklight"],c:0,e:"Its sheets split apart cleanly, a property called basal cleavage. Biotite is the dark variety."},
+{t:"rocks",v:1,q:"Talc sits at which position on the Mohs hardness scale?",a:["1, the softest","4, fairly soft","7, quite hard","10, the hardest"],c:0,e:"You can scratch talc with a fingernail. Quartz is 7 and diamond is 10."},
+{t:"rocks",v:1,q:"Specific gravity compares a mineral's density with the density of",a:["water","air","granite","iron"],c:0,e:"A specific gravity of 5 means the mineral is five times as dense as the same volume of water."},
+{t:"rocks",v:1,q:"Quartz is a very common mineral with a hardness of",a:["7","2","4","10"],c:0,e:"It scratches glass and steel but not topaz or diamond. Chert is a dull, fine-grained form of quartz."},
+{t:"rocks",v:1,q:"Schist often contains visible red crystals of",a:["garnet","halite","copper","sulfur"],c:0,e:"Schist is foliated and flaky, and garnets grow in it as the rock is metamorphosed."},
+{t:"teeth",v:1,q:"The four types of human teeth are",a:["incisors, canines, premolars, molars","incisors, canines, cuspids and crowns","front, back, upper and lower sets","sharp, flat, rounded and pointed"],c:0,e:"Each shape does a different job, from slicing at the front to grinding at the back."},
+{t:"teeth",v:1,q:"Incisors are the flat front teeth used mainly for",a:["cutting","grinding","tearing","crushing"],c:0,e:"Canines tear, premolars and molars crush and grind. You have eight incisors in a full adult set."},
+{t:"teeth",v:1,q:"The pointed teeth used for tearing food are the",a:["canines","incisors","molars","premolars"],c:0,e:"They are the longest-rooted teeth and sit at the corners of the smile. They are sometimes called cuspids."},
+{t:"teeth",v:1,q:"A full set of adult teeth contains",a:["32 teeth","20 teeth","24 teeth","28 teeth"],c:0,e:"A child's primary set has 20. The extra adult teeth include the third molars, or wisdom teeth."},
+{t:"teeth",v:1,q:"Baby teeth are also called",a:["primary teeth","wisdom teeth","molar teeth","permanent teeth"],c:0,e:"There are 20 of them and they start falling out around age six."},
+{t:"teeth",v:1,q:"Wisdom teeth are really the",a:["third molars","first incisors","upper canines","lower premolars"],c:0,e:"They come in last, often in the late teens, and are the ones most often removed for lack of room."},
+{t:"teeth",v:1,q:"The hardest substance in the human body is",a:["tooth enamel","leg bone","fingernail","tooth root"],c:0,e:"Enamel is the white outer layer. It has no living cells, so once it is damaged the body cannot regrow it."},
+{t:"teeth",v:1,q:"The soft centre of a tooth, holding nerves and blood vessels, is the",a:["pulp","enamel","dentin","cementum"],c:0,e:"Enamel is outside, dentin is the middle layer, and pulp is the living core. A toothache is usually the pulp."},
+{t:"teeth",v:1,q:"Cavities are caused by",a:["bacteria making acid from sugar","sugar dissolving enamel directly","brushing the teeth too hard","eating food that is too cold"],c:0,e:"Mouth bacteria feed on sugar and release acid, and that acid eats through the enamel."},
+{t:"teeth",v:1,q:"The sticky film of bacteria that builds up on teeth is called",a:["plaque","tartar","enamel","fluoride"],c:0,e:"If plaque is not brushed away it hardens into tartar, which only a dentist can scrape off."},
+{t:"teeth",v:1,q:"Inflammation and bleeding of the gums is known as",a:["gingivitis","halitosis","bruxism","fluorosis"],c:0,e:"It is an early, reversible gum disease. Left alone it can progress to periodontitis and bone loss."},
+{t:"teeth",v:1,q:"Which specialist would surgically remove impacted wisdom teeth?",a:["An oral surgeon","An orthodontist","A periodontist","An endodontist"],c:0,e:"Oral and maxillofacial surgery covers extractions and jaw surgery."},
+{t:"teeth",v:1,q:"A dentist who straightens teeth with braces is an",a:["orthodontist","endodontist","periodontist","oral surgeon"],c:0,e:"Endodontists do root canals, periodontists treat gums, and pedodontists treat children."},
+{t:"teeth",v:1,q:"Fluoride helps teeth by",a:["strengthening the enamel","killing all the bacteria","whitening every surface","numbing the tooth nerve"],c:0,e:"It helps rebuild weakened enamel and makes it more resistant to acid."},
+{t:"plants",v:1,q:"The male part of a flower, which produces pollen, is the",a:["stamen","pistil","sepal","ovary"],c:0,e:"The stamen is the anther plus its filament. The pistil is the female part."},
+{t:"plants",v:1,q:"Pollen lands on which part of the flower during pollination?",a:["Stigma","Anther","Petal","Sepal"],c:0,e:"The stigma is the sticky tip of the pistil. Pollen then travels down the style to the ovary."},
+{t:"plants",v:1,q:"Seeds develop inside the flower's",a:["ovary","anther","petal","stem"],c:0,e:"After fertilisation the ovary ripens into the fruit, with the seeds held inside."},
+{t:"plants",v:1,q:"Which of these is a common pollinator?",a:["Bee","Earthworm","Spider","Snail"],c:0,e:"Bees, butterflies, moths, birds and bats all move pollen. Some plants use wind instead of animals."},
+{t:"plants",v:1,q:"Water and dissolved minerals travel up a plant through the",a:["xylem","phloem","stomata","cuticle"],c:0,e:"Xylem carries water up from the roots. Phloem carries sugar made in the leaves to the rest of the plant."},
+{t:"plants",v:1,q:"Tiny pores on a leaf that let gases in and out are called",a:["stomata","stamens","nodes","veins"],c:0,e:"They open to take in carbon dioxide and close to save water. Water vapour also escapes through them."},
+{t:"plants",v:1,q:"The main job of a plant's roots is to",a:["absorb water and minerals","make sugar from sunlight","release oxygen into air","produce the flower buds"],c:0,e:"Roots also anchor the plant. Photosynthesis happens in the leaves instead."},
+{t:"plants",v:1,q:"In botany, a fruit is the part of the plant that",a:["develops from the ovary","grows under the ground","holds the green pigment","supports the flower head"],c:0,e:"That is why tomatoes, cucumbers and peppers are botanically fruits even though we cook them as vegetables."},
+{t:"plants",v:1,q:"A deciduous tree is one that",a:["drops its leaves each year","stays green all year round","never produces any seeds","grows only in the desert"],c:0,e:"Evergreens keep their leaves. Dropping leaves helps a deciduous tree save water through winter."},
+{t:"plants",v:1,q:"California's Central Valley is a major growing region for",a:["almonds and grapes","coffee and cocoa","bananas and mangoes","rubber and teak"],c:0,e:"Almonds, grapes, tomatoes and stone fruit all grow there. Almonds depend heavily on bee pollination."},
+{t:"plants",v:1,q:"Photosynthesis takes place mainly in a plant's",a:["leaves","roots","flowers","seeds"],c:0,e:"Leaves are packed with chloroplasts and spread wide to catch light. Roots have no chlorophyll."},
+{t:"eco",v:1,q:"An owl pellet is",a:["bones and fur coughed up","waste an owl leaves behind","a nest an owl builds up","an egg case from an owl"],c:0,e:"Owls swallow prey whole and cannot digest bone or fur, so they regurgitate it in a compact pellet."},
+{t:"eco",v:1,q:"Finding rodent skulls in an owl pellet tells you the owl is a",a:["consumer that eats animals","producer making its own food","decomposer breaking down waste","herbivore feeding on seeds"],c:0,e:"Owls are carnivores and sit near the top of their food chain. Identifying the skulls tells you exactly what it ate."},
+{t:"eco",v:1,q:"Which food chain is in the correct order?",a:["Grass, mouse, owl","Owl, mouse, grass","Mouse, grass, owl","Grass, owl, mouse"],c:0,e:"Energy flows from the producer to the plant-eater to the predator. Arrows always point toward the eater."},
+{t:"phys",v:1,q:"The three primary colors used in paint mixing are",a:["red, yellow and blue","red, green and blue","orange, green and violet","black, white and grey"],c:0,e:"Paint mixing is subtractive, so the primaries are red, yellow and blue. Mixing light instead uses red, green and blue."},
+{t:"phys",v:1,q:"Mixing blue and yellow paint produces",a:["green","orange","violet","brown"],c:0,e:"The three secondary colors are orange, green and violet, each from two primaries."},
+{t:"phys",v:1,q:"A tertiary color on the color wheel is made by mixing",a:["a primary and a secondary","white with any secondary color","two secondary colors together","black with any primary color"],c:0,e:"Red-orange and blue-green are tertiary colors. Colors opposite each other on the wheel are complementary."},
+{t:"phys",v:1,q:"The fixed pivot point of a lever is called the",a:["fulcrum","effort arm","resistance","mechanical edge"],c:0,e:"The effort arm runs from the fulcrum to where you push. A longer effort arm means less force is needed."},
+{t:"phys",v:1,q:"In science, work is calculated as",a:["force times distance","force divided by time","mass times velocity","distance divided by force"],c:0,e:"If nothing moves, no work is done however hard you push. Work is measured in joules."},
+{t:"phys",v:1,q:"A screw is really which simple machine wrapped around a cylinder?",a:["An inclined plane","A lever and fulcrum","A wedge and axle","A pulley system"],c:0,e:"The threads form a ramp that wraps around. Closer threads mean less force but more turning."},
+{t:"earth",v:1,q:"A compass needle lines itself up pointing toward",a:["magnetic north","true south","the nearest hill","the rising sun"],c:0,e:"Magnetic north differs slightly from true north, and the difference is called declination."},
+{t:"earth",v:1,q:"In orienteering, a bearing is measured in",a:["degrees from 0 to 360","metres from the start","minutes of walking","paces per marker"],c:0,e:"North is 0 degrees, east 90, south 180 and west 270."},
+{t:"earth",v:1,q:"Pacing is used in orienteering to measure",a:["distance travelled","the time of day","wind direction","ground steepness"],c:0,e:"You count double steps over a known distance first, then use that count to estimate how far you have walked."},
+{t:"earth",v:1,q:"On a topographic map, contour lines that are very close together show",a:["a steep slope","a flat plain","a deep lake","a wide road"],c:0,e:"Each contour line joins points of equal elevation. Lines far apart mean the ground rises gently."}
 ];
 BANK.forEach(function(x,i){x.id=x.t+"-"+i;});
 
 const SHEET=[
+{h:"The 23 events, and what you are allowed to bring",items:[
+"<b>Astronomy</b> (team of 2) ... stars and galaxies. One 8.5 x 11 double-sided note sheet allowed.",
+"<b>Dynamic Planet</b> (2) ... this year's topic is <b>Earth's Fresh Water</b>. One 2-sided note sheet allowed.",
+"<b>Rock Hound</b> (2) ... 20 stations identifying rocks and minerals. Bring your own handwritten chart. No books.",
+"<b>Plant Science</b> (2) ... plant and flower anatomy and identification. A half-inch 3-ring binder allowed.",
+"<b>D is for Dentistry</b> (2) ... mouth anatomy, baby and adult teeth, decay, tools, specialties. <b>No notes at all.</b>",
+"<b>Food Web / Food Chains / Owl Pellets</b> (3) ... dissect a pellet, rebuild the skeletons, plus a written test. Library notes allowed.",
+"<b>Simple Machines</b> (2) ... up to 15 stations, 2 minutes each. Identify the machine and measure something.",
+"<b>Color Wheel</b> (2) ... mix red, yellow and blue tempera into the secondary and tertiary colors.",
+"<b>Boggle Science</b> (2) ... find science words in a 16-letter board.",
+"<b>Orienteering</b> ... follow a course marker to marker using a compass and pacing.",
+"<b>Write It / Do It</b> (2) ... one of you writes the build instructions, the other builds from them alone.",
+"<b>Straw Egg Drop</b> (2) ... straws and masking tape are supplied on site. Protect a raw grade-A egg.",
+"<b>Bridge A Roni</b> (2), <b>Pasta Mobile</b> (2), <b>Mystery Architecture</b> (2) ... build events.",
+"<b>Hot Air Balloon</b> (3), <b>Water Rockets</b> (3), <b>Wind Turbine</b>, <b>Wright Stuff</b> (2, trial) ... flight and power events.",
+"<b>Paddle Boat</b> (2), <b>Gummi Bear Long Jump</b> (2), <b>RoboLab Slam Dunk</b> (3), <b>Bottle Music</b> (3) ... the rest of the hands-on events."],
+note:"Taken from the official 2027 Division A rulebook, updated 10.14.26. The note-sheet rules are worth knowing early, because the events that allow a sheet reward preparing one and Dentistry allows nothing at all. Team sizes for Orienteering and Wind Turbine were not stated in a form I could read, so check those with the coach."},
+
+{h:"Astronomy: what the rulebook actually lists",items:[
+"Types of stars, and the <b>life cycle</b> of a star.",
+"<b>Population I and Population II</b> stars. Population I is younger and metal-rich, Population II is older and metal-poor.",
+"<b>Absolute vs apparent brightness.</b> Apparent is how bright it looks from here, absolute is how bright it really is.",
+"The <b>Hipparchus catalogue</b> and the magnitude scale, where a smaller number means a brighter star.",
+"The <b>Hertzsprung-Russell diagram</b>. Brightness against temperature, with most stars on the main sequence.",
+"<b>Energy production</b> in stars (fusion of hydrogen into helium) and <b>nucleosynthesis</b> (building heavier elements).",
+"<b>Gravity</b>, and the <b>cosmic distance ladder</b> (parallax first, then Cepheid variables).",
+"<b>Types of galaxies</b> (spiral, elliptical, irregular) and how they are organised into the Local Group, clusters and superclusters.",
+"<b>Special emphasis on the Milky Way</b>, which is a barred spiral."],
+note:"They will show pictures of galaxies to classify, ask you to place a star on the H-R diagram, and put life-cycle images in order."},
+
+{h:"Dynamic Planet 2027: Earth's Fresh Water",items:[
+"<b>Water properties:</b> surface tension, specific heat capacity, states of matter, and how water moderates climate.",
+"<b>The water cycle</b>, and how fresh water is distributed on Earth (most of it is locked in ice).",
+"<b>Lakes:</b> tectonic, volcanic, glacial, oxbow and artificial. Nutrient levels run oligotrophic, mesotrophic, eutrophic, hypereutrophic.",
+"<b>Rivers:</b> young, mature and old, plus erosional and depositional features.",
+"<b>Named rivers:</b> Amazon, Congo, Mississippi, Ganges, Yangtze, Nile, Colorado, Snake, <b>Sacramento and San Joaquin</b>.",
+"<b>Groundwater:</b> aquifer, aquitard, infiltration, permeability, porosity, subsidence, wells, unsaturated zone, water table, cone of depression, artesian well.",
+"<b>Watersheds</b>, and <b>karst topography</b>: sinkholes (dolines), stalactites and stalagmites.",
+"<b>Instruments:</b> hygrometer, piezometer, hydrometer, rain gauge, thermometer."],
+note:"The Sacramento and San Joaquin are on the list and they are the rivers right by you. Subsidence from over-pumping groundwater is a Central Valley story too, so those are easy ones to lock in."},
+
+{h:"Rock Hound: the exact identification list",rows:[
+["Igneous","basalt, granite, obsidian, pumice, scoria"],
+["Sedimentary","bituminous coal, conglomerate, limestone (fossil), sandstone, shale"],
+["Metamorphic","gneiss, marble, quartzite, schist (garnet), slate"],
+["Minerals","calcite, copper, feldspar (pink), fluorite, galena, graphite"],
+["Minerals cont.","gypsum-satin-spar, halite, hematite, mica-biotite, pyrite"],
+["Minerals cont.","kaolinite, quartz (chert), quartz (crystal), talc"]],
+note:"These are the exact rocks and minerals named in the rulebook. For each one your chart should carry colour, streak, specific gravity, hardness, rock type and uses. Streak beats colour, since one mineral can come in many colours but leaves one powder colour."},
+
 {h:"Metric conversions (free points, memorize first)",rows:[["1 kilometer","1,000 meters"],["1 meter","100 centimeters"],["1 centimeter","10 millimeters"],["1 kilogram","1,000 grams"],["1 liter","1,000 milliliters"],["1 milliliter","1 cubic centimeter (cm3)"],["Water freezes","0 degrees C"],["Water boils","100 degrees C"],["Density of water","1 g/cm3"]],
 note:"Prefixes: kilo = 1,000 &middot; centi = 1/100 &middot; milli = 1/1,000. If you learn nothing else, learn this box. It shows up every year."},
 
@@ -538,6 +690,7 @@ function show(id){["home","quiz","res","study"].forEach(function(s){$("#"+s).hid
 function refreshHome(){
   $("#fQ").textContent=BANK.length;
   $("#fFun").textContent=BANK.filter(function(x){return x.f}).length;
+  $("#fEv").textContent=BANK.filter(function(x){return x.v}).length;
   $("#fBest").innerHTML=best?("best run <b>"+best+"%</b>"):"best run &mdash;";
   $("#fSeen").innerHTML="<b>"+Math.round(seen.length/BANK.length*100)+"%</b> seen";
   var mb=$("#missedBtn");
@@ -558,19 +711,19 @@ function start(mode,topic){
   var pool;
   if(mode==="quick"){
     pool=[];
-    Object.keys(TOPICS).forEach(function(k){
+    shuffle(Object.keys(TOPICS)).slice(0,10).forEach(function(k){
       pool.push(shuffle(BANK.filter(function(x){return x.t===k}))[0]);
     });
-    var rest=shuffle(BANK.filter(function(x){return pool.indexOf(x)<0}));
-    pool=shuffle(pool.concat(rest.slice(0,3)));
+    pool=shuffle(pool.filter(Boolean));
   }
   else if(mode==="mock"){
     pool=[];
     Object.keys(TOPICS).forEach(function(k){
-      pool=pool.concat(shuffle(BANK.filter(function(x){return x.t===k})).slice(0,6));
+      pool=pool.concat(shuffle(BANK.filter(function(x){return x.t===k})).slice(0,4));
     });
     pool=shuffle(pool).slice(0,40);
   }
+  else if(mode==="events")pool=shuffle(BANK.filter(function(x){return x.v}));
   else if(mode==="fun")pool=shuffle(BANK.filter(function(x){return x.f}));
   else if(mode==="missed")pool=shuffle(BANK.filter(function(x){return missed.indexOf(x.id)>-1}));
   else pool=shuffle(BANK.filter(function(x){return x.t===topic}));
