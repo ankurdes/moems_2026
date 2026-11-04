@@ -45,7 +45,9 @@
   .keys{color:var(--muted);font-size:.85em;text-align:center;margin-top:8px}
   @media(max-width:600px){.tiers{grid-template-columns:1fr}}
   .dots{font-size:1.1em;letter-spacing:3px;color:var(--primary);margin-left:6px}
-  #qtext{font-size:1.65em;line-height:1.45;margin:10px 0 16px;min-height:2.6em}
+  #qtext{display:block;width:100%;margin:10px 0 16px;-webkit-user-select:none;user-select:none;pointer-events:none}
+  body{-webkit-user-select:none;user-select:none}
+  input,textarea{-webkit-user-select:text;user-select:text}
   .row{display:flex;gap:10px}.row input{flex:1;font-size:1.5em;text-align:center}
   #fb{min-height:2.2em;margin-top:12px;font-weight:800;font-size:1.1em}#fb.ok{color:var(--good)}#fb.no{color:var(--bad)}
   .ev{background:#fef3c7;border:2px solid var(--accent);border-radius:12px;padding:8px 12px;margin-bottom:12px;font-weight:800;color:#92400e}
@@ -94,7 +96,7 @@
       <div id="qbox" hidden>
       <span class="tag" id="tag"></span>
       <div class="coach" id="coach"></div>
-      <div id="qtext"></div>
+      <canvas id="qtext" aria-label="Question"></canvas>
       <div class="row"><input id="ans" type="text" inputmode="numeric" autocomplete="off" autocapitalize="off" placeholder="Your answer"><button id="submit" class="big" style="margin-top:0">Go</button></div>
       <div id="fb"></div>
       <button id="skip" style="margin-top:6px">Skip</button>
@@ -206,8 +208,21 @@ function penW(t){return Math.round(0.25*ptsFor(t,0));}
 function penS(t){return Math.max(1,Math.round(0.1*ptsFor(t,0)));}
 function updTag(){if(!cur||S.over)return;var t=cur.tier;$('skip').textContent='Skip (−'+penS(t)+')';$('tag').className='tag t'+t;$('tag').textContent=TE[t]+' '+TN[t]+' · '+ptsFor(t,0)+' to '+ptsFor(t,BMAX[t])+' pts';$('coach').textContent=COACH[t]+' Wrong answer: −'+penW(t)+'. Skip: −'+penS(t)+'.';}
 function showPicker(msg,cls){cur=null;locked=false;labelTiers();renderShop();$('qbox').hidden=true;$('picker').hidden=false;$('fb0').className=cls||'';$('fb0').style.color=cls==='ok'?'#16a34a':(cls==='no'?'#dc2626':'');$('fb0').textContent=msg||'';}
-function pickTier(t){if(S.over||$('picker').hidden)return;cur=genQ(t);locked=false;$('picker').hidden=true;$('qbox').hidden=false;updTag();$('qtext').innerHTML=cur.q;$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';t0=performance.now();$('ans').focus();}
+function pickTier(t){if(S.over||$('picker').hidden)return;cur=genQ(t);locked=false;$('picker').hidden=true;$('qbox').hidden=false;updTag();drawQ(cur.q);$('ans').value='';$('ans').disabled=false;$('submit').disabled=false;$('fb').textContent='';$('fb').className='';t0=performance.now();$('ans').focus();}
 function nextQ(){showPicker();}
+function decodeEnt(t){return t.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&');}
+function drawQ(html){var c=$('qtext');var W=c.parentElement.clientWidth||600;var dpr=window.devicePixelRatio||1;var fs=W<500?21:26,lh=fs*1.45;
+ var toks=[],st={b:0,i:0,s:0},re=/<(\/?)(b|i|sup)>|([^<]+)/g,m;
+ while((m=re.exec(html))){if(m[2]){st[m[2]==='sup'?'s':m[2]]=m[1]?0:1;continue;}decodeEnt(m[3]).split(/(\s+)/).forEach(function(w){if(w)toks.push({w:w,b:st.b,i:st.i,s:st.s});});}
+ var g=c.getContext('2d');function font(t){var sz=t.s?Math.round(fs*0.65):fs;return (t.i?'italic ':'')+(t.b?'700 ':'400 ')+sz+'px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif';}
+ var lines=[[]],x=0;toks.forEach(function(t){g.font=font(t);t.wd=g.measureText(t.w).width;var sp=/^\s+$/.test(t.w);if(sp){if(x===0)return;}else if(x+t.wd>W&&x>0){lines.push([]);x=0;}lines[lines.length-1].push(t);x+=t.wd;});
+ var H=Math.ceil(lines.length*lh+fs*0.4);c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);c.style.height=H+'px';
+ g=c.getContext('2d');g.scale(dpr,dpr);g.fillStyle='#1e1b4b';g.textBaseline='alphabetic';
+ lines.forEach(function(L,li){var xx=0,y=li*lh+fs*1.05;L.forEach(function(t){g.font=font(t);g.fillText(t.w,xx,t.s?y-fs*0.38:y);xx+=t.wd;});});}
+window.addEventListener('resize',function(){if(cur&&!$('qbox').hidden)drawQ(cur.q);});
+document.addEventListener('copy',function(e){var a=document.activeElement,t=e.target;if(a&&/^(TEXTAREA|INPUT)$/.test(a.tagName))return;if(t&&t.closest&&t.closest('textarea,input'))return;e.preventDefault();});
+document.addEventListener('contextmenu',function(e){if(e.target.id==='qtext')e.preventDefault();});
+
 function fb(c,t){$('fb').className=c;$('fb').textContent=t;}
 function showEv(t){var e=$('ev');e.textContent=t;e.hidden=false;clearTimeout(showEv.t);showEv.t=setTimeout(function(){e.hidden=true;},3500);}
 function submit(){if(locked||S.over||!cur)return;var v=$('ans').value;if(v.trim()==='')return;locked=true;$('ans').disabled=true;$('submit').disabled=true;S.answered++;
@@ -231,7 +246,7 @@ $('name').addEventListener('keydown',function(e){if(e.key==='Enter')begin();});
 $('ups').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b||!S||S.over)return;var k=+b.getAttribute('data-k'),lv=S.uv[k];if(lv>=UPS[k].c.length||S.score<UPS[k].c[lv])return;S.score-=UPS[k].c[lv];S.uv[k]++;hud();renderShop();if(!$('picker').hidden)labelTiers();else updTag();});
 document.querySelectorAll('.tier').forEach(function(b){b.onclick=function(){pickTier(+b.getAttribute('data-t'));};});
 document.addEventListener('keydown',function(e){if(!S||S.over||$('game').hidden||$('picker').hidden)return;if(e.key==='1'||e.key==='2'||e.key==='3')pickTier(+e.key-1);});
-$('mycode').onclick=function(){$('codebox').value=makeCode();$('codebox').hidden=false;$('codebox').select();};
+$('mycode').onclick=function(){$('codebox').value=makeCode();$('codebox').hidden=false;$('codebox').focus();$('codebox').select();};
 $('again').onclick=function(){$('end').hidden=true;$('start').hidden=false;};
-$('copy').onclick=function(){var t=$('fcode');t.select();try{document.execCommand('copy');$('copy').textContent='✅ Copied!';}catch(e){$('copy').textContent='Select the code and copy it';}};
+$('copy').onclick=function(){var t=$('fcode');t.focus();t.select();try{document.execCommand('copy');$('copy').textContent='✅ Copied!';}catch(e){$('copy').textContent='Select the code and copy it';}};
 </script></body></html>
