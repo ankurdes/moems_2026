@@ -1,0 +1,19 @@
+science/index.html
+  s_be147270768df3::t_aceda8a0c3ed4b 152-161,230-234,307-351,747,908,921-1199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5e6e18f2e1b7c82e06dbf1925aca42cc802a458b",
+  "prompts": {},
+  "sessions": {
+    "s_be147270768df3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_be147270768df3",
+        "model": "unknown"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
