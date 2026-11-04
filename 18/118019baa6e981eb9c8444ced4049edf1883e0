@@ -1,0 +1,19 @@
+science/index.html
+  s_7ceb1d4ce532fa::t_739f817edf10ca 179,181,184,186,210-214,259,306,503-599,604-653,693,714,717,722,726
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "18118019baa6e981eb9c8444ced4049edf1883e0",
+  "prompts": {},
+  "sessions": {
+    "s_7ceb1d4ce532fa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "abb7f514-5caf-43b9-a036-c71bec8df8db",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
