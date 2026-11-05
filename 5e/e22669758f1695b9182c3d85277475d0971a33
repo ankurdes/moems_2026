@@ -1,0 +1,25 @@
+docs/moems_hub_2027.html
+  s_7f3d1ac77af38c::t_0a59b7385b5998 118-121
+docs/season/day04.html
+  s_7f3d1ac77af38c::t_1b6a79279d6145 133-141,161-165,170-175,180-185,190-195,200-204,209-214,219-224,229-234,239-244,249-255,262-263,267-284
+docs/season/day05.html
+  s_7f3d1ac77af38c::t_fd838d59cb049a 1-224
+docs/season/day05_coach_dd994bfe.html
+  s_7f3d1ac77af38c::t_6a220a54af0729 1-308
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5ee22669758f1695b9182c3d85277475d0971a33",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
