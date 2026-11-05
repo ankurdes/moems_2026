@@ -130,7 +130,15 @@
     <div class="prob">
       <div class="prob-head"><span class="qnum">1</span><span class="topic">The 25 puzzle</span></div>
       <img class="qimg" src="img/s4_q01.png" alt="Question image" width="761" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: 4975</span><ol>
+<li>A number is divisible by 25 only if it ends in <b>00, 25, 50 or 75</b>.</li>
+<li>A 3-digit number can't work: the best is 9 + 7 + 5 = 21 (for x75), which is less than 25.</li>
+<li>For 4 digits, check each ending. The first two digits must make up the rest of the 25:
+  <br>ends in 75 (7 + 5 = 12): first two digits add to 13, smallest is <b>49</b>, giving 4975
+  <br>ends in 25 (2 + 5 = 7): first two digits add to 18, so 99, giving 9925
+  <br>ends in 50 or 00: the first two digits would need to add to 20 or 25, which is impossible</li>
+<li>The smallest is <b>4975</b>. Check: 4 + 9 + 7 + 5 = 25 and 4975 ÷ 25 = 199. ✓ (A computer search agrees.)</li></ol><div class="trick"><b>⚡ Trick:</b> Split the problem: first use the divisibility rule to list the possible endings, then make the front digits as small as possible. To make a number small, put the smaller digit first.</div></div>
     </div>
   </div>
 
@@ -150,62 +158,130 @@
     <div class="prob">
       <div class="prob-head"><span class="qnum">1</span><span class="topic">Decimals</span></div>
       <img class="qimg" src="img/s4_q02.png" alt="Question image" width="241" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 0.8</span><ol>
+<li>1/4 = 0.25 and 0.6 × 0.4 = 0.24.</li>
+<li>0.25 + 0.24 + 0.15 = 0.64.</li>
+<li>√0.64 = <b>0.8</b>, because 0.8 × 0.8 = 0.64.</li></ol><div class="trick"><b>⚡ Trick:</b> Turn every fraction into a decimal (or every decimal into a fraction) first, so all the parts match.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">2</span><span class="topic">Patterns</span></div>
       <img class="qimg" src="img/s4_q03.png" alt="Question image" width="238" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 1014</span><ol>
+<li>Group the terms in pairs: (2027 − 2026) + (2025 − 2024) + ... + (3 − 2), and then the final + 1 is left over.</li>
+<li>Each pair equals 1.</li>
+<li>The pairs use the numbers 2027 down to 2, which is 2026 numbers, so there are 2026 ÷ 2 = 1013 pairs.</li>
+<li>Total = 1013 + 1 = <b>1014</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Long alternating sums: pair the terms, count the pairs, and watch for a leftover term at the end.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">3</span><span class="topic">Inequalities</span></div>
       <img class="qimg" src="img/s4_q04.png" alt="Question image" width="245" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 14</span><ol>
+<li><i>n</i><sup>2</sup> must be more than 3, so <i>n</i> can't be −1, 0 or 1.</li>
+<li><i>n</i><sup>2</sup> must be less than 70. 8<sup>2</sup> = 64 works and 9<sup>2</sup> = 81 doesn't.</li>
+<li>So <i>n</i> = 2, 3, ..., 8 (7 numbers) and <i>n</i> = −2, −3, ..., −8 (7 more).</li>
+<li>Total: <b>14</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Don't forget the negative numbers. A square is positive whether <i>n</i> is positive or negative.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">4</span><span class="topic">Factors</span></div>
       <img class="qimg" src="img/s4_q05.png" alt="Question image" width="227" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 6</span><ol>
+<li>Every factor has the form 3<sup>a</sup> × 5<sup>b</sup> with <i>a</i> from 0 to 4 and <i>b</i> from 0 to 2. That gives 5 × 3 = 15 factors in total.</li>
+<li>List them in a small grid. Powers of 3 are 1, 3, 9, 27, 81. Times 5 gives 5, 15, 45, 135, 405. Times 25 gives 25, 75, 225, 675, 2025.</li>
+<li>The two-digit ones are 27, 81, 15, 45, 25 and 75.</li>
+<li>That's <b>6</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Use the prime factorization to build every factor in an organized grid, rows by one prime and columns by the other. Then nothing gets missed.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">5</span><span class="topic">Percent</span></div>
       <img class="qimg" src="img/s4_q06.png" alt="Question image" width="241" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 40</span><ol>
+<li>7.5% = 7.5/100 = 75/1000 = <b>3/40</b> in lowest terms.</li>
+<li>The number of chess students is 3/40 of the school, which has to be a whole number.</li>
+<li>So the school size must be a multiple of 40. The least is <b>40</b> (with 3 chess students).</li></ol><div class="trick"><b>⚡ Trick:</b> "Exactly p%" problems: write the percent as a fraction in <b>lowest terms</b>. The denominator is the smallest possible group size.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">6</span><span class="topic">Probability</span></div>
       <img class="qimg" src="img/s4_q07.png" alt="Question image" width="241" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 40</span><ol>
+<li>There are 5 × 4 = 20 equally likely pairs.</li>
+<li>The product is a multiple of 3 only if one of the numbers is. From the first set that's only 3, and from the second set only 6.</li>
+<li>Pairs with 3 from the first set: 4. Pairs with 6 from the second set: 5. The pair (3, 6) was counted twice, so 4 + 5 − 1 = 8.</li>
+<li>8 out of 20 = 40%, so <i>K</i> = <b>40</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> For "multiple of 3" in a product, only the factors that are multiples of 3 matter. Count them, and subtract any pair you counted twice.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">7</span><span class="topic">Geometry</span></div>
       <img class="qimg" src="img/s4_q08.png" alt="Question image" width="232" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 216</span><ol>
+<li>Let each small rectangle be <i>w</i> wide and <i>h</i> tall. Its perimeter: 2(<i>w</i> + <i>h</i>) = 30, so <i>w</i> + <i>h</i> = 15.</li>
+<li>MATH is 4<i>w</i> wide and <i>h</i> tall: 2(4<i>w</i> + <i>h</i>) = 66, so 4<i>w</i> + <i>h</i> = 33.</li>
+<li>Subtract the first equation from the second: 3<i>w</i> = 18, so <i>w</i> = 6 and <i>h</i> = 9.</li>
+<li>MATH is 24 by 9, so the area is <b>216</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Name the small sides with letters, write one equation for each perimeter you're given, then subtract the equations to get rid of one letter.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">8</span><span class="topic">Geometry</span></div>
       <img class="qimg" src="img/s4_q09.png" alt="Question image" width="243" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 54</span><ol>
+<li>The top triangle and the bottom triangle both have the rectangle's width as their base. Their heights add up to the rectangle's full height.</li>
+<li>So top + bottom = ½ × width × height = <b>half the rectangle</b>, no matter where P is.</li>
+<li>The same is true for left + right. So top + bottom = left + right.</li>
+<li>47 + 36 = 29 + <i>N</i>, so 83 = 29 + <i>N</i> and <i>N</i> = <b>54</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> For any point inside a rectangle, the two triangles on <b>opposite sides</b> always add up to half the rectangle. You don't need to know where the point is.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">9</span><span class="topic">Rates</span></div>
       <img class="qimg" src="img/s4_q10.png" alt="Question image" width="242" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 52</span><ol>
+<li>With the tailwind the plane's speed is 300 + 50 = 350 mph. With the headwind it's 300 − 50 = 250 mph.</li>
+<li>Going: 700 ÷ 350 = 2 hours. Coming back: 700 ÷ 250 = 2.8 hours.</li>
+<li>Total: 4.8 hours = 4 hours and 0.8 × 60 = 48 minutes.</li>
+<li><i>H</i> + <i>M</i> = 4 + 48 = <b>52</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Wind problems: add the wind speed going with it and subtract going against it. Then time = distance ÷ speed for each leg. Never average the two speeds.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">10</span><span class="topic">Cryptarithm</span></div>
       <img class="qimg" src="img/s4_q11.png" alt="Question image" width="233" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 8</span><ol>
+<li>AB means 10A + B, and BA means 10B + A.</li>
+<li>Add them: 11A + 11B = <b>11(A + B)</b>.</li>
+<li>For 11(A + B) to be a perfect square, A + B must contain another 11, so A + B = 11 (A + B is at most 18).</li>
+<li>Then AB + BA = 121 = 11². The digits that add to 11 give 29, 38, 47, 56, 65, 74, 83, 92.</li>
+<li>That's <b>8</b> numbers.</li></ol><div class="trick"><b>⚡ Trick:</b> Write digit numbers as 10A + B. Adding or subtracting reversed numbers always gives a multiple of 11 (sum) or of 9 (difference).</div></div>
     </div>
     </div>
   </div>
 
-
 </div>
+
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
 
 <footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
 
 <script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qimg').outerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
 var total = 30 * 60, left = total, timer = null;
 function paint() {
   var m = Math.floor(left / 60), s = left % 60;
