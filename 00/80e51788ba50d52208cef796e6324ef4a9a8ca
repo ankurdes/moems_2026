@@ -1,0 +1,21 @@
+docs/season/day05.html
+  s_7f3d1ac77af38c::t_34462889f661cb 119
+docs/season/day05_coach_dd994bfe.html
+  s_7f3d1ac77af38c::t_20ac79819b3417 120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0080e51788ba50d52208cef796e6324ef4a9a8ca",
+  "prompts": {},
+  "sessions": {
+    "s_7f3d1ac77af38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "210f8041-cf77-4270-82e3-27d609d0c54f",
+        "model": "unknown"
+      },
+      "human_author": "Ankur Desai (ankurdes) <ankurdes@cisco.com>"
+    }
+  }
+}
