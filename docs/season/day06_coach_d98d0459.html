@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach copy - Session 6</title>
+<style>
+  :root {
+    --primary: #7c3aed;
+    --accent: #f59e0b;
+    --ink: #1e1b4b;
+    --muted: #64748b;
+    --good: #16a34a;
+    --info: #3b82f6;
+    --pink: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 50%, #dbeafe 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%);
+    color: white; padding: 26px 22px; text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  h1 { margin: 0; font-size: 2.1em; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .subtitle { font-size: 1.05em; opacity: 0.95; margin-top: 6px; }
+  .back { display: inline-block; margin-top: 10px; color: white; font-size: 0.9em; opacity: 0.9; }
+
+  .container { max-width: 1500px; margin: 0 auto; padding: 24px; }
+  .section {
+    background: white; border-radius: 16px; padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
+  }
+  .section.warm  { border-top-color: var(--accent); }
+  .section.diag  { border-top-color: var(--info); }
+  .section h2 { margin: 0 0 6px 0; font-size: 1.45em; color: var(--primary); }
+  .section.warm h2 { color: var(--accent); }
+  .section.diag h2 { color: var(--info); }
+  .lede { color: var(--muted); margin: 0 0 14px 0; font-size: 0.95em; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { background: #f8fafc; }
+  td.t { white-space: nowrap; font-weight: 700; color: var(--primary); }
+
+  .prob {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+    background: #f8fafc;
+  }
+  .prob-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .qnum {
+    background: var(--info); color: white; border-radius: 50%; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+  .warm .qnum { background: var(--accent); }
+  .topic { font-size: 0.72em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .qtext { margin: 6px 0 10px 0; font-size: 1.02em; }
+
+  button {
+    background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 14px; font-weight: 600; cursor: pointer; font-size: 0.88em;
+  }
+  button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  button.big { background: var(--primary); color: white; border: none; padding: 9px 18px; }
+  button.big:hover { background: #6d28d9; }
+
+  .diag-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .diag-grid .prob { margin-bottom: 0; display: flex; flex-direction: column; padding: 12px 14px; }
+  .diag-grid .qtext { font-size: 1.05em; flex: 1; }
+  .diag-grid button { align-self: flex-start; }
+  @media (max-width: 1300px) { .diag-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .diag-grid { grid-template-columns: 1fr; } }
+  .diag .solution { display: none !important; }
+  #modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+  #modal.show { display: flex; }
+  #modal .box { background: white; border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow: auto; padding: 22px 28px; font-size: 1.1em; }
+  #modal .box ol { padding-left: 22px; } #modal .box li { margin: 8px 0; }
+  #modal .qt { background: #f8fafc; border-left: 4px solid var(--info); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px; }
+  #modal .close { float: right; }
+  .solution {
+    display: none; margin-top: 10px; padding: 10px 14px; background: #ecfdf5;
+    border-left: 4px solid var(--good); border-radius: 4px; font-size: 0.93em;
+  }
+  .solution.show { display: block; }
+  .solution .ans { font-weight: 800; color: var(--good); font-size: 1.05em; }
+
+  .timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  #clock { font-size: 2em; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--info); min-width: 100px; }
+
+  .note { background: #fef9e7; border: 2px solid var(--accent); border-radius: 12px; padding: 12px 16px; font-size: 0.93em; }
+  .note ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+  footer { text-align: center; padding: 26px 20px; color: var(--muted); font-size: 0.85em; }
+  @media print { button, .timer-row { display: none !important; } .solution { display: block !important; } }
+
+  .trick { background:#fef3c7; border-left:4px solid #f59e0b; border-radius:6px; padding:8px 12px; margin-top:12px; }
+  .noai { background:#fee2e2; border:2px solid #dc2626; border-radius:12px; padding:10px 16px; margin:0 0 14px; font-size:1.05em; color:#7f1d1d; }
+  .section.game { border-top-color: var(--pink); }
+  .section.game h2 { color: var(--pink); }
+  .gbtn { display:inline-block; background:var(--primary); color:#fff; text-decoration:none; font-weight:800; padding:12px 22px; border-radius:12px; margin:6px 10px 0 0; }
+  .gbtn.alt { background:var(--accent); }
+  .gbtn:hover { filter:brightness(1.1); }
+  .qimg { display:block; max-width:100%; height:auto; margin:6px 0 10px; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  #modal .qt img { width:100%; max-width:380px; }
+  button:disabled { opacity:.55; cursor:not-allowed; background:#f1f5f9 !important; color:var(--ink) !important; border-color:#cbd5e1 !important; }
+  .coachbar { background:#fef3c7; border-bottom:2px solid #f59e0b; text-align:center; padding:6px; font-weight:700; color:#92400e; }
+</style>
+</head>
+<body>
+<div class="coachbar">COACH COPY · answers enabled · do not share the link</div>
+
+<header>
+  <h1>🚀 Session 6 · Wed, Nov 25, 2026</h1>
+  <div class="subtitle">Tournament practice: one team brain teaser, then a 10-question individual event</div>
+  
+</header>
+
+<div class="container">
+
+  <div class="section warm">
+    <h2>🧩 Team brain teaser (10 min)</h2>
+    <p class="lede">Work on it together as a team.</p>
+
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">The pizza cutter</span></div>
+      <img class="qimg" src="img/s6_q01.png" alt="Question image" width="988" draggable="false">
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: 16</span><ol>
+<li><b>Try small cases.</b> 0 cuts: 1 piece. 1 cut: 2 pieces. 2 cuts that cross: 4 pieces. 3 cuts: 7 pieces.</li>
+<li><b>Why 7 and not 8?</b> A new cut adds one piece for every region it passes through. A line can cross each earlier line at most once, so the 3rd cut crosses 2 lines and passes through at most 3 regions, adding 3 pieces.</li>
+<li>So the <i>n</i>th cut adds at most <i>n</i> pieces: 1, 2, 4, 7, 11, 16.</li>
+<li>With 5 cuts: 1 + 1 + 2 + 3 + 4 + 5 = <b>16</b>. You get it when every pair of cuts crosses inside the pizza and no three cuts meet at one point.</li></ol><div class="trick"><b>⚡ Trick:</b> When you can't picture the big case, list the small cases, find out how much each step adds, and explain why. The pattern 1, 2, 4, 7, 11, 16 comes from adding 1, 2, 3, 4, 5.</div></div>
+    </div>
+  </div>
+
+  <div class="section diag">
+    <h2>📝 Individual event (30 min)</h2>
+    <p class="lede">These are written in the same style as the county tournament's individual event: 10 problems, 30 minutes, no calculators. Every right answer is worth 1 point. If you're stuck for more than 3 minutes, skip and come back.</p>
+
+    <div class="noai">🚫🤖 <b>Please do NOT use AI, a calculator, or a search engine to solve these.</b> This test is for you. A wrong answer helps us find what to teach next, and a copied answer helps no one.</div>
+
+    <div class="timer-row">
+      <div id="clock">30:00</div>
+      <button class="big" onclick="startTimer()">▶ Start</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="diag-grid">
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">1</span><span class="topic">Exponents</span></div>
+      <img class="qimg" src="img/s6_q02.png" alt="Question image" width="226" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 128</span><ol>
+<li>Four copies of the same thing: 2<sup>12</sup> + 2<sup>12</sup> + 2<sup>12</sup> + 2<sup>12</sup> = 4 × 2<sup>12</sup>.</li>
+<li>4 = 2<sup>2</sup>, so this is 2<sup>2</sup> × 2<sup>12</sup> = 2<sup>14</sup>.</li>
+<li>√(2<sup>14</sup>) = 2<sup>7</sup> = <b>128</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Adding equal powers is multiplying: <i>n</i> copies of 2<sup>k</sup> is <i>n</i> × 2<sup>k</sup>. Turn everything into powers of 2, then a square root just halves the exponent.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">2</span><span class="topic">Digits</span></div>
+      <img class="qimg" src="img/s6_q03.png" alt="Question image" width="239" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 358</span><ol>
+<li>Prime factor: 120 = 2 × 2 × 2 × 3 × 5.</li>
+<li>Fewer digits means a smaller number. Two digits can make at most 9 × 9 = 81, so we need at least 3 digits.</li>
+<li>Group the primes into 3 digits (each 9 or less): 5 must be its own digit. 2 × 2 × 2 × 3 splits into 8 × 3 or 4 × 6 (or 2 × 12, which fails).</li>
+<li>That gives digits {3, 5, 8} or {4, 5, 6}. Put the smallest digit first: 358 and 456.</li>
+<li>The smallest is <b>358</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> To make the smallest number: first use as <b>few digits</b> as possible, then put the digits in increasing order.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">3</span><span class="topic">Counting digits</span></div>
+      <img class="qimg" src="img/s6_q04.png" alt="Question image" width="244" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 131</span><ol>
+<li>From 1 to 99, the digit 3 shows up 10 times in the ones place (3, 13, ..., 93) and 10 times in the tens place (30 to 39). That's 20.</li>
+<li>From 100 on, count each 3: 103 (21), 113 (22), 123 (23), 130 (24), 131 (25).</li>
+<li>Locker 132 would make it 26. So the last locker is <b>131</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Count digits by place value: how many times in the ones place, then in the tens place. Then walk forward carefully, counting a number like 133 twice.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">4</span><span class="topic">Algebra</span></div>
+      <img class="qimg" src="img/s6_q05.png" alt="Question image" width="244" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 84</span><ol>
+<li>Call the sides <i>a</i> and <i>b</i>. Three sides means two of one and one of the other.</li>
+<li>Ann: 2<i>a</i> + <i>b</i> = 26. Ben: <i>a</i> + 2<i>b</i> = 31.</li>
+<li>Add them: 3<i>a</i> + 3<i>b</i> = 57, so <i>a</i> + <i>b</i> = 19.</li>
+<li>Subtract from Ann's: <i>a</i> = 26 − 19 = 7. Then <i>b</i> = 12.</li>
+<li>Area = 7 × 12 = <b>84</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Two equations that look alike? Add them first. That often gives a simple total that makes the rest easy.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">5</span><span class="topic">Geometry</span></div>
+      <img class="qimg" src="img/s6_q06.png" alt="Question image" width="227" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 150</span><ol>
+<li>The angles of a pentagon add up to (5 − 2) × 180 = 540°.</li>
+<li>The ratio has 3 + 3 + 3 + 4 + 5 = 18 parts, so each part is 540 ÷ 18 = 30°.</li>
+<li>The largest angle is 5 parts: 5 × 30 = <b>150°</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Angle sum of an <i>n</i>-sided polygon: (<i>n</i> − 2) × 180°. For ratios, add the parts, then find one part.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">6</span><span class="topic">Probability</span></div>
+      <img class="qimg" src="img/s6_q07.png" alt="Question image" width="245" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 19/66</span><ol>
+<li>Ordered draws: 12 choices for the first marble, then 11 for the second, so 132 equally likely ways.</li>
+<li>Both red: 3 × 2 = 6. Both blue: 4 × 3 = 12. Both green: 5 × 4 = 20.</li>
+<li>Same color: 6 + 12 + 20 = 38 ways.</li>
+<li>Probability: 38/132 = <b>19/66</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Without replacement, the second draw has one fewer marble overall and one fewer of the color you took. Count each color case and add.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">7</span><span class="topic">Counting</span></div>
+      <img class="qimg" src="img/s6_q08.png" alt="Question image" width="243" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 60</span><ol>
+<li>Slide the rectangle around. A rectangle 2 wide can start in 7 − 2 + 1 = 6 columns. A rectangle 3 tall can start in 7 − 3 + 1 = 5 rows.</li>
+<li>2 wide × 3 tall: 6 × 5 = 30 places.</li>
+<li>3 wide × 2 tall: 5 × 6 = 30 places.</li>
+<li>Total: <b>60</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Placing an <i>a</i> × <i>b</i> shape on an <i>n</i> × <i>n</i> board: (<i>n</i> − <i>a</i> + 1) × (<i>n</i> − <i>b</i> + 1). Don't forget to turn it the other way.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">8</span><span class="topic">Counting</span></div>
+      <img class="qimg" src="img/s6_q09.png" alt="Question image" width="227" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 84</span><ol>
+<li>No digit can be 0: it would have to come first, and a 3-digit number can't start with 0.</li>
+<li>Pick any 3 different digits from 1 to 9. There is exactly <b>one</b> way to put them in increasing order. For example, {7, 1, 4} gives only 147.</li>
+<li>So the answer is the number of ways to choose 3 digits from 9: (9 × 8 × 7) ÷ (3 × 2 × 1) = <b>84</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> When the order is forced (increasing, decreasing, alphabetical), you're really just <b>choosing</b> which items to use, not arranging them.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">9</span><span class="topic">Number theory (hard)</span></div>
+      <img class="qimg" src="img/s6_q10.png" alt="Question image" width="238" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 13</span><ol>
+<li>From 10! on, every factorial contains 2 × 5 twice (from 2, 5, 10 and more), so it ends in at least 00. Those terms don't change the last two digits.</li>
+<li>So only 1! to 9! matter. Keep just the last two digits of each:
+  <br>1! = 1, 2! = 2, 3! = 6, 4! = 24, 5! = 120 → 20, 6! = 720 → 20, 7! = 5040 → 40, 8! = 40320 → 20, 9! = 362880 → 80.</li>
+<li>Add: 1 + 2 + 6 + 24 + 20 + 20 + 40 + 20 + 80 = 213.</li>
+<li>The last two digits are <b>13</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> For "last digits" of a huge sum, find when the terms start ending in zeros and ignore them. Then only keep the last two digits as you go.</div></div>
+    </div>
+    <div class="prob">
+      <div class="prob-head"><span class="qnum">10</span><span class="topic">Geometry (hard)</span></div>
+      <img class="qimg" src="img/s6_q11.png" alt="Question image" width="246" draggable="false">
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 50</span><ol>
+<li><b>Upright squares.</b> Size 1: 4 × 4 = 16. Size 2: 3 × 3 = 9. Size 3: 2 × 2 = 4. Size 4: 1. Total 30.</li>
+<li><b>The trick:</b> every tilted square fits snugly inside an upright "frame" square, with its corners on the frame's sides. A frame of size <i>k</i> holds <i>k</i> squares: the frame itself plus <i>k</i> − 1 tilted ones.</li>
+<li>So count frames and multiply: size 1: 16 × 1 = 16. Size 2: 9 × 2 = 18. Size 3: 4 × 3 = 12. Size 4: 1 × 4 = 4.</li>
+<li>Total: 16 + 18 + 12 + 4 = <b>50</b>. (A computer check of every set of 4 dots agrees.)</li></ol><div class="trick"><b>⚡ Trick:</b> Tilted squares are hard to count directly. Instead, count the upright square that each one sits inside, and multiply by how many squares fit in it.</div></div>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
+
+<footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
+
+<script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qimg').outerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
+var total = 30 * 60, left = total, timer = null;
+function paint() {
+  var m = Math.floor(left / 60), s = left % 60;
+  document.getElementById('clock').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function startTimer() {
+  if (timer) return;
+  timer = setInterval(function () {
+    left--; paint();
+    if (left <= 0) { clearInterval(timer); timer = null; document.getElementById('clock').textContent = "Time!"; }
+  }, 1000);
+}
+function resetTimer() { clearInterval(timer); timer = null; left = total; paint(); }
+</script>
+
+</body>
+</html>

@@ -130,7 +130,14 @@
     <div class="prob">
       <div class="prob-head"><span class="qnum">1</span><span class="topic">The self-counting number</span></div>
       <img class="qimg" src="img/s5_q01.png" alt="Question image" width="958" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="toggle(this)">Show answer</button>
+      <div class="solution"><span class="ans">Answer: 1210 and 2020</span><ol>
+<li>Call the number abcd. The digits count the 0s, 1s, 2s and 3s, and there are only 4 digits, so <b>a + b + c + d = 4</b>.</li>
+<li>The first digit a can't be 0 (that would say there are no 0s, but a itself would be one). Try a = 1, 2 and 3.</li>
+<li><b>a = 1</b> (one 0): the other three digits add to 3 and exactly one of them is 0. Trying the cases gives <b>1210</b>: one 0, two 1s, one 2, no 3s. ✓</li>
+<li><b>a = 2</b> (two 0s): two of b, c, d are 0 and the other is 2, since the digits add to 4. Only <b>2020</b> works: two 0s, no 1s, two 2s, no 3s. ✓</li>
+<li><b>a = 3</b> (three 0s): then b = c = d = 0, giving 3000. But 3000 contains one 3, while d = 0 says there are none. ✗</li>
+<li>So the answers are <b>1210 and 2020</b>. (A computer search of every 4-digit number agrees.)</li></ol><div class="trick"><b>⚡ Trick:</b> Find a rule that every answer must follow (here, the digits add up to 4). It cuts thousands of cases down to a handful.</div></div>
     </div>
   </div>
 
@@ -150,61 +157,139 @@
     <div class="prob">
       <div class="prob-head"><span class="qnum">1</span><span class="topic">Decimals</span></div>
       <img class="qimg" src="img/s5_q02.png" alt="Question image" width="241" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 4.2</span><ol>
+<li>Take the square root of each part separately: √0.0049 = 0.07, √0.36 = 0.6 and √0.0001 = 0.01.</li>
+<li>So the value is 0.07 × 0.6 ÷ 0.01.</li>
+<li>0.07 × 0.6 = 0.042, and 0.042 ÷ 0.01 = <b>4.2</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> √(a × b ÷ c) = √a × √b ÷ √c. Square roots of tidy decimals are much easier one at a time than after multiplying everything out.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">2</span><span class="topic">Exponents</span></div>
       <img class="qimg" src="img/s5_q03.png" alt="Question image" width="198" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 17</span><ol>
+<li>Pair up the 2s and 5s, because 2 × 5 = 10. There are 15 fives, so make 15 pairs: 2<sup>15</sup> × 5<sup>15</sup> = 10<sup>15</sup>.</li>
+<li>That leaves 2<sup>20 − 15</sup> = 2<sup>5</sup> = 32.</li>
+<li>So the number is 32 × 10<sup>15</sup>, which is 32 followed by 15 zeros.</li>
+<li>That's 2 + 15 = <b>17</b> digits.</li></ol><div class="trick"><b>⚡ Trick:</b> Whenever you see powers of 2 and 5 together, pair them into 10s. The leftover part tells you the leading digits.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">3</span><span class="topic">Clock</span></div>
       <img class="qimg" src="img/s5_q04.png" alt="Question image" width="237" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 78</span><ol>
+<li>The minute hand moves 6° per minute (360° ÷ 60). At 24 minutes it is at 24 × 6 = 144°, measured from the 12.</li>
+<li>The hour hand moves 30° per hour plus 0.5° per minute. At 7:24 it is at 7 × 30 + 24 × 0.5 = 210 + 12 = 222°.</li>
+<li>The difference is 222 − 144 = 78°.</li>
+<li>78° is less than 180°, so it is already the smaller angle: <b>78</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Minute hand: 6° per minute. Hour hand: 30° per hour <b>plus</b> 0.5° per minute. Most mistakes come from forgetting that the hour hand keeps moving.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">4</span><span class="topic">Coordinates</span></div>
       <img class="qimg" src="img/s5_q05.png" alt="Question image" width="245" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 38</span><ol>
+<li>Draw a box around it: from x = 0 to 8 and y = 0 to 7, which has area 8 × 7 = 56.</li>
+<li>Cut off the three right triangles outside the shape:
+  <br>between (6, 0) and (8, 5): ½ × 2 × 5 = 5
+  <br>between (8, 5) and (2, 7): ½ × 6 × 2 = 6
+  <br>between (2, 7) and (0, 0): ½ × 2 × 7 = 7</li>
+<li>Area = 56 − 5 − 6 − 7 = <b>38</b>.</li>
+<li>Check with the shoelace formula: ½ × |0 + 30 + 46 + 0| = 38. ✓</li></ol><div class="trick"><b>⚡ Trick:</b> For a polygon on a grid, draw the smallest box around it and subtract the right triangles in the corners. No formula needed.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">5</span><span class="topic">Counting digits</span></div>
       <img class="qimg" src="img/s5_q06.png" alt="Question image" width="232" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 436</span><ol>
+<li>Pages 1 to 9 use 9 digits.</li>
+<li>Pages 10 to 99 are 90 pages with 2 digits each, which is 180 digits. Running total: 189.</li>
+<li>That leaves 1200 − 189 = 1011 digits for 3-digit pages, which is 1011 ÷ 3 = 337 pages.</li>
+<li>The 3-digit pages start at 100, so the last page is 99 + 337 = <b>436</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Count digits in blocks: 1-digit, 2-digit, then 3-digit pages. Don't forget the 3-digit pages start at 100, not at 1.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">6</span><span class="topic">Area ratios</span></div>
       <img class="qimg" src="img/s5_q07.png" alt="Question image" width="245" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 56</span><ol>
+<li>Triangles ADE and ABC share the angle at A.</li>
+<li>When two triangles share an angle, the area ratio is the product of the side ratios next to that angle: (AD/AB) × (AE/AC).</li>
+<li>AD/AB = 2/3 and AE/AC = 1/3, so area ADE = 2/3 × 1/3 × 72 = 16.</li>
+<li>Quadrilateral DBCE = 72 − 16 = <b>56</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Two triangles sharing a corner angle: area ratio = (side ratio) × (side ratio) for the two sides that make that angle.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">7</span><span class="topic">Arrangements</span></div>
       <img class="qimg" src="img/s5_q08.png" alt="Question image" width="238" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 12</span><ol>
+<li>Place the non-A letters first: B, N, N. They can be arranged in 3! ÷ 2! = 3 ways (BNN, NBN, NNB).</li>
+<li>Each arrangement leaves 4 gaps for the A's: _ B _ N _ N _.</li>
+<li>Choose 3 of the 4 gaps for the A's, one A per gap so no two touch: 4 ways.</li>
+<li>Total: 3 × 4 = <b>12</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> "No two together" counting: arrange the other items first, then drop the special ones into the gaps between them, one per gap.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">8</span><span class="topic">Cryptarithm</span></div>
       <img class="qimg" src="img/s5_q09.png" alt="Question image" width="234" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 1876</span><ol>
+<li>TWO + TWO is less than 2000, so F = <b>1</b>.</li>
+<li>To make FOUR big, make O big. O is the hundreds digit of 2 × TWO, so 2T plus any carry is 10 + O. With T = 9, O is 8 (no carry from the tens) or 9 (with a carry), and 9 is taken by T. So T = 9 and O = 8, with no carry from the tens column.</li>
+<li>Ones column: 2 × O = 16, so R = 6 and 1 carries to the tens.</li>
+<li>Tens column: 2W + 1 = U with no carry, so W ≤ 4. W = 4 gives U = 9, which clashes with T. W = 3 gives U = 7.</li>
+<li>Check: 938 + 938 = <b>1876</b>, and the six letters are all different. ✓ (A computer search of all cases agrees that 1876 is the greatest.)</li></ol><div class="trick"><b>⚡ Trick:</b> Start with the leftmost digit of the answer (it's usually 1), then work from the end that you can control. To make something greatest, try the biggest digits first and back off only when there's a clash.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">9</span><span class="topic">Geometry (hard)</span></div>
       <img class="qimg" src="img/s5_q10.png" alt="Question image" width="245" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 4</span><ol>
+<li>Find the <b>longest</b> chord through P: the diameter, length 26.</li>
+<li>Find the <b>shortest</b> chord through P: the one perpendicular to OP. Its half-length comes from a right triangle with hypotenuse 13 and leg 5: √(169 − 25) = 12. So the shortest chord is 24.</li>
+<li>As the chord turns around P, its length slides smoothly from 26 down to 24 and back up to 26. So every length between 24 and 26 appears <b>twice</b> (once on each side), except the shortest and longest, which appear once each.</li>
+<li>Whole-number lengths: 24 (1 chord), 25 (2 chords), 26 (1 chord).</li>
+<li>Total: 1 + 2 + 1 = <b>4</b>.</li></ol><div class="trick"><b>⚡ Trick:</b> Chords through a fixed point: find the shortest (perpendicular to the radius line) and the longest (the diameter). Every length in between happens twice by symmetry.</div></div>
     </div>
     <div class="prob">
       <div class="prob-head"><span class="qnum">10</span><span class="topic">Counting (hard)</span></div>
       <img class="qimg" src="img/s5_q11.png" alt="Question image" width="238" draggable="false">
-      <button disabled>🔒 Answer locked</button>
+      <button onclick="openSol(this)">Show solution</button>
+      <div class="solution"><span class="ans">Answer: 12</span><ol>
+<li>Call the sides <i>a</i> ≤ <i>b</i> ≤ <i>c</i> with <i>a</i> + <i>b</i> + <i>c</i> = 24.</li>
+<li>Triangle rule: <i>a</i> + <i>b</i> &gt; <i>c</i>. Since <i>a</i> + <i>b</i> = 24 − <i>c</i>, this means 24 − <i>c</i> &gt; <i>c</i>, so <i>c</i> &lt; 12. Also <i>c</i> is the biggest side, so <i>c</i> ≥ 8.</li>
+<li>Go through each <i>c</i> and count pairs <i>a</i> ≤ <i>b</i> ≤ <i>c</i> with <i>a</i> + <i>b</i> = 24 − <i>c</i>:
+  <br><i>c</i> = 11: <i>a</i> + <i>b</i> = 13 → (2,11), (3,10), (4,9), (5,8), (6,7): 5
+  <br><i>c</i> = 10: <i>a</i> + <i>b</i> = 14 → (4,10), (5,9), (6,8), (7,7): 4
+  <br><i>c</i> = 9: <i>a</i> + <i>b</i> = 15 → (6,9), (7,8): 2
+  <br><i>c</i> = 8: <i>a</i> + <i>b</i> = 16 → (8,8): 1</li>
+<li>Total: 5 + 4 + 2 + 1 = <b>12</b>. (A computer search agrees.)</li></ol><div class="trick"><b>⚡ Trick:</b> Sort the sides so <i>a</i> ≤ <i>b</i> ≤ <i>c</i>. The triangle rule then says the biggest side is less than half the perimeter. Count case by case on the biggest side.</div></div>
     </div>
     </div>
   </div>
 
 </div>
 
+<div id="modal" onclick="if(event.target===this)closeSol()"><div class="box"><button class="close" onclick="closeSol()">Close ✕</button><div id="mbody"></div></div></div>
+
 <footer>Built for the Hansen MOEMs prep team · 2027 season</footer>
 
 <script>
+function toggle(btn) {
+  var sol = btn.nextElementSibling;
+  var shown = sol.classList.toggle('show');
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.textContent = shown ? 'Hide' : btn.dataset.label;
+}
+function openSol(btn) {
+  var card = btn.closest('.prob');
+  var q = card.querySelector('.qimg').outerHTML;
+  var sol = card.querySelector('.solution').innerHTML;
+  document.getElementById('mbody').innerHTML = '<div class="qt">' + q + '</div><div class="solution show" style="display:block">' + sol + '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeSol() { document.getElementById('modal').classList.remove('show'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSol(); });
+function showAll() {
+  document.querySelectorAll('.solution').forEach(function (s) { s.classList.add('show'); });
+}
 var total = 30 * 60, left = total, timer = null;
 function paint() {
   var m = Math.floor(left / 60), s = left % 60;
